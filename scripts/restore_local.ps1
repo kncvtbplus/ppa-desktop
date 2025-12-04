@@ -25,7 +25,7 @@ if (Use-Docker) {
   docker exec $container bash -lc "psql -U $DbUser -d postgres -tc \"SELECT 1 FROM pg_database WHERE datname='$DbName'\" | grep -q 1 || createdb -U $DbUser $DbName"
   # Copy dump into container
   $target = "/tmp/restore.dump"
-  docker cp $DumpPath $container:$target
+  docker cp $DumpPath ${container}:$target
   # Determine type by extension
   if ($DumpPath.ToLower().EndsWith('.dump')) {
     docker exec $container bash -lc "pg_restore -U $DbUser -d $DbName --clean --if-exists -O -x $target"

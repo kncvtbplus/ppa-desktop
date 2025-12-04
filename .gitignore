@@ -18,4 +18,8 @@ windows/db_initialized.flag
 archive/
 ppa-*.dump
 
+# Installer binaries
+windows/ppa-wizard-setup.exe
+
+
 

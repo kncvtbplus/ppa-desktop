@@ -19,6 +19,9 @@ services:
       S3_BUCKET: "local-ppa-bucket"
       AWS_REGION: "us-east-1"
       AWS_DEFAULT_REGION: "us-east-1"
+    # Shared filesystem to mimic the /s3 mount used in AWS (datasource, script, output)
+    volumes:
+      - ./s3:/s3
     ports:
       - "8080:8080"
 
@@ -43,6 +46,9 @@ services:
     restart: unless-stopped
     ports:
       - "6311:6311"
+    # Share the same /s3 filesystem with the app container
+    volumes:
+      - ./s3:/s3
 
 volumes:
   pgdata:
