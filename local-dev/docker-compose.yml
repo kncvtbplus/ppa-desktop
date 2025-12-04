@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: ppa-app-local
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - rserve
+    environment:
+      RDS_HOSTNAME: postgres
+      RDS_PORT: "5432"
+      RDS_USERNAME: ${POSTGRES_USER:-ppa}
+      RDS_PASSWORD: ${POSTGRES_PASSWORD:-Automation}
+      RSERVE_HOST: "rserve"
+      RSERVE_PORT: "6311"
+      S3_BUCKET: "local-ppa-bucket"
+      AWS_REGION: "us-east-1"
+      AWS_DEFAULT_REGION: "us-east-1"
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres:12.17
+    container_name: ppa-postgres-local
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ppa}
+      POSTGRES_USER: ${POSTGRES_USER:-ppa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Automation}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  rserve:
+    build:
+      context: ..
+      dockerfile: rserve/Dockerfile
+    container_name: ppa-rserve-local
+    restart: unless-stopped
+    ports:
+      - "6311:6311"
+
+volumes:
+  pgdata:
+
+
+
+
