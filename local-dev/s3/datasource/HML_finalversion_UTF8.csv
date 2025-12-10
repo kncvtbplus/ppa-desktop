@@ -1,0 +1,709 @@
+﻿FacilityCode,RegionID,Region,DistrictID,District,Name,Latitude,Longitude,ownership,level,sampletransport,microscopy,genexpert,firstline,secondline,ownership_new,level_new
+12176,10580,Kavango East Region,10619,Rundu District,Elizabeth Nepemba Correctional Facility,-18.027,19.659,Correctional service,L1,,0,0,1,2,Government,L1
+10170,10577,Erongo Region,10620,Swakopmund District,Swakopmund Correctional Facility,-22.671,14.532,Correctional service,L1,,0,0,1,2,Government,L1
+10179,10577,Erongo Region,10624,Walvis Bay District,Walvis Bay Correctional Facility,-22.972,14.51,Correctional service,L1,,0,0,1,2,Government,L1
+10187,10578,Hardap Region,10602,Mariental District,Hardap Correctional Facility,-24.543,17.943,Correctional service,L1,,0,0,1,2,Government,L1
+12175,10580,Kavango East Region,10591,Andara District,Divundu Correctional  facility,-18.096,21.546,Correctional service,L1,,0,0,1,2,Government,L1
+12180,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12182,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12188,10582,Khomas Region,10625,Windhoek District,Windhoek Male Correctional Facility,-22.542,17.07,Correctional service,L1,,0,0,1,2,Government,L1
+12189,10577,Erongo Region,10609,Omaruru District,Omaruru correctional  facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12235,10588,Oshikoto Region,10622,Tsumeb District,Evaristus Shikongo Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12241,10587,Oshana Region,11964,Ondangwa District,Oluno Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12323,10579,!Karas Region,10601,!Nami#nus District,Luderitz Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12324,10585,Omaheke Region,10595,Gobabis District,Gobabis Correctional Facility,0,0,Correctional service,L1,,0,0,1,2,Government,L1
+12326,10582,Khomas Region,10625,Windhoek District,Windhoek Female Correctional Facility,-22.542,17.07,Correctional service,L1,,0,0,1,2,Government,L1
+10203,10578,Hardap Region,10618,Rehoboth District,St. Mary's Rehoboth District Hospital,-23.326,17.076,faith based organisation,L2,,1,1,1,2,Not for profit,L2
+10206,10579,!Karas Region,10599,Keetmanshoop District,Aroab Health Centre,-26.798,19.65,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10234,10580,Kavango East Region,10591,Andara District,Andara District Hospital,-18.061,21.447,faith based organisation,L2,,1,1,1,2,Not for profit,L2
+10237,10581,Kavango West Region,11966,Ncamangoro District,Bunya Health Centre,-17.86,19.357,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10255,10580,Kavango East Region,10591,Andara District,Mayara Clinic,-17.963,21.233,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10256,10580,Kavango East Region,10604,Nyangana District,Mbambi East (Nyangana) Clinic,-17.97,21.008,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10257,10581,Kavango West Region,11967,Nkurenkuru District,Mbambi West (Nkurenkuro) Clinic,-17.473,18.471,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10263,10581,Kavango West Region,11966,Ncamangoro District,Mupini Health Centre,-17.864,19.624,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10268,10581,Kavango West Region,11967,Nkurenkuru District,Nankudu District Hospital,-17.74,18.733,faith based organisation,L2,,1,1,1,2,Not for profit,L2
+10275,10581,Kavango West Region,11967,Nkurenkuru District,Nkurenkuru Health Centre,-17.628,18.615,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10276,10580,Kavango East Region,10604,Nyangana District,Nyangana District Hospital,-18.004,20.677,faith based organisation,L2,,1,1,1,2,Not for profit,L2
+10277,10580,Kavango East Region,10604,Nyangana District,Nyangana Clinic,-18.007,20.674,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10279,10580,Kavango East Region,10591,Andara District,Old Bagani Clinic,-18.105,21.621,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10284,10580,Kavango East Region,10619,Rundu District,Sambyu Health Centre,-17.907,20.029,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10289,10580,Kavango East Region,10604,Nyangana District,Shinyungwe Clinic,-18.029,20.889,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10326,10582,Khomas Region,10625,Windhoek District,Roman Catholic Hospital,-22.565,17.083,faith based organisation,L3,,1,1,1,2,Not for profit,L2
+10417,10586,Omusati Region,10616,Outapi District,Anamulenge Clinic,-17.495,15.016,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10456,10586,Omusati Region,10614,Oshikuku District,Oshikuku St Martin District Hospital,-17.66,15.476,faith based organisation,L2,,1,1,1,1,Not for profit,L2
+10458,10586,Omusati Region,10614,Oshikuku District,Oshitutuma (St. Benedict) Clinic,-17.673,15.369,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10478,10587,Oshana Region,10613,Oshakati District,Okatana Health Centre,-17.741,15.713,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+10503,10588,Oshikoto Region,10611,Onandjokwe District,Onandjokwe District Hospital,-17.912,16.042,faith based organisation,L2,,1,1,1,1,Not for profit,L2
+12172,10577,Erongo Region,10620,Swakopmund District,Arandis New Clinic Site,-22.423,14.981,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+12173,10588,Oshikoto Region,10611,Onandjokwe District,Ontunda Clinic,-18.088,16.439,faith based organisation,L1,,0,0,1,2,Not for profit,L1
+12221,10579,!Karas Region,10599,Keetmanshoop District,Namibia Planned Parenthood Association,-26.591,18.155,NGO,L0,,0,0,0,0,Not for profit,L0
+10550,10577,Erongo Region,10624,Walvis Bay District,Namibia Planned Parenthood Association,-22.958,14.505,NGO,L0,,0,0,0,0,Not for profit,L0
+10334,10582,Khomas Region,10625,Windhoek District,Windhoek Military Hospital,-22.593,17.088,MOD,L2,,0,0,1,2,Government,L2
+10299,10582,Khomas Region,10625,Windhoek District,Central Business District New Start Centre,-22.564,17.087,NGO,L0,,0,0,0,0,Not for profit,L0
+10298,10582,Khomas Region,10625,Windhoek District,Bernard North Camp New Start Centre,-22.528,17.06,NGO,L0,,0,0,0,0,Not for profit,L0
+10300,10582,Khomas Region,10625,Windhoek District,Council of Churches in Namibia New Start Cent,-22.527,17.044,NGO,L0,,0,0,0,0,Not for profit,L0
+12184,10584,Ohangwena Region,10593,Eenhana District,Namibia Planned Parenthood Association,-17.917,19.773,NGO,L0,,0,0,0,0,Not for profit,L0
+12212,10584,Ohangwena Region,10593,Eenhana District,Oshuuli CBART,-17.767,15.333,public MoHSS,L0,,0,0,0,0,Government,L0
+12209,10584,Ohangwena Region,10608,Okongo District,Oshifitu CBART,-17.7,16.967,public MoHSS,L0,,0,0,0,0,Government,L0
+12191,10584,Ohangwena Region,10608,Okongo District,Odila CBART,-17.681,16.724,public MoHSS,L0,,0,0,0,0,Government,L0
+12208,10584,Ohangwena Region,10608,Okongo District,Oshalumbu CBART,-17.65,17.533,public MoHSS,L0,,0,0,0,0,Government,L0
+12210,10584,Ohangwena Region,10608,Okongo District,Oshilambwili CBART,-17.65,16.933,public MoHSS,L0,,0,0,0,0,Government,L0
+10548,10590,Zambezi Region,10598,Katima Mulilo District,Katima Mulilo (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12206,10584,Ohangwena Region,10608,Okongo District,Onghalulu CBART,-17.633,17.617,public MoHSS,L0,,0,0,0,0,Government,L0
+12195,10584,Ohangwena Region,10608,Okongo District,Oupili CBART,-17.6,16.967,public MoHSS,L0,,0,0,0,0,Government,L0
+12186,10584,Ohangwena Region,10594,Engela District,Engela (WBCG) Clinic,-17.391,15.891,NGO,L1,,0,0,0,0,Not for profit,L1
+12207,10584,Ohangwena Region,10593,Eenhana District,Onhunda CBART,-17.6,16.91,public MoHSS,L0,,0,0,0,0,Government,L0
+12196,10584,Ohangwena Region,10594,Engela District,Omutwe womunhu CBART,-17.567,16.883,public MoHSS,L0,,0,0,0,0,Government,L0
+12205,10584,Ohangwena Region,10608,Okongo District,Onehanga CBART,-17.567,17.483,public MoHSS,L0,,0,0,0,0,Government,L0
+12226,10577,Erongo Region,10624,Walvis Bay District,Walvis Bay (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12202,10584,Ohangwena Region,10608,Okongo District,Onamihonga CBART,-17.55,17.033,public MoHSS,L0,,0,0,0,0,Government,L0
+10463,10586,Omusati Region,10616,Outapi District,Outapi New Start Centre,-17.515,14.984,NGO,L0,,0,0,0,0,Not for profit,L0
+10123,10590,Zambezi Region,10598,Katima Mulilo District,Namibia Planned Parenthood Association,-17.502,24.277,NGO,L0,,0,0,0,0,Not for profit,L0
+12224,10580,Kavango East Region,10619,Rundu District,Namibia Planned Parenthood Association,-17.501,24.278,NGO,L0,,0,0,0,0,Not for profit,L0
+12204,10584,Ohangwena Region,10593,Eenhana District,Ondwi CBART,-17.5,16.617,public MoHSS,L0,,0,0,0,0,Government,L0
+12252,10580,Kavango East Region,10591,Andara District,Andara (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+10367,10584,Ohangwena Region,10593,Eenhana District,Eenhana New Start Centre,-17.481,16.339,NGO,L0,,0,0,0,0,Not for profit,L0
+12190,10584,Ohangwena Region,10594,Engela District,Efinde CBART,-17.45,17.033,public MoHSS,L0,,0,0,0,0,Government,L0
+12193,10584,Ohangwena Region,10608,Okongo District,Okatope CBART,-17.45,17.183,public MoHSS,L0,,0,0,0,0,Government,L0
+10398,10584,Ohangwena Region,10594,Engela District,Oshikango New Start Centre,-17.406,15.89,NGO,L0,,0,0,0,0,Not for profit,L0
+12194,10584,Ohangwena Region,10608,Okongo District,Olupale CBART,-17.4,17.4,public MoHSS,L0,,0,0,0,0,Government,L0
+12198,10584,Ohangwena Region,10593,Eenhana District,Onaimbungu CBART,-17.4,16.867,public MoHSS,L0,,0,0,0,0,Government,L0
+10384,10584,Ohangwena Region,10594,Engela District,Omagano Voluntary Counselling and Testing Hea,-17.394,15.891,NGO,L0,,0,0,0,0,Not for profit,L0
+12199,10584,Ohangwena Region,10593,Eenhana District,Onam CBART,-17.393,16.113,public MoHSS,L0,,0,0,0,0,Government,L0
+12261,10581,Kavango West Region,11966,Ncamangoro District,Ncamangoro (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12197,10584,Ohangwena Region,10593,Eenhana District,Omutwe Wondjamba CBART,-17.359,16,public MoHSS,L0,,0,0,0,0,Government,L0
+12174,10590,Zambezi Region,10598,Katima Mulilo District,Katima Mulilo NRCS,0,0,faith based organisation,L0,,0,0,0,0,Not for profit,L0
+12177,10580,Kavango East Region,10619,Rundu District,Rundu Child Line Life Line Centre,0,0,faith based organisation,L0,,0,0,0,0,Not for profit,L0
+12179,10587,Oshana Region,10613,Oshakati District,Tonateni New Start Site,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12187,10586,Omusati Region,10616,Outapi District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12244,10588,Oshikoto Region,11965,Omuthiya District,Omuthiya NAPPA,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12247,10588,Oshikoto Region,10611,Onandjokwe District,Onandjokwe NAPPA,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12270,10582,Khomas Region,10625,Windhoek District,Windhoek (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12248,10577,Erongo Region,10609,Omaruru District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12249,10577,Erongo Region,10623,Usakos District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12251,10580,Kavango East Region,10591,Andara District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12253,10580,Kavango East Region,10591,Andara District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12254,10580,Kavango East Region,10604,Nyangana District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12255,10580,Kavango East Region,10604,Nyangana District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12256,10580,Kavango East Region,10619,Rundu District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12257,10580,Kavango East Region,10619,Rundu District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12258,10580,Kavango East Region,10619,Rundu District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12259,10580,Kavango East Region,10619,Rundu District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12260,10581,Kavango West Region,11966,Ncamangoro District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12262,10581,Kavango West Region,11966,Ncamangoro District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12263,10581,Kavango West Region,11966,Ncamangoro District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12264,10581,Kavango West Region,11967,Nkurenkuru District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12266,10581,Kavango West Region,11967,Nkurenkuru District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12290,10585,Omaheke Region,10595,Gobabis District,Gobabis (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12267,10582,Khomas Region,10625,Windhoek District,Bishop Zephania Kameeta,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12268,10582,Khomas Region,10625,Windhoek District,Star for Life Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12269,10582,Khomas Region,10625,Windhoek District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12271,10582,Khomas Region,10625,Windhoek District,Cancer Association Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12272,10582,Khomas Region,10625,Windhoek District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12273,10582,Khomas Region,10625,Windhoek District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12274,10582,Khomas Region,10625,Windhoek District,Namibia Health Plan,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12275,10582,Khomas Region,10625,Windhoek District,Omnicare Trust,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12277,10582,Khomas Region,10625,Windhoek District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12279,10584,Ohangwena Region,10593,Eenhana District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12280,10584,Ohangwena Region,10593,Eenhana District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12303,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otjiwarongo (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12281,10584,Ohangwena Region,10593,Eenhana District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12282,10584,Ohangwena Region,10594,Engela District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12283,10584,Ohangwena Region,10594,Engela District,LifeLine ChildLine,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12285,10584,Ohangwena Region,10594,Engela District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12287,10584,Ohangwena Region,10594,Engela District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12288,10584,Ohangwena Region,10608,Okongo District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12289,10584,Ohangwena Region,10608,Okongo District,Positive Vibes Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12291,10586,Omusati Region,10614,Oshikuku District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12292,10587,Oshana Region,10613,Oshakati District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12293,10586,Omusati Region,10621,Tsandi District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12294,10587,Oshana Region,10613,Oshakati District,Sam Nuyoma Multisectoral Centre,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12295,10587,Oshana Region,10613,Oshakati District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12297,10588,Oshikoto Region,11965,Omuthiya District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12298,10588,Oshikoto Region,11965,Omuthiya District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12299,10588,Oshikoto Region,10611,Onandjokwe District,Catholic Aids Action,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12300,10588,Oshikoto Region,10611,Onandjokwe District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12301,10588,Oshikoto Region,10622,Tsumeb District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12302,10589,Otjozondjupa Region,10596,Grootfontein District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12304,10589,Otjozondjupa Region,10615,Otjiwarongo District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12306,10590,Zambezi Region,10598,Katima Mulilo District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12307,10590,Zambezi Region,10598,Katima Mulilo District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12308,10590,Zambezi Region,10598,Katima Mulilo District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12309,10579,!Karas Region,10601,!Nami#nus District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12310,10586,Omusati Region,10606,Okahao District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12311,10587,Oshana Region,10613,Oshakati District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12312,10581,Kavango West Region,11966,Ncamangoro District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12314,10577,Erongo Region,10620,Swakopmund District,Society for Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12315,10586,Omusati Region,10616,Outapi District,Namibia Planned Parenthood Association,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12316,10590,Zambezi Region,10598,Katima Mulilo District,Positive Vibes,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12317,10579,!Karas Region,10597,Karasburg District,Society For Family Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12320,10589,Otjozondjupa Region,10605,Okahandja District,Omnicare Trust,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12327,10584,Ohangwena Region,10608,Okongo District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12328,10586,Omusati Region,10616,Outapi District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12329,10586,Omusati Region,10606,Okahao District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12330,10586,Omusati Region,10621,Tsandi District,Project Hope Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12331,10577,Erongo Region,10609,Omaruru District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12332,10577,Erongo Region,10620,Swakopmund District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12333,10577,Erongo Region,10623,Usakos District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12334,10577,Erongo Region,10624,Walvis Bay District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12335,10578,Hardap Region,10592,Aranos District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12336,10578,Hardap Region,10602,Mariental District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12337,10578,Hardap Region,10618,Rehoboth District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12338,10579,!Karas Region,10597,Karasburg District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12339,10579,!Karas Region,10599,Keetmanshoop District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12340,10580,Kavango East Region,10591,Andara District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12341,10580,Kavango East Region,10604,Nyangana District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12342,10580,Kavango East Region,10619,Rundu District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12343,10581,Kavango West Region,11966,Ncamangoro District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12344,10581,Kavango West Region,11967,Nkurenkuru District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12345,10583,Kunene Region,10600,Khorixas District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12346,10583,Kunene Region,10612,Opuwo District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12347,10583,Kunene Region,10617,Outjo District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12348,10584,Ohangwena Region,10593,Eenhana District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12349,10584,Ohangwena Region,10594,Engela District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12350,10584,Ohangwena Region,10608,Okongo District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12351,10585,Omaheke Region,10595,Gobabis District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12352,10586,Omusati Region,10606,Okahao District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12353,10586,Omusati Region,10614,Oshikuku District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12372,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+12354,10586,Omusati Region,10616,Outapi District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12355,10586,Omusati Region,10621,Tsandi District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12356,10587,Oshana Region,11964,Ondangwa District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12376,10584,Ohangwena Region,10594,Engela District,Oshikango (WBCG) Clinic,0,0,NGO,L1,,0,0,0,0,Not for profit,L1
+10322,10582,Khomas Region,10625,Windhoek District,Patric Iyambo Police,-22.615,17.094,Police,L1,,0,0,2,2,Government,L1
+10106,10590,Zambezi Region,10598,Katima Mulilo District,Good Health Medical Health Centre,-17.5,24.277,private,L1,,0,0,0,0,Private,L1
+10126,10590,Zambezi Region,10598,Katima Mulilo District,North Star Alliance Clinic,-17.505,24.269,private,L1,,0,0,0,0,Private,L1
+10135,10577,Erongo Region,10620,Swakopmund District,Bismarck Health Clinic,-22.679,14.524,private,L1,,0,0,0,0,Private,L1
+10136,10577,Erongo Region,10624,Walvis Bay District,Cadilu Fishing Clinic,-22.932,14.517,private,L1,,0,0,2,2,Private,L1
+10138,10577,Erongo Region,10620,Swakopmund District,Cottage Medi-Clinic,-22.659,14.536,private,L3,,1,1,1,2,Private,L2
+10140,10577,Erongo Region,10624,Walvis Bay District,Erongo Imaging Clinic,-22.958,14.51,private,L1,,0,0,0,0,Private,L1
+10141,10577,Erongo Region,10624,Walvis Bay District,Etale Clinic,-22.937,14.513,private,L1,,0,0,2,2,Private,L1
+10142,10577,Erongo Region,10624,Walvis Bay District,Gendor Clinic,-22.936,14.514,private,L1,,0,0,2,2,Private,L1
+10145,10577,Erongo Region,10624,Walvis Bay District,Hangana Seafood Clinic,-22.935,14.515,private,L1,,0,0,2,2,Private,L1
+10146,10577,Erongo Region,10620,Swakopmund District,Hansa Brauerei Clinic,-22.683,14.524,private,L1,,0,0,0,0,Private,L1
+10148,10577,Erongo Region,10624,Walvis Bay District,Hyperbalic Oxygen Treatment Centre,-22.958,14.51,private,L1,,0,0,0,0,Private,L1
+10150,10577,Erongo Region,10620,Swakopmund District,Medical Imaging Clinic,-22.659,14.536,private,L1,,0,0,0,0,Private,L1
+10151,10577,Erongo Region,10624,Walvis Bay District,Medixx Occupational Health Clinic,-22.958,14.51,private,L1,,0,0,2,2,Private,L1
+10152,10577,Erongo Region,10624,Walvis Bay District,Merlus Clinic,-22.938,14.511,private,L1,,0,0,2,2,Private,L1
+10153,10577,Erongo Region,10624,Walvis Bay District,Mondi-Packaging Clinic,-22.946,14.506,private,L1,,0,0,2,2,Private,L1
+10154,10577,Erongo Region,10624,Walvis Bay District,Namport Health Centre,-22.951,14.502,private,L1,,0,0,2,2,Private,L1
+10156,10577,Erongo Region,10623,Usakos District,Navachab Gold  Mine Clinic,-21.968,15.78,private,L1,,0,0,2,0,Private,L1
+10157,10577,Erongo Region,10620,Swakopmund District,NIMT Clinic,-22.428,14.982,private,L1,,0,0,0,0,Private,L1
+10158,10577,Erongo Region,10620,Swakopmund District,Occu-Med Medical Health Centre,-22.453,15.048,private,L1,,0,0,0,0,Private,L1
+10159,10577,Erongo Region,10624,Walvis Bay District,Ocnam-Occupational Care Namibia,-22.946,14.509,private,L1,,0,0,0,0,Private,L1
+10166,10577,Erongo Region,10620,Swakopmund District,Spangenberg Clinic,-22.66,14.535,private,L1,,0,0,0,0,Private,L1
+10169,10577,Erongo Region,10620,Swakopmund District,Swakopmund Medical Clinic,-22.659,14.535,private,L1,,0,0,0,0,Private,L1
+10172,10577,Erongo Region,10623,Usakos District,Thaddeus Hospital,-21.99,15.586,private,L2,,0,0,0,0,Private,L2
+10180,10577,Erongo Region,10624,Walvis Bay District,Welwitchia Hospital Immunization Clinic,-22.958,14.51,private,L1,,0,0,0,0,Private,L1
+10181,10577,Erongo Region,10624,Walvis Bay District,Welwitschia Private Hospital,-22.958,14.51,private,L3,,1,1,1,2,Private,L2
+10184,10578,Hardap Region,10618,Rehoboth District,Dr's. Olivier & Partners Health Centre,-23.321,17.078,private,L1,,0,0,0,0,Private,L1
+10196,10578,Hardap Region,10618,Rehoboth District,Reho Clinic,-23.321,17.076,private,L1,,0,0,0,0,Private,L1
+10199,10578,Hardap Region,10618,Rehoboth District,Rehoboth Private Clinic,-23.314,17.078,private,L1,,0,0,0,0,Private,L1
+10211,10579,!Karas Region,10599,Keetmanshoop District,Brukaros Clinic,-26.702,18.017,private,L1,,0,0,0,0,Private,L1
+10212,10579,!Karas Region,10599,Keetmanshoop District,Daan Viljoen Clinic,-26.577,18.137,private,L1,,0,0,0,0,Private,L1
+10213,10579,!Karas Region,10601,!Nami#nus District,Elizabeth Bay Clinic,-26.895,15.191,private,L1,,0,0,0,0,Private,L1
+10216,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop Private Clinic,-26.58,18.134,private,L1,,0,0,0,0,Private,L1
+10219,10579,!Karas Region,10599,Keetmanshoop District,Khabuser Clinic,-26.576,18.131,private,L1,,0,0,0,0,Private,L1
+10223,10579,!Karas Region,10601,!Nami#nus District,Namdeb Hospital,-28.55,16.423,private,L2,,1,1,2,2,Private,L2
+10225,10579,!Karas Region,10601,!Nami#nus District,Oranjemund Primary Health Care Clinic,-28.55,16.421,private,L1,,0,0,2,2,Private,L1
+10226,10579,!Karas Region,10601,!Nami#nus District,Pocket Beaches Clinic,-27.427,15.41,private,L1,,0,0,0,0,Private,L1
+10227,10579,!Karas Region,10601,!Nami#nus District,Roschem Clinic (Closed),-27.964,16.758,private,L1,,0,0,0,0,Private,L1
+10228,10579,!Karas Region,10601,!Nami#nus District,Rosh Care Clinic,-27.966,16.759,private,L1,,0,0,0,0,Private,L1
+10230,10579,!Karas Region,10601,!Nami#nus District,Sedadic Clinic,-27.427,15.41,private,L1,,0,0,0,0,Private,L1
+10242,10580,Kavango East Region,10619,Rundu District,HZH Private Clinic,-17.913,19.783,private,L1,,0,0,0,0,Private,L1
+10266,10580,Kavango East Region,10619,Rundu District,Namibia Health Clinic,-17.913,19.769,private,L1,,0,0,0,0,Private,L1
+10294,10582,Khomas Region,10625,Windhoek District,African TCM Clinic,-22.568,17.074,private,L1,,0,0,0,0,Private,L1
+10295,10582,Khomas Region,10625,Windhoek District,Anne's Baby Clinic,-22.573,17.102,private,L1,,0,0,0,0,Private,L1
+10297,10582,Khomas Region,10625,Windhoek District,Bethesda Medical Centre,-22.521,17.046,private,L1,,0,0,0,0,Private,L1
+10301,10582,Khomas Region,10625,Windhoek District,Central Clinic,-22.554,17.077,private,L1,,0,0,0,0,Private,L1
+10304,10582,Khomas Region,10625,Windhoek District,Dr. Jia Fan (T.C.M.) Clinic,-22.566,17.08,private,L1,,0,0,0,0,Private,L1
+10307,10582,Khomas Region,10625,Windhoek District,Health 4 You Primary Clinic,-22.566,17.08,private,L1,,0,0,0,0,Private,L1
+10308,10582,Khomas Region,10625,Windhoek District,Highland Primary Clinic,-22.531,17.076,private,L1,,0,0,0,0,Private,L1
+10312,10582,Khomas Region,10625,Windhoek District,Khomas Medical Center,-22.549,17.06,private,L1,,0,0,0,0,Private,L1
+10314,10582,Khomas Region,10625,Windhoek District,Windhoek Medi Clinic Private Hospital,-22.541,17.091,private,L3,,1,1,1,2,Private,L2
+10315,10582,Khomas Region,10625,Windhoek District,Merromed Clinic,-22.512,17.063,private,L1,,0,0,0,0,Private,L1
+10316,10582,Khomas Region,10625,Windhoek District,Namibia Planned Parenthood Association,-22.51,17.054,private,L1,,0,0,0,0,Private,L1
+10317,10582,Khomas Region,10625,Windhoek District,Natural Health Clinic,-22.568,17.083,private,L1,,0,0,0,0,Private,L1
+10320,10582,Khomas Region,10625,Windhoek District,Paramount Health-Care Clinic,-22.544,17.086,private,L1,,0,0,0,0,Private,L1
+10321,10582,Khomas Region,10625,Windhoek District,Park Primary Health Clinic,-22.558,17.053,private,L1,,0,0,0,0,Private,L1
+10323,10582,Khomas Region,10625,Windhoek District,Polytechnic of Namibia Health Services,-22.565,17.077,private,L1,,0,0,2,2,Private,L1
+10324,10582,Khomas Region,10625,Windhoek District,Rhino Park Primary Health Care Clinic,-22.547,17.075,private,L3,,1,1,2,2,Private,L2
+10327,10582,Khomas Region,10625,Windhoek District,Southern Clinic,-22.581,17.078,private,L1,,0,0,0,0,Private,L1
+10328,10582,Khomas Region,10625,Windhoek District,Standard Bank Namibia - Medical Centre,-22.567,17.085,private,L1,,0,0,0,0,Private,L1
+10329,10582,Khomas Region,10625,Windhoek District,Swamed Clinic,-22.562,17.082,private,L1,,0,0,0,0,Private,L1
+10330,10582,Khomas Region,10625,Windhoek District,UNAM Primary Health Care Clinic,-22.613,17.058,private,L1,,0,0,2,2,Private,L1
+10331,10582,Khomas Region,10625,Windhoek District,Van Eck Power Station Clinic,-22.513,17.079,private,L1,,0,0,0,0,Private,L1
+10405,10585,Omaheke Region,10595,Gobabis District,Gobabis Health Centre,-22.45,18.976,private,L1,,0,0,0,0,Private,L1
+10407,10585,Omaheke Region,10595,Gobabis District,Harnas Lifeline Clinic,-21.598,19.416,private,L1,,0,0,0,0,Private,L1
+10428,10586,Omusati Region,10616,Outapi District,Nampower Clinic,-17.438,14.358,private,L1,,0,0,0,0,Private,L1
+10434,10586,Omusati Region,10606,Okahao District,Okahao Medical Clinic,-17.886,15.064,private,L1,,0,0,0,0,Private,L1
+10464,10586,Omusati Region,10616,Outapi District,Outapi Medical Centre,-17.504,14.992,private,L1,,0,0,0,0,Private,L1
+10475,10587,Oshana Region,10613,Oshakati District,Ndilimani Clinic,-17.742,15.71,private,L1,,0,0,0,0,Private,L1
+10477,10587,Oshana Region,10613,Oshakati District,Okandjegedi Medical Clinic,-17.772,15.691,private,L1,,0,0,0,0,Private,L1
+10481,10587,Oshana Region,10613,Oshakati District,Omagano Health Centre,-17.787,15.733,private,L1,,0,0,0,0,Private,L1
+10486,10587,Oshana Region,10613,Oshakati District,Ongwediva Medipark Hospital,-17.778,15.766,private,L3,,1,1,2,2,Private,L2
+10491,10588,Oshikoto Region,10622,Tsumeb District,Alpha Clinic,-19.244,17.715,private,L1,,0,0,0,0,Private,L1
+10495,10588,Oshikoto Region,10622,Tsumeb District,Namibia Primary Health Care Clinic,-19.224,17.729,private,L1,,0,0,0,0,Private,L1
+10516,10588,Oshikoto Region,10622,Tsumeb District,Tsumeb Private Hospital,-19.242,17.721,private,L2,,0,0,0,0,Private,L2
+10517,10589,Otjozondjupa Region,10615,Otjiwarongo District,Badenhorst Clinic,-20.47,16.65,private,L1,,0,0,0,0,Private,L1
+10519,10589,Otjozondjupa Region,10615,Otjiwarongo District,Daktari Rehab Centre,-20.765,15.851,private,L1,,0,0,0,0,Private,L1
+10523,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein Private Hospital,-19.563,18.09,private,L2,,0,0,0,0,Private,L2
+10527,10589,Otjozondjupa Region,10605,Okahandja District,Meatco Okahandja Clinic,-21.969,16.905,private,L1,,0,0,0,0,Private,L1
+10529,10589,Otjozondjupa Region,10615,Otjiwarongo District,Ohorongo Cement Clinic,-19.524,17.452,private,L1,,0,0,0,0,Private,L1
+10533,10589,Otjozondjupa Region,10607,Okakarara District,Okakarara Private Clinic,-20.587,17.451,private,L1,,0,0,0,0,Private,L1
+10537,10589,Otjozondjupa Region,10615,Otjiwarongo District,Okorusu Clinic,-20.058,16.75,private,L1,,0,0,0,0,Private,L1
+10544,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otjiwarongo Medi-Clinic,-20.469,16.651,private,L1,,0,0,0,0,Private,L1
+10562,10583,Kunene Region,10600,Khorixas District,Khorixas Private Clinic,0,0,private,L1,,0,0,0,0,Private,L1
+10570,10586,Omusati Region,10616,Outapi District,Hope Medical Centre,-17.509,14.989,private,L1,,0,0,0,0,Private,L1
+10626,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein Medi Health Centre,0,0,private,L1,,0,0,0,0,Private,L1
+10627,10590,Zambezi Region,10598,Katima Mulilo District,Katima Family Practice,0,0,private,L1,,0,0,0,0,Private,L1
+10628,10585,Omaheke Region,10595,Gobabis District,Dr Opperman Consulting,-22.446,18.964,private,L1,,0,0,0,0,Private,L1
+10629,10583,Kunene Region,10612,Opuwo District,Ombombo Clinic,-18.682,13.937,private,L1,,0,0,0,0,Private,L1
+10630,10577,Erongo Region,10620,Swakopmund District,DRC Clinic,-22.647,14.562,private,L1,,0,0,0,0,Private,L1
+10631,10590,Zambezi Region,10598,Katima Mulilo District,Riverside Medical Centre,-17.501,24.274,private,L1,,0,0,0,0,Private,L1
+10632,10590,Zambezi Region,10598,Katima Mulilo District,Katima Medical Centre,0,0,private,L1,,0,0,0,0,Private,L1
+10633,10585,Omaheke Region,10595,Gobabis District,Dr Ihemba Consulting,-22.45,18.978,private,L2,,0,0,0,0,Private,L2
+10634,10577,Erongo Region,10609,Omaruru District,Ongwari Consulting Room,-21.422,15.951,private,L1,,0,0,0,0,Private,L1
+10635,10577,Erongo Region,10620,Swakopmund District,Mondesa Clinic,-22.652,14.554,private,L1,,0,0,0,0,Private,L1
+10636,10582,Khomas Region,10625,Windhoek District,PathCare Labs,-22.551,17.089,private,L1,,1,1,0,0,Private,L1
+10637,10585,Omaheke Region,10595,Gobabis District,Dr Gabi Consulting,-22.45,18.97,private,L1,,0,0,0,0,Private,L1
+10638,10577,Erongo Region,10609,Omaruru District,Omaruru Maternity Hospital,-22.946,14.509,private,L2,,0,0,0,0,Private,L2
+12168,10577,Erongo Region,10609,Omaruru District,Dr Craven Consulting,-21.422,15.951,private,L1,,0,0,0,0,Private,L1
+12214,10582,Khomas Region,10625,Windhoek District,Maxuilili Clinic,0,0,private,L1,,0,0,0,0,Private,L1
+12243,10587,Oshana Region,11964,Ondangwa District,Kapia Health Center,0,0,private,L1,,0,0,0,0,Private,L1
+10101,10590,Zambezi Region,10598,Katima Mulilo District,Batubaja Clinic,-18.206,23.876,public MoHSS,L1,,0,0,1,2,Government,L1
+10102,10590,Zambezi Region,10598,Katima Mulilo District,Bukalo Health Centre,-17.712,24.529,public MoHSS,L1,,0,0,1,2,Government,L1
+10103,10590,Zambezi Region,10598,Katima Mulilo District,Chetto Clinic,-17.953,22.559,public MoHSS,L1,,0,0,1,2,Government,L1
+10104,10590,Zambezi Region,10598,Katima Mulilo District,Chinchimani Clinic,-17.986,24.118,public MoHSS,L1,,0,0,1,2,Government,L1
+10105,10590,Zambezi Region,10598,Katima Mulilo District,Choi Clinic,-17.856,23.364,public MoHSS,L1,,0,0,1,2,Government,L1
+10107,10590,Zambezi Region,10598,Katima Mulilo District,Ibbu Clinic,-17.962,24.521,public MoHSS,L1,,0,0,1,2,Government,L1
+10108,10590,Zambezi Region,10598,Katima Mulilo District,Impalila Clinic,-17.766,25.177,public MoHSS,L1,,0,0,1,2,Government,L1
+10109,10590,Zambezi Region,10598,Katima Mulilo District,Isize Clinic,-17.568,24.544,public MoHSS,L1,,0,0,1,2,Government,L1
+10110,10590,Zambezi Region,10598,Katima Mulilo District,Itomba Clinic,-17.69,24.901,public MoHSS,L1,,0,0,1,2,Government,L1
+10111,10590,Zambezi Region,10598,Katima Mulilo District,Kabbe Clinic,-17.718,24.632,public MoHSS,L1,,0,0,1,2,Government,L1
+10112,10590,Zambezi Region,10598,Katima Mulilo District,Kanono Clinic,-17.941,24.146,public MoHSS,L1,,0,0,1,2,Government,L1
+10113,10590,Zambezi Region,10598,Katima Mulilo District,Kasheshe Clinic,-17.664,24.136,public MoHSS,L1,,0,0,1,2,Government,L1
+10114,10590,Zambezi Region,10598,Katima Mulilo District,Katima Mulilo District Hospital,-17.499,24.279,public MoHSS,L2,,1,1,1,1,Government,L2
+10115,10590,Zambezi Region,10598,Katima Mulilo District,Katima Mulilo Clinic,-17.501,24.281,public MoHSS,L1,,0,0,1,2,Government,L1
+10116,10590,Zambezi Region,10598,Katima Mulilo District,Linyanti Clinic,-18.076,24.023,public MoHSS,L1,,0,0,1,2,Government,L1
+10117,10590,Zambezi Region,10598,Katima Mulilo District,Lisikili Clinic,-17.552,24.444,public MoHSS,L1,,0,0,1,2,Government,L1
+10118,10590,Zambezi Region,10598,Katima Mulilo District,Lusese Clinic,-17.764,24.695,public MoHSS,L1,,0,0,1,2,Government,L1
+10119,10590,Zambezi Region,10598,Katima Mulilo District,Masokotwane Clinic,-17.797,24.204,public MoHSS,L1,,0,0,1,2,Government,L1
+10120,10590,Zambezi Region,10598,Katima Mulilo District,Mavuluma Clinic,-17.515,24.295,public MoHSS,L1,,0,0,1,2,Government,L1
+10121,10590,Zambezi Region,10598,Katima Mulilo District,Mbalasinte Clinic,-17.792,25.023,public MoHSS,L1,,0,0,1,2,Government,L1
+10122,10590,Zambezi Region,10598,Katima Mulilo District,Muyako Clinic,-17.888,24.4,public MoHSS,L1,,0,0,1,2,Government,L1
+10124,10590,Zambezi Region,10598,Katima Mulilo District,Ngoma Clinic,-17.92,24.709,public MoHSS,L1,,0,0,1,2,Government,L1
+10125,10590,Zambezi Region,10598,Katima Mulilo District,Ngweze Clinic,-17.528,24.272,public MoHSS,L1,,0,0,1,2,Government,L1
+10127,10590,Zambezi Region,10598,Katima Mulilo District,Sachona Clinic,-17.966,23.447,public MoHSS,L1,,0,0,1,2,Government,L1
+10128,10590,Zambezi Region,10598,Katima Mulilo District,Sangwali Health Centre,-18.265,23.638,public MoHSS,L1,,0,0,1,2,Government,L1
+10129,10590,Zambezi Region,10598,Katima Mulilo District,Schuckmansburg Clinic,-17.549,24.815,public MoHSS,L1,,0,0,1,2,Government,L1
+10130,10590,Zambezi Region,10598,Katima Mulilo District,Sesheke Clinic,-17.752,23.398,public MoHSS,L1,,0,0,1,2,Government,L1
+10131,10590,Zambezi Region,10598,Katima Mulilo District,Sibbinda Health Centre,-17.785,23.821,public MoHSS,L1,,0,0,1,2,Government,L1
+10132,10590,Zambezi Region,10598,Katima Mulilo District,Mafuta Clinic,-17.545,24.318,public MoHSS,L1,,0,0,1,2,Government,L1
+10133,10577,Erongo Region,10620,Swakopmund District,Arandis Clinic,-22.41,14.982,public MoHSS,L1,,0,0,1,2,Government,L1
+10137,10577,Erongo Region,10624,Walvis Bay District,Coastal Clinic,-22.932,14.531,public MoHSS,L1,,0,0,1,2,Government,L1
+10139,10577,Erongo Region,10623,Usakos District,Dr. Sam Nuyoma Health Centre,-21.932,15.864,public MoHSS,L1,,0,0,1,2,Government,L1
+10144,10577,Erongo Region,10623,Usakos District,Hakhaseb Clinic,-21.978,15.594,public MoHSS,L1,,0,0,1,2,Government,L1
+10147,10577,Erongo Region,10620,Swakopmund District,Henties Bay Clinic,-22.114,14.284,public MoHSS,L1,,0,0,1,2,Government,L1
+10149,10577,Erongo Region,10624,Walvis Bay District,Kuisebmund Health Centre,-22.938,14.522,public MoHSS,L1,,0,0,1,2,Government,L1
+10155,10577,Erongo Region,10624,Walvis Bay District,Narraville Clinic,-22.951,14.538,public MoHSS,L1,,0,0,1,2,Government,L1
+10160,10577,Erongo Region,10609,Omaruru District,Okombahe Clinic,-21.356,15.38,public MoHSS,L1,,0,0,1,2,Government,L1
+10161,10577,Erongo Region,10609,Omaruru District,Okongue Clinic,-20.679,15.379,public MoHSS,L1,,0,0,1,2,Government,L1
+10162,10577,Erongo Region,10609,Omaruru District,Omaruru Clinic,-21.43,15.95,public MoHSS,L1,,0,0,1,2,Government,L1
+10163,10577,Erongo Region,10609,Omaruru District,Omaruru District Hospital,-21.431,15.95,public MoHSS,L2,,1,1,1,1,Government,L2
+10164,10577,Erongo Region,10609,Omaruru District,Omatjete Clinic,-21.054,15.508,public MoHSS,L1,,0,0,1,2,Government,L1
+10165,10577,Erongo Region,10623,Usakos District,Otjimbingwe Clinic,-22.358,16.127,public MoHSS,L1,,0,0,1,2,Government,L1
+10167,10577,Erongo Region,10623,Usakos District,Spitzkoppe Clinic,-21.846,15.208,public MoHSS,L1,,0,0,1,2,Government,L1
+10168,10577,Erongo Region,10620,Swakopmund District,Swakopmund District Hospital,-22.67,14.531,public MoHSS,L2,,1,1,1,1,Government,L2
+10171,10577,Erongo Region,10620,Swakopmund District,Tamariskia Clinic,-22.656,14.543,public MoHSS,L1,,0,0,1,2,Government,L1
+10173,10577,Erongo Region,10623,Usakos District,Tubusis Clinic,-21.585,15.458,public MoHSS,L1,,0,0,1,2,Government,L1
+10174,10577,Erongo Region,10609,Omaruru District,Uis Clinic,-21.23,14.903,public MoHSS,L1,,0,0,1,2,Government,L1
+10175,10577,Erongo Region,10623,Usakos District,Usakos District Hospital,-21.99,15.586,public MoHSS,L2,,1,1,1,1,Government,L2
+10176,10577,Erongo Region,10624,Walvis Bay District,Utuseb Clinic,-23.274,14.765,public MoHSS,L1,,0,0,1,2,Government,L1
+10177,10577,Erongo Region,10624,Walvis Bay District,Walvis Bay Clinic,-22.956,14.509,public MoHSS,L1,,0,0,1,2,Government,L1
+10178,10577,Erongo Region,10624,Walvis Bay District,Walvis Bay District Hospital,-22.965,14.501,public MoHSS,L2,,1,1,1,1,Government,L2
+10182,10578,Hardap Region,10592,Aranos District,Aranos Clinic,-24.138,19.106,public MoHSS,L1,,0,0,1,2,Government,L1
+10183,10578,Hardap Region,10592,Aranos District,Aranos Health Centre,-24.139,19.118,public MoHSS,L2,,0,0,1,1,Government,L2
+10185,10578,Hardap Region,10602,Mariental District,Gibeon Clinic,-25.126,17.774,public MoHSS,L1,,0,0,1,2,Government,L1
+10186,10578,Hardap Region,10592,Aranos District,Gochas Clinic,-24.861,18.813,public MoHSS,L1,,0,0,1,2,Government,L1
+10188,10589,Otjozondjupa Region,10607,Okakarara District,Uitkoms Clinic,-21.086,18,public MoHSS,L1,,0,0,1,2,Government,L1
+10189,10578,Hardap Region,10602,Mariental District,Hoachanas Clinic,-23.917,18.054,public MoHSS,L1,,0,0,1,2,Government,L1
+10190,10578,Hardap Region,10602,Mariental District,Kalkrand Clinic,-24.074,17.591,public MoHSS,L1,,0,0,1,2,Government,L1
+10191,10578,Hardap Region,10618,Rehoboth District,Klein Aub Clinic,-23.79,16.636,public MoHSS,L1,,0,0,1,2,Government,L1
+10192,10578,Hardap Region,10602,Mariental District,Maltahohe Clinic,-24.836,16.987,public MoHSS,L1,,0,0,1,2,Government,L1
+10193,10578,Hardap Region,10602,Mariental District,Maltahohe Health Centre,-24.843,16.978,public MoHSS,L1,,0,0,1,2,Government,L1
+10194,10578,Hardap Region,10602,Mariental District,Mariental Clinic,-24.63,17.967,public MoHSS,L1,,0,0,1,2,Government,L1
+10195,10578,Hardap Region,10602,Mariental District,Mariental District Hospital,-24.623,17.966,public MoHSS,L2,,1,1,1,1,Government,L2
+10197,10578,Hardap Region,10618,Rehoboth District,Rehoboth Clinic,-23.325,17.097,public MoHSS,L1,,0,0,1,2,Government,L1
+10198,10578,Hardap Region,10618,Rehoboth District,Rehoboth Health Centre,-23.324,17.072,public MoHSS,L1,,0,0,1,2,Government,L1
+10201,10578,Hardap Region,10618,Rehoboth District,Rietoog Clinic,-23.968,16.56,public MoHSS,L1,,0,0,1,2,Government,L1
+10202,10578,Hardap Region,10618,Rehoboth District,Schlip Clinic,-24.045,17.128,public MoHSS,L1,,0,0,1,2,Government,L1
+10204,10578,Hardap Region,10602,Mariental District,Stampriet Clinic,-24.351,18.389,public MoHSS,L1,,0,0,1,2,Government,L1
+10205,10579,!Karas Region,10597,Karasburg District,Ariamsvlei Clinic,-28.12,19.833,public MoHSS,L1,,0,0,1,2,Government,L1
+10207,10579,!Karas Region,10601,!Nami#nus District,Aus Clinic,-26.664,16.259,public MoHSS,L1,,0,0,1,2,Government,L1
+10208,10579,!Karas Region,10597,Karasburg District,Aussenker Clinic,-28.369,17.412,public MoHSS,L1,,0,0,1,2,Government,L1
+10209,10579,!Karas Region,10599,Keetmanshoop District,Berseba Clinic,-25.993,17.761,public MoHSS,L1,,0,0,1,2,Government,L1
+10210,10579,!Karas Region,10599,Keetmanshoop District,Bethanie Health Centre,-26.499,17.15,public MoHSS,L1,,0,0,1,2,Government,L1
+10214,10579,!Karas Region,10597,Karasburg District,Karasburg Clinic,-28.016,18.742,public MoHSS,L1,,0,0,1,2,Government,L1
+10215,10579,!Karas Region,10597,Karasburg District,Karasburg District Hospital,-28.016,18.741,public MoHSS,L2,,1,1,1,1,Government,L2
+10217,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop/Tseiblaagte Clinic,-26.584,18.147,public MoHSS,L1,,0,0,1,2,Government,L1
+10218,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop District Hospital,-26.567,18.153,public MoHSS,L2,,1,1,1,1,Government,L2
+10220,10579,!Karas Region,10599,Keetmanshoop District,Koes Clinic,-25.932,19.122,public MoHSS,L1,,0,0,1,2,Government,L1
+10221,10579,!Karas Region,10601,!Nami#nus District,Luderitz District Hospital,-26.64,15.166,public MoHSS,L2,,1,1,1,1,Government,L2
+10222,10579,!Karas Region,10601,!Nami#nus District,Luderitz Clinic,-26.64,15.166,public MoHSS,L1,,0,0,1,2,Government,L1
+10224,10579,!Karas Region,10597,Karasburg District,Noordoewer Health Centre,-28.714,17.617,public MoHSS,L1,,0,0,1,2,Government,L1
+10229,10579,!Karas Region,11963,Rosh Pinah District,Rosh Pinah Clinic,-27.957,16.759,public MoHSS,L1,,0,0,1,2,Government,L1
+10231,10579,!Karas Region,10599,Keetmanshoop District,Tses Clinic,-25.882,18.128,public MoHSS,L1,,0,0,1,2,Government,L1
+10232,10579,!Karas Region,10597,Karasburg District,Warmbad Clinic,-28.445,18.734,public MoHSS,L1,,0,0,1,2,Government,L1
+10233,10579,!Karas Region,11963,Rosh Pinah District,Oranjemund Clinic,-28.559,16.414,public MoHSS,L1,,0,0,1,2,Government,L1
+10235,10580,Kavango East Region,10619,Rundu District,Baramasoni Clinic,-18.189,20.188,public MoHSS,L1,,0,0,1,2,Government,L1
+10236,10580,Kavango East Region,10591,Andara District,Biro Clinic,-17.99,21.324,public MoHSS,L1,,0,0,1,2,Government,L1
+10238,10580,Kavango East Region,10619,Rundu District,De Lange Clinic,-17.919,19.764,public MoHSS,L1,,0,0,1,2,Government,L1
+10239,10580,Kavango East Region,10591,Andara District,Divundu Clinic,-18.096,21.546,public MoHSS,L1,,0,0,1,2,Government,L1
+10240,10581,Kavango West Region,11967,Nkurenkuru District,Gcaruhwa Clinic,-18.009,18.919,public MoHSS,L1,,0,0,1,2,Government,L1
+10241,10581,Kavango West Region,11966,Ncamangoro District,Gcwatjinga Clinic,-18.498,19.744,public MoHSS,L1,,0,0,1,2,Government,L1
+10243,10580,Kavango East Region,10619,Rundu District,Kaisosi Clinic,-17.914,19.821,public MoHSS,L1,,0,0,1,2,Government,L1
+10244,10580,Kavango East Region,10604,Nyangana District,Kandjara Clinic,-18.203,20.775,public MoHSS,L1,,0,0,1,2,Government,L1
+10245,10580,Kavango East Region,10591,Andara District,Kangongo Clinic,-17.956,21.163,public MoHSS,L1,,0,0,1,2,Government,L1
+10246,10581,Kavango West Region,11966,Ncamangoro District,Kapako Clinic,-17.881,19.57,public MoHSS,L1,,0,0,1,2,Government,L1
+10247,10580,Kavango East Region,10604,Nyangana District,Kapupahedi Clinic,-18.133,20.368,public MoHSS,L1,,0,0,1,2,Government,L1
+10248,10580,Kavango East Region,10604,Nyangana District,Karukuta Clinic,-17.994,20.578,public MoHSS,L1,,0,0,1,2,Government,L1
+10249,10580,Kavango East Region,10604,Nyangana District,Katere Clinic,-18.026,20.773,public MoHSS,L1,,0,0,1,2,Government,L1
+10250,10581,Kavango West Region,11966,Ncamangoro District,Katjinakatji Clinic,-18.529,19.179,public MoHSS,L1,,0,0,1,2,Government,L1
+10251,10580,Kavango East Region,10619,Rundu District,Kayengona Clinic,-17.893,19.878,public MoHSS,L1,,0,0,1,2,Government,L1
+10252,10580,Kavango East Region,10604,Nyangana District,Mabushe Clinic,-17.899,20.375,public MoHSS,L1,,0,0,1,2,Government,L1
+10253,10581,Kavango West Region,11967,Nkurenkuru District,Mangetti Clinic,-18.737,18.589,public MoHSS,L1,,0,0,1,2,Government,L1
+10254,10580,Kavango East Region,10619,Rundu District,Mashare Clinic,-17.905,20.139,public MoHSS,L1,,0,0,1,2,Government,L1
+10258,10581,Kavango West Region,11967,Nkurenkuru District,Mburu-uru Clinic,-18.061,18.731,public MoHSS,L1,,0,0,1,2,Government,L1
+10259,10581,Kavango West Region,11966,Ncamangoro District,Mile 10 Clinic,-18.03,19.653,public MoHSS,L1,,0,0,1,2,Government,L1
+10260,10581,Kavango West Region,11966,Ncamangoro District,Mile 30 Clinic,-18.201,19.482,public MoHSS,L1,,0,0,1,2,Government,L1
+10261,10581,Kavango West Region,11967,Nkurenkuru District,Mpungu Health Centre,-17.665,18.231,public MoHSS,L1,,0,0,1,2,Government,L1
+10262,10581,Kavango West Region,11967,Nkurenkuru District,Muparara Clinic,-18.03,18.399,public MoHSS,L1,,0,0,1,2,Government,L1
+10264,10580,Kavango East Region,10591,Andara District,Mutjiku Clinic,-18.091,21.602,public MoHSS,L1,,0,0,1,2,Government,L1
+10265,10581,Kavango West Region,11967,Nkurenkuru District,Muveve Clinic,-17.847,19.229,public MoHSS,L1,,0,0,1,2,Government,L1
+10267,10581,Kavango West Region,11967,Nkurenkuru District,Nankudu Clinic,-17.74,18.733,public MoHSS,L1,,0,0,1,2,Government,L1
+10269,10580,Kavango East Region,10619,Rundu District,Ncaute Clinic,-18.372,19.829,public MoHSS,L1,,0,0,1,2,Government,L1
+10270,10581,Kavango West Region,11966,Ncamangoro District,Ncuncuni Clinic,-18.151,19.768,public MoHSS,L1,,0,0,1,2,Government,L1
+10271,10580,Kavango East Region,10619,Rundu District,Ndama Clinic,-17.931,19.777,public MoHSS,L1,,0,0,1,2,Government,L1
+10272,10580,Kavango East Region,10604,Nyangana District,Ndonga Linena Clinic,-17.952,20.475,public MoHSS,L1,,0,0,1,2,Government,L1
+10273,10581,Kavango West Region,11967,Nkurenkuru District,Nepara Clinic,-17.796,18.425,public MoHSS,L1,,0,0,1,2,Government,L1
+10274,10580,Kavango East Region,10619,Rundu District,Nkarapamwe Clinic,-17.915,19.784,public MoHSS,L1,,0,0,1,2,Government,L1
+10278,10581,Kavango West Region,11967,Nkurenkuru District,Nzinze Clinic,-17.821,18.903,public MoHSS,L1,,0,0,1,2,Government,L1
+10280,10580,Kavango East Region,10591,Andara District,Omega Clinic,-18.028,22.202,public MoHSS,L1,,0,0,1,2,Government,L1
+10281,10580,Kavango East Region,10619,Rundu District,Rundu Clinic,-17.914,19.768,public MoHSS,L1,,0,0,1,2,Government,L1
+10282,10580,Kavango East Region,10619,Rundu District,Rundu Intermediate Hospital,-17.915,19.768,public MoHSS,L3,,1,1,1,1,Government,L2
+10283,10581,Kavango West Region,11967,Nkurenkuru District,Rupara Health Centre,-17.837,19.084,public MoHSS,L1,,0,0,1,2,Government,L1
+10285,10580,Kavango East Region,10619,Rundu District,Sauyemwa Clinic,-17.922,19.734,public MoHSS,L1,,0,0,1,2,Government,L1
+10286,10580,Kavango East Region,10591,Andara District,Shadikongoro Clinic,-18.016,21.407,public MoHSS,L1,,0,0,1,2,Government,L1
+10287,10580,Kavango East Region,10591,Andara District,Shamaturu Clinic,-18.161,21.344,public MoHSS,L1,,0,0,1,2,Government,L1
+10288,10581,Kavango West Region,11966,Ncamangoro District,Sharukwe Clinic,-18.045,19.757,public MoHSS,L1,,0,0,1,2,Government,L1
+10290,10581,Kavango West Region,11967,Nkurenkuru District,Sikarosompo Clinic,-17.892,18.515,public MoHSS,L1,,0,0,1,2,Government,L1
+10291,10580,Kavango East Region,10619,Rundu District,Takawasa Clinic,-17.892,20.256,public MoHSS,L1,,0,0,1,2,Government,L1
+10292,10581,Kavango West Region,11967,Nkurenkuru District,Tondoro Health Centre,-17.769,18.791,public MoHSS,L1,,0,0,1,2,Government,L1
+10293,10581,Kavango West Region,11967,Nkurenkuru District,Yinsu Clinic,-17.804,18.58,public MoHSS,L1,,0,0,1,2,Government,L1
+10296,10582,Khomas Region,10625,Windhoek District,Baumgartsbrunn Clinic,-22.61,16.783,public MoHSS,L1,,0,0,1,2,Government,L1
+10302,10582,Khomas Region,10625,Windhoek District,Donkerhoek Clinic,-22.518,17.063,public MoHSS,L1,,0,0,1,2,Government,L1
+10303,10582,Khomas Region,10625,Windhoek District,Dordabis Clinic,-22.949,17.663,public MoHSS,L1,,0,0,1,2,Government,L1
+10305,10582,Khomas Region,10625,Windhoek District,Groot Aub Clinic,-22.944,17.202,public MoHSS,L1,,0,0,1,2,Government,L1
+10306,10582,Khomas Region,10625,Windhoek District,Hakahana Clinic,-22.509,17.033,public MoHSS,L1,,0,0,1,2,Government,L1
+10309,10582,Khomas Region,10625,Windhoek District,Katutura Health Centre,-22.523,17.052,public MoHSS,L1,,0,0,1,2,Government,L1
+10310,10582,Khomas Region,10625,Windhoek District,Katutura Intermediate Hospital,-22.534,17.065,public MoHSS,L3,,1,1,1,1,Government,L2
+10313,10582,Khomas Region,10625,Windhoek District,Khomasdal Health Centre,-22.542,17.057,public MoHSS,L1,,0,0,1,2,Government,L1
+10318,10582,Khomas Region,10625,Windhoek District,Okuryangava Clinic,-22.51,17.052,public MoHSS,L1,,0,0,1,2,Government,L1
+10319,10582,Khomas Region,10625,Windhoek District,Otjomuise Clinic,-22.558,17.017,public MoHSS,L1,,0,0,1,2,Government,L1
+10325,10582,Khomas Region,10625,Windhoek District,Robert Mugabe Clinic,-22.562,17.086,public MoHSS,L1,,0,0,1,2,Government,L1
+10332,10582,Khomas Region,10625,Windhoek District,Wanaheda Clinic,-22.522,17.035,public MoHSS,L1,,0,0,1,2,Government,L1
+10333,10582,Khomas Region,10625,Windhoek District,Windhoek Central Hospital,-22.554,17.072,public MoHSS,L3,,1,1,1,1,Government,L2
+10335,10583,Kunene Region,10600,Khorixas District,Anichab Clinic,-20.951,14.836,public MoHSS,L1,,0,0,1,2,Government,L1
+10336,10583,Kunene Region,10600,Khorixas District,Anker Clinic,-19.798,14.545,public MoHSS,L1,,0,0,1,2,Government,L1
+10337,10583,Kunene Region,10600,Khorixas District,Bergsig Clinic,-20.217,14.071,public MoHSS,L1,,0,0,1,2,Government,L1
+10338,10583,Kunene Region,10612,Opuwo District,Epupa Clinic,-17.001,13.253,public MoHSS,L1,,0,0,1,2,Government,L1
+10339,10583,Kunene Region,10600,Khorixas District,Erwee Clinic,-19.688,14.314,public MoHSS,L1,,0,0,1,2,Government,L1
+10340,10583,Kunene Region,10612,Opuwo District,Etanga Clinic,-17.868,13.026,public MoHSS,L1,,0,0,1,2,Government,L1
+10341,10583,Kunene Region,10612,Opuwo District,Etoto Clinic,-17.624,14.115,public MoHSS,L1,,0,0,1,2,Government,L1
+10342,10583,Kunene Region,10600,Khorixas District,Fransfontein Clinic,-20.214,15.012,public MoHSS,L1,,0,0,1,2,Government,L1
+10343,10583,Kunene Region,10617,Outjo District,Kamanjab Health Centre,-19.627,14.846,public MoHSS,L1,,0,0,1,2,Government,L1
+10344,10583,Kunene Region,10600,Khorixas District,Khorixas Clinic,-20.379,14.969,public MoHSS,L1,,0,0,1,2,Government,L1
+10345,10583,Kunene Region,10600,Khorixas District,Khorixas District Hospital,-20.379,14.969,public MoHSS,L2,,1,1,1,1,Government,L2
+10347,10583,Kunene Region,10612,Opuwo District,Ohandungu Clinic,-17.767,13.64,public MoHSS,L1,,0,0,1,2,Government,L1
+10348,10583,Kunene Region,10612,Opuwo District,Okangwati Health Centre,-17.434,13.273,public MoHSS,L1,,0,0,1,2,Government,L1
+10349,10583,Kunene Region,10612,Opuwo District,Ongongo Clinic,-18.071,13.395,public MoHSS,L1,,0,0,1,2,Government,L1
+10350,10583,Kunene Region,10612,Opuwo District,Opuwo Clinic,-18.056,13.841,public MoHSS,L1,,0,0,1,2,Government,L1
+10351,10583,Kunene Region,10612,Opuwo District,Opuwo District Hospital,-18.056,13.842,public MoHSS,L2,,1,1,1,1,Government,L2
+10352,10583,Kunene Region,10612,Opuwo District,Orumana Clinic,-18.257,13.894,public MoHSS,L1,,0,0,1,2,Government,L1
+10353,10583,Kunene Region,10612,Opuwo District,Oruvandjei Clinic,-18.919,14.107,public MoHSS,L1,,0,0,1,2,Government,L1
+10354,10583,Kunene Region,10612,Opuwo District,Otjimuhaka Clinic,-17.334,13.838,public MoHSS,L1,,0,0,1,2,Government,L1
+10355,10583,Kunene Region,10612,Opuwo District,Otjiu Clinic,-18.229,13.274,public MoHSS,L1,,0,0,1,2,Government,L1
+10356,10583,Kunene Region,10612,Opuwo District,Otjokavare Clinic,-19.065,14.349,public MoHSS,L1,,0,0,1,2,Government,L1
+10357,10583,Kunene Region,10612,Opuwo District,Otjondeka Clinic,-18.63,14.234,public MoHSS,L1,,0,0,1,2,Government,L1
+10358,10583,Kunene Region,10612,Opuwo District,Otuani Clinic,-18.569,13.688,public MoHSS,L1,,0,0,1,2,Government,L1
+10359,10583,Kunene Region,10617,Outjo District,Outjo Clinic,-20.108,16.166,public MoHSS,L1,,0,0,1,2,Government,L1
+10360,10583,Kunene Region,10617,Outjo District,Outjo District Hospital,-20.106,16.156,public MoHSS,L2,,1,1,1,1,Government,L2
+10362,10583,Kunene Region,10612,Opuwo District,Sesfontein Health Centre,-19.124,13.613,public MoHSS,L1,,0,0,1,2,Government,L1
+10363,10583,Kunene Region,10600,Khorixas District,Terrace Bay Clinic,-19.991,13.037,public MoHSS,L1,,0,0,1,2,Government,L1
+10364,10584,Ohangwena Region,10594,Engela District,Edundja Clinic,-17.419,16.001,public MoHSS,L1,,0,0,1,2,Government,L1
+10365,10584,Ohangwena Region,10593,Eenhana District,Eenhana Clinic,-17.484,16.328,public MoHSS,L1,,0,0,1,2,Government,L1
+10366,10584,Ohangwena Region,10593,Eenhana District,Eenhana District Hospital,-17.484,16.328,public MoHSS,L2,,1,1,1,1,Government,L2
+10368,10584,Ohangwena Region,10608,Okongo District,Ekoka Clinic,-17.692,17.401,public MoHSS,L1,,0,0,1,2,Government,L1
+10369,10584,Ohangwena Region,10594,Engela District,Endola Clinic,-17.616,15.744,public MoHSS,L1,,0,0,1,2,Government,L1
+10370,10584,Ohangwena Region,10594,Engela District,Engela Clinic,-17.449,15.867,public MoHSS,L1,,0,0,1,2,Government,L1
+10371,10584,Ohangwena Region,10594,Engela District,Engela District Hospital,-17.449,15.867,public MoHSS,L2,,1,1,1,1,Government,L2
+10372,10584,Ohangwena Region,10593,Eenhana District,Epembe Clinic,-17.781,16.451,public MoHSS,L1,,0,0,1,2,Government,L1
+10373,10584,Ohangwena Region,10593,Eenhana District,Epinga Clinic,-17.412,16.437,public MoHSS,L1,,0,0,1,2,Government,L1
+10374,10584,Ohangwena Region,10594,Engela District,Eudafano Clinic,-17.468,15.793,public MoHSS,L1,,0,0,1,2,Government,L1
+10375,10584,Ohangwena Region,10594,Engela District,Odibo Health Centre,-17.402,15.935,public MoHSS,L1,,0,0,1,2,Government,L1
+10376,10584,Ohangwena Region,10594,Engela District,Ohalushu Clinic,-17.642,15.878,public MoHSS,L1,,0,0,1,2,Government,L1
+10377,10584,Ohangwena Region,10594,Engela District,Ohangwena Clinic,-17.471,15.905,public MoHSS,L1,,0,0,1,2,Government,L1
+10378,10584,Ohangwena Region,10594,Engela District,Ohaukelo Clinic,-17.406,15.89,public MoHSS,L1,,0,0,1,2,Government,L1
+10379,10584,Ohangwena Region,10594,Engela District,Okambebe Clinic,-17.406,15.89,public MoHSS,L1,,0,0,1,2,Government,L1
+10380,10584,Ohangwena Region,10594,Engela District,Okatope Clinic,-17.517,15.956,public MoHSS,L1,,0,0,1,2,Government,L1
+10381,10584,Ohangwena Region,10608,Okongo District,Okongo Clinic,-17.575,17.221,public MoHSS,L1,,0,0,1,2,Government,L1
+10382,10584,Ohangwena Region,10608,Okongo District,Okongo District Hospital,-17.575,17.221,public MoHSS,L2,,1,1,1,1,Government,L2
+10383,10584,Ohangwena Region,10608,Okongo District,Olukula Clinic,-17.464,17.508,public MoHSS,L1,,0,0,1,2,Government,L1
+10385,10584,Ohangwena Region,10608,Okongo District,Omboloka Clinic,-17.409,17.128,public MoHSS,L1,,0,0,1,2,Government,L1
+10386,10584,Ohangwena Region,10593,Eenhana District,Omundaungilo Clinic,-17.427,16.706,public MoHSS,L1,,0,0,1,2,Government,L1
+10387,10584,Ohangwena Region,10594,Engela District,Omungwelume Clinic,-17.504,15.635,public MoHSS,L1,,0,0,1,2,Government,L1
+10388,10584,Ohangwena Region,10593,Eenhana District,Onambutu Clinic,-17.636,16.294,public MoHSS,L1,,0,0,1,2,Government,L1
+10389,10584,Ohangwena Region,10594,Engela District,Onamukulo Clinic,-17.688,16.065,public MoHSS,L1,,0,0,1,2,Government,L1
+10390,10584,Ohangwena Region,10593,Eenhana District,Onangolo Clinic,-17.555,16.507,public MoHSS,L1,,0,0,1,2,Government,L1
+10391,10584,Ohangwena Region,10594,Engela District,Ondobe Clinic,-17.517,15.956,public MoHSS,L1,,0,0,1,2,Government,L1
+10392,10584,Ohangwena Region,10594,Engela District,Onekwaya Clinic,-17.593,15.869,public MoHSS,L1,,0,0,1,2,Government,L1
+10393,10584,Ohangwena Region,10594,Engela District,Ongenga Clinic,-17.446,15.67,public MoHSS,L1,,0,0,1,2,Government,L1
+10394,10584,Ohangwena Region,10594,Engela District,Ongha Health Centre,-17.472,15.574,public MoHSS,L1,,0,0,1,2,Government,L1
+10395,10584,Ohangwena Region,10593,Eenhana District,Ongula yaNetanga Clinic,-17.721,16.14,public MoHSS,L1,,0,0,1,2,Government,L1
+10396,10584,Ohangwena Region,10593,Eenhana District,Oshaango Clinic,-17.718,16.232,public MoHSS,L1,,0,0,1,2,Government,L1
+10397,10584,Ohangwena Region,10593,Eenhana District,Oshandi Clinic,-17.452,16.194,public MoHSS,L1,,0,0,1,2,Government,L1
+10399,10584,Ohangwena Region,10593,Eenhana District,Oshikunde Clinic,-17.565,16.751,public MoHSS,L1,,0,0,1,2,Government,L1
+10400,10585,Omaheke Region,10595,Gobabis District,Aminuis Clinic,-23.641,19.368,public MoHSS,L1,,0,0,1,2,Government,L1
+10401,10585,Omaheke Region,10595,Gobabis District,Corridor Clinic,-23.507,19.895,public MoHSS,L1,,0,0,1,2,Government,L1
+10402,10585,Omaheke Region,10595,Gobabis District,Eiseb Block Clinic,-20.614,20.846,public MoHSS,L1,,0,0,1,2,Government,L1
+10403,10585,Omaheke Region,10595,Gobabis District,Epako Clinic,-22.447,18.992,public MoHSS,L1,,0,0,1,2,Government,L1
+10404,10585,Omaheke Region,10595,Gobabis District,Epukiro Post 3 Clinic,-21.598,19.414,public MoHSS,L1,,0,0,1,2,Government,L1
+10406,10585,Omaheke Region,10595,Gobabis District,Gobabis District Hospital,-22.456,18.976,public MoHSS,L2,,1,1,1,1,Government,L2
+10408,10585,Omaheke Region,10595,Gobabis District,Leonardville Clinic,-23.502,18.788,public MoHSS,L1,,0,0,1,2,Government,L1
+10409,10585,Omaheke Region,10595,Gobabis District,Omitara Clinic,-22.289,17.973,public MoHSS,L1,,0,0,1,2,Government,L1
+10410,10585,Omaheke Region,10595,Gobabis District,Onderombapa Clinic,-23.192,19.553,public MoHSS,L1,,0,0,1,2,Government,L1
+10411,10585,Omaheke Region,10595,Gobabis District,Otjimanangombe Clinic,-21.435,19.896,public MoHSS,L1,,0,0,1,2,Government,L1
+10412,10585,Omaheke Region,10595,Gobabis District,Otjinene Health Centre,-21.139,18.783,public MoHSS,L1,,0,0,1,2,Government,L1
+10413,10585,Omaheke Region,10595,Gobabis District,Sendingplaas Clinic,-21.694,19.102,public MoHSS,L1,,0,0,1,2,Government,L1
+10414,10585,Omaheke Region,10595,Gobabis District,Tallismanus/Rietfontein Clinic,-21.844,20.75,public MoHSS,L1,,0,0,1,2,Government,L1
+10415,10585,Omaheke Region,10595,Gobabis District,Witvlei Clinic,-22.421,18.49,public MoHSS,L1,,0,0,1,2,Government,L1
+10416,10586,Omusati Region,10606,Okahao District,Amarika Clinic,-18.346,15.193,public MoHSS,L1,,0,0,1,2,Government,L1
+10418,10586,Omusati Region,10621,Tsandi District,Eendombe Clinic,-17.722,15.099,public MoHSS,L1,,0,0,1,2,Government,L1
+10419,10586,Omusati Region,10616,Outapi District,Eengolo Clinic,-17.608,15.079,public MoHSS,L1,,0,0,1,2,Government,L1
+10420,10586,Omusati Region,10614,Oshikuku District,Elim Health Centre,-17.728,15.497,public MoHSS,L1,,0,0,1,2,Government,L1
+10421,10586,Omusati Region,10614,Oshikuku District,Epoko Clinic,-17.462,15.208,public MoHSS,L1,,0,0,1,2,Government,L1
+10422,10586,Omusati Region,10606,Okahao District,Etilyasa Clinic,-17.982,15.147,public MoHSS,L1,,0,0,1,2,Government,L1
+10423,10586,Omusati Region,10616,Outapi District,Eunda Clinic,-17.521,14.641,public MoHSS,L1,,0,0,1,2,Government,L1
+10424,10586,Omusati Region,10614,Oshikuku District,Iipanddayamiti Clinic,-17.663,15.606,public MoHSS,L1,,0,0,1,2,Government,L1
+10425,10586,Omusati Region,10621,Tsandi District,Ilyateko Clinic,-17.664,14.779,public MoHSS,L1,,0,0,1,2,Government,L1
+10426,10586,Omusati Region,10606,Okahao District,Indira Gandhi Health Centre,-17.985,15.044,public MoHSS,L1,,0,0,1,2,Government,L1
+10427,10586,Omusati Region,10616,Outapi District,Mahenene Health Centre,-17.45,14.786,public MoHSS,L1,,0,0,1,2,Government,L1
+10429,10586,Omusati Region,10621,Tsandi District,Nujoma-Eya Clinic,-17.8,15.04,public MoHSS,L1,,0,0,1,2,Government,L1
+10430,10586,Omusati Region,10614,Oshikuku District,Odimbwa Clinic,-17.472,15.503,public MoHSS,L1,,0,0,1,2,Government,L1
+10431,10586,Omusati Region,10614,Oshikuku District,Ogongo Clinic,-17.699,15.281,public MoHSS,L1,,0,0,1,2,Government,L1
+10432,10586,Omusati Region,10606,Okahao District,Okahao District Hospital,-17.888,15.071,public MoHSS,L2,,1,1,1,1,Government,L2
+10433,10586,Omusati Region,10606,Okahao District,Okahao Clinic,-17.889,15.071,public MoHSS,L1,,0,0,1,2,Government,L1
+10435,10586,Omusati Region,10614,Oshikuku District,Okalongo Health Centre,-17.438,15.328,public MoHSS,L1,,0,0,1,2,Government,L1
+10436,10586,Omusati Region,10614,Oshikuku District,Okando Clinic,-17.575,15.382,public MoHSS,L1,,0,0,1,2,Government,L1
+10437,10586,Omusati Region,10614,Oshikuku District,Okathitu Clinic,-17.518,15.316,public MoHSS,L1,,0,0,1,2,Government,L1
+10438,10586,Omusati Region,10621,Tsandi District,Okatseidhi Clinic,-17.992,14.718,public MoHSS,L1,,0,0,1,2,Government,L1
+10439,10586,Omusati Region,10614,Oshikuku District,Olupandu Clinic,-17.575,15.601,public MoHSS,L1,,0,0,1,2,Government,L1
+10440,10586,Omusati Region,10606,Okahao District,Oluteyi Clinic,-17.83,15.166,public MoHSS,L1,,0,0,1,2,Government,L1
+10441,10586,Omusati Region,10614,Oshikuku District,Olutsiidhi Clinic,-17.822,15.287,public MoHSS,L1,,0,0,1,2,Government,L1
+10442,10586,Omusati Region,10614,Oshikuku District,Omagalanga Clinic,-17.627,15.435,public MoHSS,L1,,0,0,1,2,Government,L1
+10443,10586,Omusati Region,10621,Tsandi District,Omakange Clinic,-18.113,14.317,public MoHSS,L1,,0,0,1,2,Government,L1
+10444,10586,Omusati Region,10616,Outapi District,Omona Watjihozu Health Centre,-17.434,14.434,public MoHSS,L1,,0,0,1,2,Government,L1
+10445,10586,Omusati Region,10614,Oshikuku District,Omuthitugwonyama Clinic,-17.522,15.276,public MoHSS,L1,,0,0,1,2,Government,L1
+10446,10586,Omusati Region,10614,Oshikuku District,Omutundungu Clinic,-17.497,15.419,public MoHSS,L1,,0,0,1,2,Government,L1
+10447,10586,Omusati Region,10614,Oshikuku District,Onaanda Clinic,-17.907,15.349,public MoHSS,L1,,0,0,1,2,Government,L1
+10448,10586,Omusati Region,10621,Tsandi District,Onamandongo Clinic,-17.834,14.927,public MoHSS,L1,,0,0,1,2,Government,L1
+10449,10586,Omusati Region,10606,Okahao District,Onamatanga Clinic,-18.343,14.498,public MoHSS,L1,,0,0,1,2,Government,L1
+10450,10586,Omusati Region,10616,Outapi District,Onawa Clinic,-17.46,15.086,public MoHSS,L1,,0,0,1,2,Government,L1
+10451,10586,Omusati Region,10621,Tsandi District,Onesi Health Centre,-17.589,14.684,public MoHSS,L1,,0,0,1,2,Government,L1
+10452,10586,Omusati Region,10621,Tsandi District,Ongulumbashe Clinic,-17.77,14.697,public MoHSS,L1,,0,0,1,2,Government,L1
+10453,10586,Omusati Region,10614,Oshikuku District,Onheleiwa Clinic,-17.422,15.468,public MoHSS,L1,,0,0,1,2,Government,L1
+10454,10586,Omusati Region,10606,Okahao District,Onkani Clinic,-18.173,15.44,public MoHSS,L1,,0,0,1,2,Government,L1
+10455,10586,Omusati Region,10616,Outapi District,Oshaala Clinic,-17.525,14.723,public MoHSS,L1,,0,0,1,2,Government,L1
+10457,10586,Omusati Region,10621,Tsandi District,Oshitudha Clinic,-17.619,14.864,public MoHSS,L1,,0,0,1,2,Government,L1
+10459,10586,Omusati Region,10606,Okahao District,Otamanzi Clinic,-17.994,15.253,public MoHSS,L1,,0,0,1,2,Government,L1
+10460,10586,Omusati Region,10614,Oshikuku District,Othika Clinic,-17.819,15.44,public MoHSS,L1,,0,0,1,2,Government,L1
+10461,10586,Omusati Region,10616,Outapi District,Outapi District Hospital,-17.516,14.985,public MoHSS,L2,,1,1,1,1,Government,L2
+10462,10586,Omusati Region,10616,Outapi District,Outapi Clinic,-17.516,14.985,public MoHSS,L1,,0,0,1,2,Government,L1
+10465,10586,Omusati Region,10616,Outapi District,Ruacana Clinic,-17.438,14.361,public MoHSS,L1,,0,0,1,2,Government,L1
+10466,10586,Omusati Region,10614,Oshikuku District,Sheetekela Clinic,-17.481,15.373,public MoHSS,L1,,0,0,1,2,Government,L1
+10467,10586,Omusati Region,10621,Tsandi District,Tsandi District Hospital,-17.747,14.885,public MoHSS,L2,,1,1,1,1,Government,L2
+10468,10586,Omusati Region,10621,Tsandi District,Tsandi Clinic,-17.748,14.886,public MoHSS,L1,,0,0,1,2,Government,L1
+10469,10586,Omusati Region,10606,Okahao District,Uutsathima Clinic,-18.456,14.837,public MoHSS,L1,,0,0,1,2,Government,L1
+10470,10587,Oshana Region,11964,Ondangwa District,Ehafo Clinic,-17.97,15.796,public MoHSS,L1,,0,0,1,2,Government,L1
+10471,10587,Oshana Region,11964,Ondangwa District,Eheke Clinic,-17.925,15.875,public MoHSS,L1,,0,0,1,2,Government,L1
+10472,10587,Oshana Region,10613,Oshakati District,Ekamba Clinic,-17.787,15.563,public MoHSS,L1,,0,0,1,2,Government,L1
+10473,10587,Oshana Region,10613,Oshakati District,Eluwa Clinic,-17.781,15.767,public MoHSS,L1,,0,0,1,2,Government,L1
+10474,10587,Oshana Region,10613,Oshakati District,Enkono Clinic,-17.902,15.753,public MoHSS,L1,,0,0,1,2,Government,L1
+10476,10587,Oshana Region,11964,Ondangwa District,Okaku Clinic,-17.812,15.926,public MoHSS,L1,,0,0,1,2,Government,L1
+10479,10587,Oshana Region,10613,Oshakati District,Okaukamasheshe Clinic,-17.896,15.558,public MoHSS,L1,,0,0,1,2,Government,L1
+10480,10587,Oshana Region,10613,Oshakati District,Okaukuejo Clinic,-19.18,15.92,public MoHSS,L1,,0,0,1,2,Government,L1
+10482,10587,Oshana Region,10613,Oshakati District,Ompundja Clinic,-17.908,15.701,public MoHSS,L1,,0,0,1,2,Government,L1
+10483,10587,Oshana Region,10613,Oshakati District,Onamutayi Clinic,-17.733,15.842,public MoHSS,L1,,0,0,1,2,Government,L1
+10484,10587,Oshana Region,11964,Ondangwa District,Ondangwa Health Centre,-17.926,15.988,public MoHSS,L1,,0,0,1,2,Government,L1
+10487,10587,Oshana Region,10613,Oshakati District,Oshakati Health Centre,-17.789,15.707,public MoHSS,L1,,0,0,1,2,Government,L1
+10488,10587,Oshana Region,10613,Oshakati District,Oshakati Intermediate Hospital,-17.789,15.707,public MoHSS,L3,,1,1,1,1,Government,L2
+10489,10587,Oshana Region,10613,Oshakati District,Ou Nick Health Centre,-17.777,15.691,public MoHSS,L1,,0,0,1,2,Government,L1
+10490,10587,Oshana Region,11964,Ondangwa District,Uukwiyuushona Clinic,-18.018,15.918,public MoHSS,L1,,0,0,1,2,Government,L1
+10492,10588,Oshikoto Region,11965,Omuthiya District,Amilema Clinic,-18.381,16.414,public MoHSS,L1,,0,0,1,2,Government,L1
+10493,10588,Oshikoto Region,10611,Onandjokwe District,Elombe Clinic,-17.841,16.218,public MoHSS,L1,,0,0,1,2,Government,L1
+10494,10588,Oshikoto Region,10622,Tsumeb District,Lombard Clinic,-19.244,17.708,public MoHSS,L1,,0,0,1,2,Government,L1
+10496,10588,Oshikoto Region,11965,Omuthiya District,Ndamono Clinic,-18.186,16.378,public MoHSS,L1,,0,0,1,2,Government,L1
+10497,10588,Oshikoto Region,10611,Onandjokwe District,Okankolo Health Centre,-17.956,16.425,public MoHSS,L1,,0,0,1,2,Government,L1
+10498,10588,Oshikoto Region,10611,Onandjokwe District,Olukonda Clinic,-17.984,16.021,public MoHSS,L1,,0,0,1,2,Government,L1
+10499,10588,Oshikoto Region,11965,Omuthiya District,Omuntele Clinic,-18.238,16.24,public MoHSS,L1,,0,0,1,2,Government,L1
+10500,10588,Oshikoto Region,11965,Omuthiya District,Omuthiya Clinic,-18.353,16.571,public MoHSS,L1,,0,0,1,2,Government,L1
+10501,10588,Oshikoto Region,10611,Onandjokwe District,Onakazizi Clinic,-18.159,16.138,public MoHSS,L1,,0,0,1,2,Government,L1
+10502,10588,Oshikoto Region,11965,Omuthiya District,Onamishu Clinic,-18.109,16.814,public MoHSS,L1,,0,0,1,2,Government,L1
+10504,10588,Oshikoto Region,11965,Omuthiya District,Onanke Clinic,-18.446,16.325,public MoHSS,L1,,0,0,1,2,Government,L1
+10505,10588,Oshikoto Region,10611,Onandjokwe District,Onayena Health Centre,-17.946,16.195,public MoHSS,L1,,0,0,1,2,Government,L1
+10506,10588,Oshikoto Region,11965,Omuthiya District,Onkumbula Clinic,-17.924,16.859,public MoHSS,L1,,0,0,1,2,Government,L1
+10507,10588,Oshikoto Region,10611,Onandjokwe District,Ontananga Clinic,-18.011,16.061,public MoHSS,L1,,0,0,1,2,Government,L1
+10509,10588,Oshikoto Region,10611,Onandjokwe District,Onyaanya Health Centre,-18.103,16.271,public MoHSS,L1,,0,0,1,2,Government,L1
+10510,10588,Oshikoto Region,11965,Omuthiya District,Onyuulaye Clinic,-18.076,16.528,public MoHSS,L1,,0,0,1,2,Government,L1
+10511,10588,Oshikoto Region,10611,Onandjokwe District,Oshigambo Clinic,-17.784,16.078,public MoHSS,L1,,0,0,1,2,Government,L1
+10512,10588,Oshikoto Region,10622,Tsumeb District,Oshivelo Clinic,-18.62,17.167,public MoHSS,L1,,0,0,1,2,Government,L1
+10513,10588,Oshikoto Region,10622,Tsumeb District,Tsintsabis Clinic,-18.771,17.963,public MoHSS,L1,,0,0,1,2,Government,L1
+10514,10588,Oshikoto Region,10622,Tsumeb District,Tsumeb Clinic,-19.248,17.716,public MoHSS,L1,,0,0,1,2,Government,L1
+10515,10588,Oshikoto Region,10622,Tsumeb District,Tsumeb District Hospital,-19.245,17.707,public MoHSS,L2,,1,1,1,1,Government,L2
+10518,10589,Otjozondjupa Region,10607,Okakarara District,Coblenz Clinic,-20.111,18.186,public MoHSS,L1,,0,0,1,2,Government,L1
+10520,10589,Otjozondjupa Region,10596,Grootfontein District,Gam Clinic,-20.24,20.817,public MoHSS,L1,,0,0,1,2,Government,L1
+10521,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein Poly Clinic,-19.573,18.102,public MoHSS,L1,,0,0,1,2,Government,L1
+10522,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein District Hospital,-19.563,18.098,public MoHSS,L2,,1,1,1,1,Government,L2
+10524,10589,Otjozondjupa Region,10615,Otjiwarongo District,Kalkfeld Clinic,-20.89,16.191,public MoHSS,L1,,0,0,1,2,Government,L1
+10525,10589,Otjozondjupa Region,10596,Grootfontein District,Kombat Clinic,-19.718,17.712,public MoHSS,L1,,0,0,1,2,Government,L1
+10526,10589,Otjozondjupa Region,10596,Grootfontein District,Mangetti Dune Health Centre,-19.519,19.735,public MoHSS,L1,,0,0,1,2,Government,L1
+10528,10589,Otjozondjupa Region,10605,Okahandja District,Nau-Aib Clinic,-21.985,16.894,public MoHSS,L1,,0,0,1,2,Government,L1
+10530,10589,Otjozondjupa Region,10605,Okahandja District,Okahandja District Hospital,-21.98,16.912,public MoHSS,L2,,1,1,1,1,Government,L2
+10531,10589,Otjozondjupa Region,10607,Okakarara District,Okakarara Clinic,-20.589,17.451,public MoHSS,L1,,0,0,1,2,Government,L1
+10532,10589,Otjozondjupa Region,10607,Okakarara District,Okakarara District Hospital,-20.589,17.451,public MoHSS,L2,,1,1,1,1,Government,L2
+10534,10589,Otjozondjupa Region,10607,Okakarara District,Okamatapati Clinic,-20.406,18.215,public MoHSS,L1,,0,0,1,2,Government,L1
+10535,10589,Otjozondjupa Region,10607,Okakarara District,Okarondu Clinic,-20.453,17.777,public MoHSS,L1,,0,0,1,2,Government,L1
+10536,10589,Otjozondjupa Region,10607,Okakarara District,Okondjatu Clinic,-20.988,18.231,public MoHSS,L1,,0,0,1,2,Government,L1
+10538,10589,Otjozondjupa Region,10596,Grootfontein District,Omatako Clinic,-19.438,19.224,public MoHSS,L1,,0,0,1,2,Government,L1
+10539,10589,Otjozondjupa Region,10615,Otjiwarongo District,Orwetoveni Clinic,-20.464,16.668,public MoHSS,L1,,0,0,1,2,Government,L1
+10540,10589,Otjozondjupa Region,10615,Otjiwarongo District,Osire Health Centre,-21.079,17.369,public MoHSS,L1,,0,0,1,2,Government,L1
+10541,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otavi Health Centre,-19.636,17.338,public MoHSS,L1,,0,0,1,2,Government,L1
+10542,10589,Otjozondjupa Region,10596,Grootfontein District,Otjituuo Clinic,-19.638,18.597,public MoHSS,L1,,0,0,1,2,Government,L1
+10543,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otjiwarongo District Hospital,-20.462,16.656,public MoHSS,L2,,1,1,1,1,Government,L2
+10545,10589,Otjozondjupa Region,10605,Okahandja District,Ovitoto Clinic,-21.977,17.209,public MoHSS,L1,,0,0,1,2,Government,L1
+10546,10589,Otjozondjupa Region,10596,Grootfontein District,Tsumkwe Clinic,-19.594,20.503,public MoHSS,L1,,0,0,1,2,Government,L1
+10549,10577,Erongo Region,10623,Usakos District,Karibib Clinic,-21.932,15.864,public MoHSS,L1,,0,0,1,2,Government,L1
+10551,10578,Hardap Region,10602,Mariental District,Sesriem Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+10552,10577,Erongo Region,10624,Walvis Bay District,HAART Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+10553,10579,!Karas Region,10597,Karasburg District,Gabis Clinic,-28.129,18.594,public MoHSS,L1,,0,0,1,2,Government,L1
+10554,10580,Kavango East Region,10591,Andara District,Andara Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+10555,10581,Kavango West Region,11966,Ncamangoro District,Erago Clinic,-18.194,19.274,public MoHSS,L1,,0,0,1,2,Government,L1
+10556,10581,Kavango West Region,11966,Ncamangoro District,Mpora Clinic,-18.434,19.266,public MoHSS,L1,,0,0,1,2,Government,L1
+10561,10582,Khomas Region,10625,Windhoek District,Windhoek Hospitals Personnel Health Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+10563,10589,Otjozondjupa Region,10605,Okahandja District,Otjozondu Clinic,-21.936,17.253,public MoHSS,L1,,0,0,1,2,Government,L1
+10564,10583,Kunene Region,10617,Outjo District,Outjo Maternity Hospital,0,0,public MoHSS,L2,,0,0,0,0,Government,L2
+10565,10584,Ohangwena Region,10594,Engela District,Hamukoto Wakapa Clinic,-17.42,16.114,public MoHSS,L1,,0,0,1,2,Government,L1
+10568,10585,Omaheke Region,10595,Gobabis District,Borderpost Clinic,-22.281,19.991,public MoHSS,L1,,0,0,1,2,Government,L1
+10571,10587,Oshana Region,10613,Oshakati District,Ongwediva Health Centre,-17.767,15.759,public MoHSS,L1,,0,0,1,2,Government,L1
+10572,10588,Oshikoto Region,11965,Omuthiya District,Hedimbi Clinic,-18.176,17.205,public MoHSS,L1,,0,0,1,2,Government,L1
+10573,10588,Oshikoto Region,11965,Omuthiya District,Oshalongo Clinic,-18.292,16.375,public MoHSS,L1,,0,0,1,2,Government,L1
+10574,10588,Oshikoto Region,11965,Omuthiya District,Omuthiya District Hospital,-18.365,16.58,public MoHSS,L2,,1,1,1,1,Government,L2
+11968,10577,Erongo Region,10620,Swakopmund District,Erongo Regional Health Office,-22.67,14.531,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11969,10578,Hardap Region,10602,Mariental District,Hardap Regional Health Office,-24.623,17.966,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11970,10579,!Karas Region,10599,Keetmanshoop District,!Karas Regional Health Office,-26.567,18.153,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11971,10580,Kavango East Region,10619,Rundu District,Kavango East Regional Health Office,-17.915,19.768,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11972,10581,Kavango West Region,11967,Nkurenkuru District,Kavango West Regional Health Office,-17.74,18.733,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11973,10582,Khomas Region,10625,Windhoek District,Khomas Regional Health Office,-22.554,17.072,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11974,10583,Kunene Region,10612,Opuwo District,Kunene Regional Health Office,-18.056,13.842,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11975,10584,Ohangwena Region,10593,Eenhana District,Ohangwena Regional Health Office,-17.484,16.328,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11976,10585,Omaheke Region,10595,Gobabis District,Omaheke Regional Health Office,-22.45,18.976,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11977,10586,Omusati Region,10616,Outapi District,Omusati Regional Health Office,-17.516,14.985,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11978,10587,Oshana Region,10613,Oshakati District,Oshana Regional Health Office,-17.789,15.707,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11979,10588,Oshikoto Region,11965,Omuthiya District,Oshikoto Regional Health Office,-18.353,16.571,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11980,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otjozondjupa Regional Health Office,-20.462,16.656,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11981,10590,Zambezi Region,10598,Katima Mulilo District,Zambezi Regional Health Office,-17.499,24.279,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11996,10580,Kavango East Region,10591,Andara District,Andara District Health Office,-18.061,21.447,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11997,10578,Hardap Region,10592,Aranos District,Aranos District Health Office,-24.139,19.118,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11998,10584,Ohangwena Region,10593,Eenhana District,Eenhana District Health Office,-17.484,16.328,public MoHSS,N/A,,0,0,0,0,Government,N/A
+11999,10584,Ohangwena Region,10594,Engela District,Engela District Health Office,-17.449,15.867,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12000,10585,Omaheke Region,10595,Gobabis District,Gobabis District Health Office,-22.45,18.976,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12001,10589,Otjozondjupa Region,10596,Grootfontein District,Grootfontein District Health Office,-19.563,18.098,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12002,10579,!Karas Region,10597,Karasburg District,Karasburg District Health Office,-28.016,18.741,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12003,10590,Zambezi Region,10598,Katima Mulilo District,Katima Mulilo District Health Office,-17.499,24.279,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12004,10579,!Karas Region,10599,Keetmanshoop District,Keetmanshoop District Health Office,-26.567,18.153,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12005,10583,Kunene Region,10600,Khorixas District,Khorixas District Health Office,-20.379,14.969,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12006,10579,!Karas Region,10601,!Nami#nus District,!Nami#nus District Health Office,-26.64,15.166,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12007,10578,Hardap Region,10602,Mariental District,Mariental District Health Office,-24.623,17.966,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12009,10580,Kavango East Region,10604,Nyangana District,Nyangana District Health Office,-18.004,20.677,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12010,10589,Otjozondjupa Region,10605,Okahandja District,Okahandja District Health Office,-21.98,16.912,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12011,10586,Omusati Region,10606,Okahao District,Okahao District Health Office,-17.888,15.071,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12012,10589,Otjozondjupa Region,10607,Okakarara District,Okakarara District Health Office,-20.589,17.451,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12013,10584,Ohangwena Region,10608,Okongo District,Okongo District Health Office,-17.575,17.221,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12014,10577,Erongo Region,10609,Omaruru District,Omaruru District Health Office,-21.431,15.95,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12015,10588,Oshikoto Region,11965,Omuthiya District,Omuthiya District Health Office,-18.353,16.571,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12016,10588,Oshikoto Region,10611,Onandjokwe District,Onandjokwe District Health Office,-17.912,16.042,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12017,10583,Kunene Region,10612,Opuwo District,Opuwo District Health Office,-18.056,13.842,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12018,10587,Oshana Region,10613,Oshakati District,Oshakati District Health Office,-17.789,15.707,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12019,10586,Omusati Region,10614,Oshikuku District,Oshikuku District Health Office,-17.888,15.071,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12020,10589,Otjozondjupa Region,10615,Otjiwarongo District,Otjiwarongo District Health Office,-20.462,16.656,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12021,10586,Omusati Region,10616,Outapi District,Outapi District Health Office,-17.516,14.985,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12022,10583,Kunene Region,10617,Outjo District,Outjo District Health Office,-20.106,16.156,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12023,10578,Hardap Region,10618,Rehoboth District,Rehoboth District Health Office,-23.326,17.076,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12024,10580,Kavango East Region,10619,Rundu District,Rundu District Health Office,-17.915,19.768,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12025,10577,Erongo Region,10620,Swakopmund District,Swakopmund District Health Office,-22.67,14.531,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12026,10586,Omusati Region,10621,Tsandi District,Tsandi District Health Office,-17.747,14.885,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12027,10588,Oshikoto Region,10622,Tsumeb District,Tsumeb District Health Office,-19.245,17.707,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12028,10577,Erongo Region,10623,Usakos District,Usakos District Health Office,-21.99,15.586,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12029,10577,Erongo Region,10624,Walvis Bay District,Walvis Bay District Health Office,-22.965,14.501,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12030,10582,Khomas Region,10625,Windhoek District,Windhoek District Health Office,-22.554,17.072,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12031,10579,!Karas Region,11963,Rosh Pinah District,Rosh Pinah District Health Office,-27.966,16.759,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12032,10587,Oshana Region,11964,Ondangwa District,Ondangwa District Health Office,-17.926,15.988,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12034,10581,Kavango West Region,11966,Ncamangoro District,Ncamangoro District Health Office,0,0,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12035,10581,Kavango West Region,11967,Nkurenkuru District,Nkurenkuru District Health Office,-17.74,18.733,public MoHSS,N/A,,0,0,0,0,Government,N/A
+12171,10583,Kunene Region,10617,Outjo District,Queen Sophia Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12185,10584,Ohangwena Region,10594,Engela District,Omundudu Clinic,-17.55,15.683,public MoHSS,L1,,0,0,1,2,Government,L1
+12357,10587,Oshana Region,10613,Oshakati District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12358,10588,Oshikoto Region,11965,Omuthiya District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12359,10588,Oshikoto Region,10611,Onandjokwe District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12360,10588,Oshikoto Region,10622,Tsumeb District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12361,10589,Otjozondjupa Region,10596,Grootfontein District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12362,10589,Otjozondjupa Region,10605,Okahandja District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12363,10589,Otjozondjupa Region,10607,Okakarara District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12364,10589,Otjozondjupa Region,10615,Otjiwarongo District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12365,10590,Zambezi Region,10598,Katima Mulilo District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12366,10579,!Karas Region,10601,!Nami#nus District,Men's Health,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12367,10577,Erongo Region,10620,Swakopmund District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12368,10577,Erongo Region,10624,Walvis Bay District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12369,10578,Hardap Region,10602,Mariental District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12370,10578,Hardap Region,10618,Rehoboth District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12371,10588,Oshikoto Region,10622,Tsumeb District,Abt Associates Namibia,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12373,10589,Otjozondjupa Region,10607,Okakarara District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12374,10589,Otjozondjupa Region,10596,Grootfontein District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12375,10577,Erongo Region,10609,Omaruru District,Development Aid from People to People,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12192,10584,Ohangwena Region,10593,Eenhana District,Ohangwena Mobile Van,0,0,public MoHSS,L0,,0,0,0,0,Government,L0
+12201,10584,Ohangwena Region,10593,Eenhana District,Onamaladi CBART,0,0,public MoHSS,L0,,0,0,0,0,Government,L0
+12203,10584,Ohangwena Region,10593,Eenhana District,Onduludia  CBART,0,0,public MoHSS,L0,,0,0,0,0,Government,L0
+12211,10584,Ohangwena Region,10608,Okongo District,Oshitishiwa CBART,0,0,public MoHSS,L0,,0,0,0,0,Government,L0
+12213,10583,Kunene Region,10612,Opuwo District,Kunene Mobile Van,0,0,public MoHSS,L1,,0,0,2,2,Government,L1
+12216,10588,Oshikoto Region,10622,Tsumeb District,Elavi Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12217,10582,Khomas Region,10625,Windhoek District,Katutura Paediatric Clinic,-22.534,17.065,public MoHSS,L1,,0,0,1,2,Government,L1
+12218,10587,Oshana Region,10613,Oshakati District,Eloolo Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12223,10586,Omusati Region,10616,Outapi District,Outapi NAPPA Clinic,-17.506,14.981,public MoHSS,L1,,0,0,1,2,Government,L1
+12227,10588,Oshikoto Region,10622,Tsumeb District,Kuvukiland Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12232,10583,Kunene Region,10612,Opuwo District,Otjomuru Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12233,10583,Kunene Region,10617,Outjo District,Seringkop Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12234,10584,Ohangwena Region,10593,Eenhana District,Omuhongo Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12236,10585,Omaheke Region,10595,Gobabis District,Blouberg Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12237,10583,Kunene Region,10617,Outjo District,Thomas Adam Sheya Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12239,10588,Oshikoto Region,10611,Onandjokwe District,Onandjokwe Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12240,10583,Kunene Region,10612,Opuwo District,Onjuva Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12242,10582,Khomas Region,10625,Windhoek District,Ombili Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12245,10589,Otjozondjupa Region,10615,Otjiwarongo District,Etunda Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12246,10590,Zambezi Region,10598,Katima Mulilo District,Kaenda Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12318,10584,Ohangwena Region,10608,Okongo District,Omauni Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12319,10586,Omusati Region,10614,Oshikuku District,Oikokola Clinic,0,0,public MoHSS,L1,,0,0,1,2,Government,L1
+12377,10581,Kavango West Region,11967,Nkurenkuru District,Nkurenkuru Clinic,0,0,public MoHSS,L1,,0,0,1,1,Government,L1
+10560,10582,Khomas Region,10625,Windhoek District,Family-Community Health Services,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12378,10583,Kunene Region,10612,Opuwo District,Namibia Planned Parenthood Association,0,0,NGO,L0,,0,0,0,0,Not for profit,L0
+12379,10582,Khomas Region,10625,Windhoek District,One Economy Foundation,0,0,NGO,L0,,0,0,0,0,Not for profit,L0

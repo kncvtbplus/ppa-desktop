@@ -14,14 +14,17 @@ services:
       RDS_PORT: "5432"
       RDS_USERNAME: ${POSTGRES_USER:-ppa}
       RDS_PASSWORD: ${POSTGRES_PASSWORD:-Automation}
+      LOCAL_MODE: "true"
       RSERVE_HOST: "rserve"
       RSERVE_PORT: "6311"
       S3_BUCKET: "local-ppa-bucket"
       AWS_REGION: "us-east-1"
       AWS_DEFAULT_REGION: "us-east-1"
     # Shared filesystem to mimic the /s3 mount used in AWS (datasource, script, output)
+    # In development this defaults to ./s3; the Windows installer overrides PPA_DATA_DIR
+    # to point to a user-writable location (e.g. under %LOCALAPPDATA%).
     volumes:
-      - ./s3:/s3
+      - ${PPA_DATA_DIR:-./s3}:/s3
     ports:
       - "8080:8080"
 
@@ -48,7 +51,7 @@ services:
       - "6311:6311"
     # Share the same /s3 filesystem with the app container
     volumes:
-      - ./s3:/s3
+      - ${PPA_DATA_DIR:-./s3}:/s3
 
 volumes:
   pgdata:

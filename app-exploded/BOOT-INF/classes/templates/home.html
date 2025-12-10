@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:data="http://www.thymeleaf.org/spring-data"
+	xmlns:udata="http://www.thymeleaf.org/unescaped-data"
+	data-ng-app="application" data-ng-controller="home"
+>
+<head>
+<base href="/">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="contextPath" th:content="${#httpServletRequest.getContextPath()}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
+<title>PPA - Patient Pathway Analysis</title>
+
+<!-- jquery and easyui -->
+<link rel="stylesheet" type="text/css" th:href="@{/lib/jquery-easyui-1.6.6/themes/icon.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/lib/jquery-easyui-1.6.6/themes/default/easyui.css}">
+<script type="text/javascript" th:src="@{/lib/jquery-easyui-1.6.6/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery-easyui-1.6.6/jquery.easyui.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery-easyui-datagridview/datagrid-bufferview.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery-easyui-datagridview/datagrid-scrollview.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery-easyui-datagridview/datagrid-groupview.js}"></script>
+
+<!-- application styles -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+<!-- blockUI -->
+<script type="text/javascript" th:src="@{/lib/blockui/jquery.blockUI.js}"></script>
+
+<!-- application functions -->
+<script type="text/javascript" th:src='@{/js/functions.js}'></script>
+
+<!-- easyui default -->
+<script type="text/javascript" th:src="@{/js/easyui-defaults.js}"></script>
+
+<!-- angular -->
+<script type="text/javascript" th:src="@{/lib/angular/angular.min.js}"></script>
+
+<!-- angular scripts -->
+<script type="text/javascript" th:src="@{/js/home.js}"></script>
+
+</head>
+<!-- main layout - begin -->
+<body class='home'>
+<div  class='easyui-layout'
+	data-options=
+	'
+		fit: true,
+	'
+>
+
+	<div
+		data-options=
+		'
+			region: "center",
+			border: false,
+		'
+	>
+
+	</div>
+	
+	<div class='home-textbox' style='height: 40%; '
+		data-options=
+		'
+			region: "south",
+			border: false,
+			cls: "home-textbox-panel",
+		'
+	>
+	
+		<div class='easyui-layout'
+			data-options=
+			'
+				fit: true,
+			'
+		>
+		
+			<div style='width: 50%; '
+				data-options=
+				'
+					region: "west",
+					border: false,
+					cls: "home-textbox-left",
+				'
+			>
+			
+				<div class='home-textbox-title' data-ng-bind-html='textboxTitle'></div>
+				<div class='home-textbox-subtitle' data-ng-bind-html='textboxSubtitle'></div>
+				
+			</div>
+				
+			<div style='width: 50%; '
+				data-options=
+				'
+					region: "east",
+					border: false,
+					cls: "home-textbox-right",
+				'
+			>
+			
+				<div class='easyui-layout'
+					data-options=
+					'
+						fit: true,
+					'
+				>
+				
+					<div
+						data-options=
+						'
+							region: "center",
+							border: false,
+						'
+					>
+					
+						<div class='home-textbox-description' data-ng-bind-html='textboxDescription'></div>
+						
+					</div>
+					
+					<!-- buttons - begin -->
+					<div style='height: 100px; '
+						data-options=
+						'
+							region: "south",
+							border: false,
+							cls: "home-textbox-buttons", 
+						'
+					>
+					
+						<div class='div-table width-full height-full table-layout-fixed'>
+							<div class='div-table-row'>
+							
+								<div class='div-table-cell' style='width: 30%; '>
+								
+									<a id='home-loginButton' class='navigation-button navigation-button-home width-full'></a>
+								
+								</div>
+								
+								<div class='div-table-cell' style='width: 5%; '>
+								</div>
+								
+								<div class='div-table-cell' style='width: 30%; '>
+								
+									<a id='home-registerButton' class='navigation-button navigation-button-home width-full'></a>
+								
+								</div>
+							
+								<div class='div-table-cell' style='width: 5%; '>
+								</div>
+								
+								<div class='div-table-cell' style='width: 30%; '>
+								
+									<a href='https://pcf4tb.org/ppa-introduction/' target='_blank' class='easyui-linkbutton navigation-button navigation-button-home width-full'
+										data-options=
+										'
+											text: getMessage("home.button.ppaResources.text"),
+										'
+									></a>
+								
+								</div>
+								
+							</div>
+						</div>
+					
+					</div>
+					<!-- buttons - end -->
+						
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<!-- registerUser dialog - begin -->
+	<div id='registerUserDialog' class='dialog security-form' style='visibility: hidden; '>
+		<img class='security-form-close' src='/images/security-form-close.png' ng-click='hideRegisterUserDialog()'>
+		<form id='registerUser-form' class='width-full height-full'>
+		<div class='div-table width-full height-full table-layout-fixed'>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-header'>
+					<div class='security-form-title' data-ng-bind='getMessage("registerUser.form.title")'></div>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='registerUser-form-username' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='registerUser-form-usernameConfirmation' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='registerUser-form-password' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='registerUser-form-passwordConfirmation' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-button'>
+					<a id='registerUser-form-submitButton' class='navigation-button navigation-button-home'></a>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell'>
+					<span data-ng-bind=loginText></span> <a href='' data-ng-bind='loginHrefText' data-ng-click='showLoginUserDialog()'></a>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!-- registerUser dialog - end -->
+	
+	<!-- loginUser dialog - begin -->
+	<div id='loginUserDialog' class='dialog security-form' style='visibility: hidden; '>
+		<img class='security-form-close' src='/images/security-form-close.png' ng-click='hideLoginUserDialog()'>
+		<form id='loginUser-form' class='width-full height-full'>
+		<div class='div-table width-full height-full table-layout-fixed'>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-header'>
+					<div class='security-form-title' data-ng-bind='getMessage("loginUser.form.title")'></div>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='loginUser-form-username' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='loginUser-form-password' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-button'>
+					<a id='loginUser-form-registerButton' class='navigation-button navigation-button-home'></a>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-link'>
+					<a href='' data-ng-bind='forgotUsernamePasswordHrefText' data-ng-click='showRecoverPasswordDialog()'></a>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell'>
+					<span data-ng-bind='signUpText'></span> <a href='' data-ng-bind='signUpHrefText' data-ng-click='showRegisterUserDialog()'></a>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!-- loginUser dialog - end -->
+	
+	<!-- acceptInvitation dialog - begin -->
+	<div id='acceptInvitationDialog' class='dialog security-form' style='visibility: hidden; '>
+		<img class='security-form-close' src='/images/security-form-close.png' ng-click='hideAcceptInvitationDialog()'>
+		<form id='acceptInvitation-form' class='width-full height-full'>
+		<div class='div-table width-full height-full table-layout-fixed'>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-header'>
+					<div class='security-form-title' data-ng-bind='getMessage("acceptInvitation.form.title")'></div>
+					<div class='security-form-subtitle' data-ng-bind='invitationAccountName'></div>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div id='acceptInvitation-form-password-cell' class='div-table-cell security-form-input'>
+					<input id='acceptInvitation-form-password' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div id='acceptInvitation-form-passwordConfirmation-cell' class='div-table-cell security-form-input'>
+					<input id='acceptInvitation-form-passwordConfirmation' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-button'>
+					<a id='acceptInvitation-form-acceptInvitationButton' class='navigation-button navigation-button-home'></a>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!-- acceptInvitation dialog - end -->
+	
+	<!-- recoverPassword dialog - begin -->
+	<div id='recoverPasswordDialog' class='dialog security-form' style='visibility: hidden; '>
+		<img class='security-form-close' src='/images/security-form-close.png' ng-click='hideRecoverPasswordDialog()'>
+		<form id='recoverPassword-form' class='width-full height-full'>
+		<div class='div-table width-full height-full table-layout-fixed'>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-header'>
+					<div class='security-form-title' data-ng-bind='getMessage("recoverPassword.form.title")'></div>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='recoverPassword-form-email' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-button'>
+					<a id='recoverPassword-form-sendButton' class='navigation-button navigation-button-home'></a>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!-- recoverPassword dialog - end -->
+	
+	<!-- resetPassword dialog - begin -->
+	<div id='resetPasswordDialog' class='dialog security-form' style='visibility: hidden; '>
+		<img class='security-form-close' src='/images/security-form-close.png' ng-click='hideResetPasswordDialog()'>
+		<form id='resetPassword-form' class='width-full height-full'>
+		<div class='div-table width-full height-full table-layout-fixed'>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-header'>
+					<div class='security-form-title' data-ng-bind='getMessage("resetPassword.form.title")'></div>
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='resetPassword-form-password' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-input'>
+					<input id='resetPassword-form-passwordConfirmation' />
+				</div>
+			</div>
+			<div class='div-table-row'>
+			</div>
+			<div class='div-table-row'>
+				<div class='div-table-cell security-form-button'>
+					<a id='resetPassword-form-resetPasswordButton' class='navigation-button navigation-button-home'></a>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!-- resetPassword dialog - end -->
+	
+</div>
+</body>
+</html>
+

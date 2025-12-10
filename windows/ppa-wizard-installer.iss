@@ -35,6 +35,8 @@ Source: "..\scripts\restore_local.ps1"; DestDir: "{app}\scripts"; Flags: ignorev
 ; Windows helper scripts
 Source: "ppa-wizard-run.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
 Source: "ppa-wizard-stop.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
+; User guide
+Source: "ppa-wizard-user-guide.txt"; DestDir: "{app}\windows"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\PPA Wizard (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; IconFilename: "powershell.exe"
@@ -42,8 +44,8 @@ Name: "{group}\PPA Wizard (Stop)"; Filename: "powershell.exe"; Parameters: "-Exe
 Name: "{commondesktop}\PPA Wizard"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "powershell.exe"
 
 [Run]
-; Optionally open a README after installation
-; Filename: "notepad.exe"; Parameters: """{app}\README-windows.txt"""; Flags: nowait postinstall skipifsilent
+; Open the simple user guide after installation (optional)
+Filename: "notepad.exe"; Parameters: """{app}\windows\ppa-wizard-user-guide.txt"""; Flags: nowait postinstall skipifsilent
 
 [Code]
 function IsDockerInstalled(): Boolean;
@@ -76,33 +78,27 @@ begin
   begin
     if not IsDockerInstalled() then
     begin
-      if MsgBox('Docker Desktop for Windows is required to run PPA Wizard.'#13#10#13#10 +
-                'Docker does not appear to be installed on this system.'#13#10 +
-                'Do you want to download and start the Docker Desktop installer now?', 
+      if MsgBox('PPA Wizard needs Docker Desktop to run.'#13#10#13#10 +
+                'Docker Desktop is not detected on this computer.'#13#10 +
+                'Do you want to open the Docker Desktop download page now?', 
                 mbConfirmation, MB_YESNO) = IDYES then
       begin
         DockerUrl := 'https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe';
-        DestPath := ExpandConstant('{tmp}\DockerDesktopInstaller.exe');
 
-        if not DownloadDockerInstaller(DockerUrl, DestPath) then
+        { Open the Docker Desktop download URL in the default browser }
+        if not ShellExec('', DockerUrl, '', '', SW_SHOWNORMAL, ewNoWait, ResultCode) then
         begin
-          MsgBox('Failed to download Docker Desktop installer. Please install Docker Desktop manually and then rerun this PPA Wizard setup.', 
+          MsgBox('Could not open the Docker Desktop download page.'#13#10 +
+                 'Please visit docker.com and install Docker Desktop manually, then run this PPA Wizard setup again.', 
                  mbError, MB_OK);
           Result := False;
           exit;
         end;
 
-        if not ShellExec('', DestPath, '', '', SW_SHOWNORMAL, ewNoWait, ResultCode) then
-        begin
-          MsgBox('Could not start the Docker Desktop installer. Please run it manually from:'#13#10 + DestPath, 
-                 mbError, MB_OK);
-          Result := False;
-          exit;
-        end;
-
-        MsgBox('The Docker Desktop installer has been started.'#13#10#13#10 +
-               'After Docker installation completes (and Docker Desktop has started at least once), '#13#10 +
-               'please rerun this PPA Wizard installer.', 
+        MsgBox('Your web browser has been opened on the Docker Desktop download page.'#13#10#13#10 +
+               'Please download and install Docker Desktop.'#13#10 +
+               'After the installation finishes (and Docker Desktop has started at least once), '#13#10 +
+               'run this PPA Wizard installer again.', 
                mbInformation, MB_OK);
 
         { Cancel this installation so the user can complete Docker installation first }

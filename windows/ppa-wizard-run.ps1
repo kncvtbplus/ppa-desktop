@@ -21,6 +21,18 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Split-Path -Parent $ScriptDir
 $ComposeDir = Join-Path $ProjectRoot "local-dev"
 
+# Determine a user-writable data directory for Docker volumes (e.g. /s3 mount)
+$LocalDataRoot = Join-Path $env:LOCALAPPDATA "PPA-Wizard"
+$S3LocalDir = Join-Path $LocalDataRoot "s3"
+
+if (-not (Test-Path $S3LocalDir)) {
+  Write-Host "Creating local data directory for PPA Wizard at $S3LocalDir" -ForegroundColor Cyan
+  New-Item -ItemType Directory -Path $S3LocalDir -Force | Out-Null
+}
+
+# Expose this path to docker-compose so it can mount it as /s3 inside containers
+$env:PPA_DATA_DIR = $S3LocalDir
+
 if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
   Write-Error "Could not find 'application.jar' in project root ($ProjectRoot). Make sure the application JAR is present."
   exit 1
