@@ -29,3 +29,6 @@ local-dev/s3/output/
 # Original PPA source drop (contains certs/keys; keep local only)
 PPA sourcecode/
 
+# AWS infra repo (keep local, not tracked)
+ppa-infra/
+
