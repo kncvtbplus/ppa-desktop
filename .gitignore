@@ -19,7 +19,13 @@ archive/
 ppa-*.dump
 
 # Installer binaries
-windows/ppa-wizard-setup.exe
+windows/ppa-wizard-setup*.exe
+windows/data_seeded.flag
 
+# Local S3 data (large/generated)
+local-dev/s3/datasource/
+local-dev/s3/output/
 
+# Original PPA source drop (contains certs/keys; keep local only)
+PPA sourcecode/
 

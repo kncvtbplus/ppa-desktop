@@ -1055,6 +1055,37 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 	background-size: cover;
 }
 
+.home-offline-wrapper
+{
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+}
+.home-offline-box
+{
+	width: min(900px, 100%);
+	background-color: rgba(0,0,0,0.55);
+	color: white;
+	border-radius: 20px;
+	padding: 28px 32px;
+	text-align: center;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.home-offline-title
+{
+	font-size: 32px;
+	line-height: 1.2;
+	font-weight: bold;
+	margin-bottom: 14px;
+}
+.home-offline-subtitle
+{
+	font-size: 22px;
+	line-height: 1.35;
+}
+
 .home-textbox-panel
 {
 	background-color: rgba(0,0,0,0.5);

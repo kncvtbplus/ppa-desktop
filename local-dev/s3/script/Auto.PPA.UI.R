@@ -46,7 +46,7 @@ library("xlsx")
 ##   Read in User Input  ##
 ###########################
 
-# "Univeral" Data Read-In Function for Different File Types Applicable to the PPA
+# "Universal" Data Read-In Function for Different File Types Applicable to the PPA
 
 read.PPA <- function(data)
 {
@@ -63,6 +63,15 @@ read.PPA <- function(data)
             stop("Unsupported data source file extension: ",  toupper(file_ext(data)))
           }
   )
+}
+
+# Safe wrapper that gives a clearer error message if the file does not exist
+read.PPA.safe <- function(data)
+{
+  if (!file.exists(data)) {
+    stop(paste("Data file not found at path:", data))
+  }
+  read.PPA(data)
 }
 
 # Defining Data Sources by Pathway Data Point
@@ -141,8 +150,13 @@ subnational.adder <- function (Pathway.Data, Pathway.Data.Point)
     
   } else {
     
-    # add Subnational column with all empty string values
-    Pathway.Data[["Subnational"]] <- "National"
+    # add Subnational column; when there are no rows we still create an
+    # empty character column to avoid data.frame replacement errors
+    if (nrow(Pathway.Data) == 0) {
+      Pathway.Data[["Subnational"]] <- character(0)
+    } else {
+      Pathway.Data[["Subnational"]] <- "National"
+    }
     
   }
   
@@ -168,10 +182,13 @@ sector.type.adder <- function (Pathway.Data, Pathway.Data.Point)
 # Summarizes raw data by count (n) for subnational unit and sector/level#
 summarize.raw.n <- function (Pathway.Data, Pathway.Data.Point)
 {
+  # When there are no rows after subsetting/filtering, treat this as zero
+  # volume for the given metric instead of a hard error. This allows output
+  # generation to continue and visualize gaps in the data.
   if (nrow(Pathway.Data) == 0) {
-    
-    stop(paste(Pathway.Data.Point, ": data subsetting and filtering resulted in zero row data set."))
-    
+    Pathway.Data <- unique(Master.Data[, c("Subnational", "PPA.Sector", "PPA.Level")])
+    Pathway.Data[[Pathway.Data.Point]] <- 0
+    return(Pathway.Data)
   }
   
   # determine or add weight column
@@ -214,9 +231,10 @@ summarize.raw.n <- function (Pathway.Data, Pathway.Data.Point)
 summarize.care.seekers <- function(Pathway.Data, Pathway.Data.Point)
 {
   if (nrow(Pathway.Data) == 0) {
-    
-    stop(paste(Pathway.Data.Point, ": data subsetting and filtering resulted in zero row data set."))
-    
+    # zero care seekers for this metric; propagate as zeros
+    Empty <- unique(Master.Data[, c("Subnational")])
+    Empty[["N.By.Sub"]] <- 0
+    return(Empty)
   }
   
   # summarize by "Subnational", "PPA.Sector", "PPA.Level" 
@@ -236,9 +254,10 @@ summarize.care.seekers <- function(Pathway.Data, Pathway.Data.Point)
 summarize.raw.prop.cs <- function (Pathway.Data, Pathway.Data.Point)
 {
   if (nrow(Pathway.Data) == 0) {
-    
-    stop(paste(Pathway.Data.Point, ": data subsetting and filtering resulted in zero row data set."))
-    
+    # zero care seeking proportion across all sector/levels
+    Empty <- unique(Master.Data[, c("Subnational", "PPA.Sector", "PPA.Level")])
+    Empty[[Pathway.Data.Point]] <- 0
+    return(Empty)
   }
   
   # summarize by "Subnational", "PPA.Sector", "PPA.Level" 
@@ -270,9 +289,16 @@ summarize.raw.prop.cs <- function (Pathway.Data, Pathway.Data.Point)
 summarize.raw.n.service.availability <- function (Services.Data, Pathway.Data.Point) {
   
   if (nrow(Services.Data) == 0) {
-    
-    stop(paste(Pathway.Data.Point, ": data subsetting and filtering resulted in zero row data set."))
-    
+    # No facility rows at all for this availability metric. Treat this as
+    # zero availability across all sectors/levels instead of a hard error
+    # so that output generation and visualisation can continue.
+    Services.Data.Result <- unique(Master.Data[, c("Subnational", "PPA.Sector", "PPA.Level", "N.Facilities")])
+    Services.Data.Result[["Numerator"]] <- 0
+    Services.Data.Result[["Ratio"]] <- 0
+    Services.Data.Result[["N.Facilities"]] <- NULL
+    Services.Data.Result[["Numerator"]] <- NULL
+    names(Services.Data.Result)[names(Services.Data.Result) == "Ratio"] <- Pathway.Data.Point
+    return(Services.Data.Result)
   }
   
   # get Metadata variables
@@ -286,8 +312,21 @@ summarize.raw.n.service.availability <- function (Services.Data, Pathway.Data.Po
   
   # numerator
   Values.to.Count <- Services.Data[Variable.Column %in% Values, ]
-  Values.to.Count <- summarize.raw.n(Values.to.Count, Pathway.Data.Point)
-  colnames(Values.to.Count)[colnames(Values.to.Count) == Pathway.Data.Point] <- "Numerator"
+  
+  # When no facilities match the availability filter, treat this as zero
+  # availability rather than a hard error. This is common in early or
+  # partial datasets and should not prevent output generation.
+  if (nrow(Values.to.Count) == 0) {
+    
+    Values.to.Count <- unique(Master.Data[, c("Subnational", "PPA.Sector", "PPA.Level")])
+    Values.to.Count[["Numerator"]] <- 0
+    
+  } else {
+    
+    Values.to.Count <- summarize.raw.n(Values.to.Count, Pathway.Data.Point)
+    colnames(Values.to.Count)[colnames(Values.to.Count) == Pathway.Data.Point] <- "Numerator"
+    
+  }
   
   # merge
   Services.Data.Result <- merge(Master.Data[,c("Subnational", "PPA.Sector", "PPA.Level", "N.Facilities")], Values.to.Count, by = c("Subnational", "PPA.Sector", "PPA.Level"), all.x = TRUE)
@@ -396,7 +435,7 @@ if ("N.Facilities" %in% names(Metadata)) {
   
   if (N.Facilities.Data.Source != "") {
     
-    N.Facilities.Data <- read.PPA(N.Facilities.Data.Source)
+    N.Facilities.Data <- read.PPA.safe(N.Facilities.Data.Source)
     N.Facilities.Data <- subset.raw(N.Facilities.Data, "N.Facilities")
     N.Facilities.Data <- subnational.adder(N.Facilities.Data, "N.Facilities")
     N.Facilities.Data <- sector.type.adder(N.Facilities.Data, "N.Facilities")
@@ -420,7 +459,7 @@ if ("Care.Seeking" %in% names(Metadata)) {
   
   if (Care.Seeking.Data.Source != "") {
     
-    Care.Seeking.Data <- read.PPA(Care.Seeking.Data.Source)
+    Care.Seeking.Data <- read.PPA.safe(Care.Seeking.Data.Source)
     Care.Seeking.Data <- subset.raw(Care.Seeking.Data, "Care.Seeking")
     Care.Seeking.Data <- subnational.adder(Care.Seeking.Data, "Care.Seeking")
     Care.Seeking.Data <- sector.type.adder(Care.Seeking.Data, "Care.Seeking")
@@ -452,7 +491,7 @@ for (Availability in c("Dx.Availability.1", "Dx.Availability.2", "Dx.Availabilit
     
     if (Availability.Data.Source != "" && Availability.Variable.Column.Name != "") {
       
-      Availability.Data <- read.PPA(Availability.Data.Source)
+      Availability.Data <- read.PPA.safe(Availability.Data.Source)
       Availability.Data <- subset.raw(Availability.Data, Availability)
       Availability.Data <- subnational.adder(Availability.Data, Availability)
       Availability.Data <- sector.type.adder(Availability.Data, Availability)
@@ -513,13 +552,14 @@ write.xlsx2(InputData, outputFilePath, sheetName = "input", col.names = FALSE, r
 ###
 
 ## Libraries
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
 library(cowplot)
-library(extrafont)
-
-## Import fonts
+# extrafont is not used in the container; rely on default fonts
+# library(extrafont)
 # font_import() run once!
-loadfonts()
+# loadfonts()
 
 ## Data
 #cameroon <- read_csv("data/Cameroon National Master PPA for Eric v2.csv")
@@ -901,8 +941,8 @@ for (agg in aggregation) {
   final_plots <- plot_grid(p1, p2, p3, p4, p5, p6, align = "h", ncol = 6, axis = "l",
                            rel_widths = c(.175, .2, .2, .1, .2, .125))
   
-  ## Write it out
-  #    ggsave(final_plots, filename = file.path(final_dir, paste0(mydata, "_", agg, "_charts.png")), dpi = 300, height = 8, width = 18)
-  ggsave(final_plots, filename = chartFilePaths[[agg]], dpi = 300, height = 8, width = 18)
+  ## Write it out (only if a file path is defined for this aggregation level)
+  if (!is.null(chartFilePaths[[agg]]) && nzchar(chartFilePaths[[agg]])) {
+    ggsave(final_plots, filename = chartFilePaths[[agg]], dpi = 300, height = 8, width = 18)
+  }
 }
-

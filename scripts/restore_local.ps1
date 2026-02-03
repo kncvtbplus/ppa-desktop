@@ -1,13 +1,23 @@
-$ErrorActionPreference = 'Stop'
+# Parameter block must be the first statement in the script (except comments/
+# blank lines) for all PowerShell versions to treat it correctly.
 param(
-  [Parameter(Mandatory=$true)]
+  [Parameter(Mandatory = $true)]
   [string]$DumpPath,             # Path to .dump (custom format) or .sql
-  [string]$DbName = "ppa",
-  [string]$DbUser = "ppa",
-  [string]$DbPassword = "Automation",
-  [string]$DbHost = "localhost",
-  [int]$DbPort = 5432
+  [string]$DbName,
+  [string]$DbUser,
+  [string]$DbPassword,
+  [string]$DbHost,
+  [int]$DbPort
 )
+
+$ErrorActionPreference = 'Stop'
+
+# Assign defaults if optional parameters were not specified
+if (-not $DbName)     { $DbName     = "ppa" }
+if (-not $DbUser)     { $DbUser     = "ppa" }
+if (-not $DbPassword) { $DbPassword = "Automation" }
+if (-not $DbHost)     { $DbHost     = "localhost" }
+if (-not $DbPort)     { $DbPort     = 5432 }
 
 function Use-Docker() {
   try {

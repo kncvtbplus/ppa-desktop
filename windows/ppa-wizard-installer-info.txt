@@ -1,0 +1,12 @@
+PPA Wizard – important information before installation
+======================================================
+
+- PPA Wizard itself requires roughly 300 MB of disk space.
+- **Docker Desktop** is required and typically needs **at least 3 GB** of free disk space for installation and images.
+- Docker Desktop may ask you to create or sign in to a Docker account, but **this is not required for PPA Wizard**:
+  you can choose the option to skip account creation / sign-in and continue using Docker without logging in.
+
+Make sure you have sufficient free disk space before continuing. After Docker Desktop is installed once on your
+computer, it can be reused for future PPA Wizard updates.
+
+

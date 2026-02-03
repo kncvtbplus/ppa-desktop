@@ -118,7 +118,7 @@ If you run into problems:
 - Note any error message you see on the screen.
 - If possible, take a screenshot.
 - Contact your technical contact person or PPA support team and share:
-  - What you were trying to do (for example: “Generate output for Namibia – caprivi PPA”).
+  - What you were trying to do (for example: “Generate output for country X – National PPA”).
   - The exact error text or screenshot.
 
 
