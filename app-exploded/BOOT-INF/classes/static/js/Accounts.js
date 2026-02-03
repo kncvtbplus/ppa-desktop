@@ -363,38 +363,13 @@ application.controller
 				// refresh datagrid
 				
 				$("#Accounts-accounts").datagrid("reload");
-
+				
 				// refresh account selection
 				
 				call(null, "refreshSelectedAccount");
 				
 			}
 			
-			$scope.createAccount = function()
-			{
-				// add row
-				
-				postData
-				(
-						"createAccount",
-						{},
-						true,
-						function()
-						{
-							// refresh user
-							
-							call(null, "refreshUser");
-							
-							// refresh accounts
-							
-							$scope.refreshAccounts();
-							
-						}
-				)
-				;
-				
-			}
-
 			// temporary disable account name modification
 //			$scope.setAccountName = function(accountId, accountName)
 //			{

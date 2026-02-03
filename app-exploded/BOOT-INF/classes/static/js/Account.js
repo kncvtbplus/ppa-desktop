@@ -393,8 +393,8 @@ application.controller
 						true,
 						function()
 						{
-							alertTitle = $scope.logoutTitle;
-							alertMessage = $scope.logoutMessage;
+							var alertTitle = $scope.logoutTitle;
+							var alertMessage = $scope.logoutMessage;
 							
 							$.messager.alert
 							(
@@ -513,8 +513,8 @@ application.controller
 						true,
 						function()
 						{
-							alertTitle = $scope.logoutTitle;
-							alertMessage = $scope.logoutMessage;
+							var alertTitle = $scope.logoutTitle;
+							var alertMessage = $scope.logoutMessage;
 							
 							$.messager.alert
 							(
