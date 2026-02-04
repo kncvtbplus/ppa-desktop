@@ -17,8 +17,8 @@
 # Leave this section commented out when integrating with UI
 
 #Country <- "Kenya"
-#setwd('C:/Dropbox (Linksbridge)/Linksbridge/2018/Projects/TB/Current Projects/201801_PPA Automation/Country Test Data')
-#setwd('C:/mine/projects/Linksbridge/engine/Country Test Data')
+#setwd('C:/Dropbox/KNCV/2018/Projects/TB/Current Projects/201801_PPA Automation/Country Test Data')  # legacy example path
+#setwd('C:/mine/projects/PPA-Desktop/engine/Country Test Data')  # legacy example path
 #setwd("./Kenya")
 #Country.Inputs <- paste(Country, "UI.xlsx")
 # Metadata <- readWorksheetFromFile(Country.Inputs, sheet = "Subnational", header = TRUE)
@@ -548,7 +548,7 @@ InputData <- data.frame(unlist(Metadata))
 write.xlsx2(InputData, outputFilePath, sheetName = "input", col.names = FALSE, row.names = TRUE, append = TRUE)
 
 ###
-### Linksbridge Automated ggplot2 Visualizations
+### PPA Desktop automated ggplot2 visualizations
 ###
 
 ## Libraries

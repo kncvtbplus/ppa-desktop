@@ -1,10 +1,10 @@
-## PPA Wizard — Windows installable setup
+## PPA Desktop — Windows installable setup
 
-Deze map bevat een voorstel hoe je van de PPA Wizard een installeerbare Windows‑applicatie maakt, bovenop Docker.
+Deze map bevat een voorstel hoe je van PPA Desktop een installeerbare Windows‑applicatie maakt, bovenop Docker.
 
 ### Architectuur
 
-- **PPA Wizard app**: `application.jar` (Spring Boot) draait in een Docker‑container.
+- **PPA Desktop app**: `application.jar` (Spring Boot) draait in een Docker‑container.
 - **Database**: PostgreSQL draait in een tweede Docker‑container (via `local-dev/docker-compose.yml`), gevuld met een meegeleverde dump (`ppa-20251113153524.dump`).
 - **R‑laag**: een aparte **Rserve‑container** (via `rserve/Dockerfile`) zodat R‑gebaseerde PPA‑functionaliteit lokaal beschikbaar is.
 - **Windows laag**:
@@ -13,7 +13,7 @@ Deze map bevat een voorstel hoe je van de PPA Wizard een installeerbare Windows�
 
 De gebruiker ziet uiteindelijk alleen:
 
-- Een **Start Menu‑shortcut / desktop‑icoon** “PPA Wizard”.
+- Een **Start Menu‑shortcut / desktop‑icoon** “PPA Desktop”.
 - De browser opent op `http://localhost:8080` met de applicatie.
 
 Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
@@ -58,14 +58,14 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 ### 3. Wat de installer doet
 
 - Kopieert:
-  - `application.jar` naar `C:\Program Files\PPA Wizard\`.
+  - `application.jar` naar `C:\Program Files\PPA Desktop\`.
   - `Dockerfile` naar dezelfde map.
-  - `local-dev/docker-compose.yml` naar `C:\Program Files\PPA Wizard\local-dev\`.
-  - `ppa-wizard-run.ps1` en `ppa-wizard-stop.ps1` naar `C:\Program Files\PPA Wizard\windows\`.
+  - `local-dev/docker-compose.yml` naar `C:\Program Files\PPA Desktop\local-dev\`.
+  - `ppa-wizard-run.ps1` en `ppa-wizard-stop.ps1` naar `C:\Program Files\PPA Desktop\windows\`.
 - Maakt Start Menu‑shortcuts:
-  - **PPA Wizard (Start)** → start PowerShell met `ppa-wizard-run.ps1`.
-  - **PPA Wizard (Stop)** → stopt de Docker‑stack.
-- Optioneel: desktopicoon voor “PPA Wizard (Start)”.
+  - **PPA Desktop (Start)** → start PowerShell met `ppa-wizard-run.ps1`.
+  - **PPA Desktop (Stop)** → stopt de Docker‑stack.
+- Optioneel: desktopicoon voor “PPA Desktop (Start)”.
 
 ### 4. Gebruik voor eindgebruikers
 
@@ -78,10 +78,10 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
       - De installer downloadt de officiële Docker Desktop installer en start deze.
       - Daarna wordt de PPA‑installer afgebroken met de instructie om, na succesvolle Docker‑installatie, de PPA‑installer opnieuw te starten.
 - **Starten**:
-  - Via Start Menu: “PPA Wizard (Start)” of desktopicoon.
+  - Via Start Menu: “PPA Desktop (Start)” of desktopicoon.
   - Wacht tot de browser opent met `http://localhost:8080`.
 - **Stoppen**:
-  - Via Start Menu: “PPA Wizard (Stop)”.
+  - Via Start Menu: “PPA Desktop (Stop)”.
 
 ### 5. Verdere uitbreidingen
 

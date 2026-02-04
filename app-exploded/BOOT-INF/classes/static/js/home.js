@@ -502,12 +502,26 @@ application.controller
 				
 				// login
 				
+				var loginData =
+				{
+					"username": $("#loginUser-form-username").textbox("getValue"),
+					"password": $("#loginUser-form-password").passwordbox("getValue"),
+				};
+				
+				// include remember-me parameter when checkbox is present and checked
+				var $rememberMeCheckbox = $("input[name='remember-me']");
+				if (!$rememberMeCheckbox.length)
+				{
+					$rememberMeCheckbox = $("#loginUser-form-rememberme");
+				}
+				if ($rememberMeCheckbox.length && $rememberMeCheckbox.is(":checked"))
+				{
+					loginData["remember-me"] = "true";
+				}
+				
 				login
 				(
-						{
-							"username": $("#loginUser-form-username").textbox("getValue"),
-							"password": $("#loginUser-form-password").passwordbox("getValue"),
-						},
+						loginData,
 						// success handler
 						function()
 						{

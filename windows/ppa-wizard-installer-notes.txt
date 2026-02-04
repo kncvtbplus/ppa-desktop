@@ -1,7 +1,7 @@
-PPA Wizard installation completed
+PPA Desktop installation completed
 =================================
 
-Thank you for installing **PPA Wizard**.
+Thank you for installing **PPA Desktop**.
 
 - A simple step-by-step user guide has been installed at:
   `{app}\windows\ppa-wizard-user-guide.txt`

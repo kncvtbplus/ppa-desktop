@@ -1,13 +1,13 @@
-PPA Wizard – Local Use Guide (for Windows users)
+PPA Desktop – Local Use Guide (for Windows users)
 ===============================================
 
-What is PPA Wizard?
+What is the PPA Desktop?
 -------------------
-PPA Wizard is a small program that runs on your own computer.  
+The PPA Desktop is a small program that runs on your own computer.  
 It opens in your web browser and helps you create a Patient Pathway Analysis (PPA).
 
 You do not need to know anything about Docker, Java, or R.  
-The installer and the “PPA Wizard (Start)” shortcut do the technical work for you.
+The installer and the “PPA Desktop (Start)” shortcut do the technical work for you.
 
 
 1. Before you start
@@ -15,43 +15,43 @@ The installer and the “PPA Wizard (Start)” shortcut do the technical work fo
 System requirements:
 - Windows 10 or 11 (64‑bit)
 - At least 8 GB of memory is recommended
-- Internet connection the first time you run PPA Wizard (to download components)
+- Internet connection the first time you run PPA Desktop (to download components)
 
-PPA Wizard uses **Docker Desktop** in the background.  
+PPA Desktop uses **Docker Desktop** in the background.  
 If Docker is not yet installed, the installer will offer to download it for you.
 
 
-2. Installing PPA Wizard
+2. Installing PPA Desktop
 ------------------------
 1. Double‑click the file **ppa-wizard-setup.exe**.
 2. Follow the steps on screen.
 3. If Docker Desktop is not installed:
-   - A message will appear that PPA Wizard needs Docker Desktop.
+   - A message will appear that PPA Desktop needs Docker Desktop.
    - Choose **Yes** to download and start the Docker Desktop installer.
    - Complete the Docker Desktop installation and start Docker Desktop once.
-   - Run **ppa-wizard-setup.exe** again to finish the PPA Wizard installation.
+   - Run **ppa-wizard-setup.exe** again to finish the PPA Desktop installation.
 4. When the installer is finished you will have:
-   - A Start Menu folder **PPA Wizard**
+   - A Start Menu folder **PPA Desktop**
    - Shortcuts:
-     - **PPA Wizard (Start)**
-     - **PPA Wizard (Stop)**
-   - Optionally a desktop icon “PPA Wizard”.
+     - **PPA Desktop (Start)**
+     - **PPA Desktop (Stop)**
+   - Optionally a desktop icon “PPA Desktop”.
 
 
-3. Starting and stopping PPA Wizard
+3. Starting and stopping PPA Desktop
 -----------------------------------
 To start:
 1. Make sure **Docker Desktop** is running (the whale icon is visible in the taskbar).
-2. Click **Start → PPA Wizard → PPA Wizard (Start)**  
-   or double‑click the **PPA Wizard** desktop icon.
+2. Click **Start → PPA Desktop → PPA Desktop (Start)**  
+   or double‑click the **PPA Desktop** desktop icon.
 3. A PowerShell window will open. The first time this can take a few minutes:
    - The program prepares a local database.
    - It starts three background components (application, database, R).
 4. Your default browser will open at: **http://localhost:8080**.  
-   This is the PPA Wizard home page.
+   This is the PPA Desktop home page.
 
 To stop:
-1. Click **Start → PPA Wizard → PPA Wizard (Stop)**.
+1. Click **Start → PPA Desktop → PPA Desktop (Stop)**.
 2. This will stop all background components.
 
 
@@ -61,7 +61,7 @@ To stop:
   **http://localhost:8080**.
 - If the page does not load:
   - Make sure Docker Desktop is running.
-  - Try **PPA Wizard (Start)** again.
+  - Try **PPA Desktop (Start)** again.
   - If it still fails, contact your support person and mention any error text you see.
 
 
@@ -105,7 +105,7 @@ The top of the page shows the main steps:
 
 6. Where are my files stored?
 -----------------------------
-PPA Wizard keeps its internal files in a special working folder that is managed by
+PPA Desktop keeps its internal files in a special working folder that is managed by
 Docker. You normally do not need to open this folder.
 
 When you click **Download** in step 6, your browser saves a ZIP file to your usual

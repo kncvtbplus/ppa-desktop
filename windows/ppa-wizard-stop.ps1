@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Stopping PPA Wizard (Docker stack)..." -ForegroundColor Cyan
+Write-Host "Stopping PPA Desktop and its background services..." -ForegroundColor Cyan
 
 function Test-DockerInstalled {
   try {
@@ -12,7 +12,7 @@ function Test-DockerInstalled {
 }
 
 if (-not (Test-DockerInstalled)) {
-  Write-Error "Docker Desktop is not installed or not available in PATH."
+  Write-Error "Docker Desktop does not seem to be installed."
   exit 1
 }
 
@@ -21,7 +21,7 @@ $ProjectRoot = Split-Path -Parent $ScriptDir
 $ComposeDir = Join-Path $ProjectRoot "local-dev"
 
 if (-not (Test-Path (Join-Path $ComposeDir "docker-compose.yml"))) {
-  Write-Error "Could not find 'local-dev/docker-compose.yml'."
+  Write-Error "Could not find the file 'local-dev/docker-compose.yml'. Please reinstall PPA Desktop or contact support."
   exit 1
 }
 
@@ -32,7 +32,7 @@ try {
   Pop-Location
 }
 
-Write-Host "PPA Wizard stack stopped." -ForegroundColor Green
+Write-Host "PPA Desktop has been stopped." -ForegroundColor Green
 
 
 

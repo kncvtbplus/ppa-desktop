@@ -1,14 +1,16 @@
 FROM rocker/r-ver:4.3.1
 
 # System dependencies for R packages used by Auto.PPA.UI.R
-RUN apt-get update && apt-get install -y \
+# Use --no-install-recommends to keep the image smaller and installs faster.
+RUN apt-get update && apt-get install -y --no-install-recommends \
     littler \
     default-jdk \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Core R packages required by the Auto.PPA.UI.R script and Java glue code
-RUN R -e "install.packages(c('Rserve','plyr','foreign','dplyr','xlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI'), repos='https://cloud.r-project.org')"
+# Core R packages required by the Auto.PPA.UI.R script and Java glue code.
+# Use multiple CPUs when available to speed up compilation.
+RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','xlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI'), repos='https://cloud.r-project.org')"
 
 EXPOSE 6311
 
@@ -17,7 +19,3 @@ EXPOSE 6311
 ## which would let the R process exit. We explicitly keep the R session
 ## alive afterwards so that the Docker container does not stop.
 CMD ["R", "-q", "-e", "Rserve::Rserve(args='--RS-enable-remote --no-save'); while(TRUE) Sys.sleep(3600)"]
-
-
-
-

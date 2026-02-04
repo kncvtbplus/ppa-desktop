@@ -1,6 +1,6 @@
-## PPA Wizard — Overview, structure and usage
+## PPA Desktop — Overview, structure and usage
 
-The PPA Wizard is a Java Spring Boot web application that guides the Patient Pathway Analysis (PPA) process end‑to‑end: uploading data, mapping variables, and generating PPA outputs. This repository contains a prebuilt application (`application.jar`) and a `Procfile` to run the app as a web process.
+The PPA Desktop is a Java Spring Boot web application that guides the Patient Pathway Analysis (PPA) process end‑to‑end: uploading data, mapping variables, and generating PPA outputs. This repository contains a prebuilt application (`application.jar`) and a `Procfile` to run the app as a web process.
 
 ## Architecture and tech stack
 
@@ -17,7 +17,7 @@ The PPA Wizard is a Java Spring Boot web application that guides the Patient Pat
   - `application.properties`, `messages.properties`
   - `static/` — JS/CSS/images (jQuery EasyUI, etc.)
   - `templates/` — Thymeleaf templates (if present)
-  - `com/linksbridge/ppa/`
+  - `com/linksbridge/ppa/` (original Java package namespace used in the JAR)
     - core: `Application` (Spring Boot main)
     - config: `WebMvcConfiguration`, `WebSecurityConfiguration`, `RefreshSessionInterceptor`
     - security: custom authentication/authorization handlers
@@ -26,6 +26,8 @@ The PPA Wizard is a Java Spring Boot web application that guides the Patient Pat
     - persistence: `repository/*` (Spring Data repositories)
     - users: `user/MyUserDetailsService`, `MyUserDetails`
     - utilities and Thymeleaf dialect extensions
+
+The PPA Desktop was originally built under the `com.linksbridge.ppa` namespace and is now fully maintained and distributed by **KNCV TB Plus**.
 
 ## Functional overview
 

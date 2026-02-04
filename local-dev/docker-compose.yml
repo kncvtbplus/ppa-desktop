@@ -1,9 +1,7 @@
 version: "3.9"
 services:
   app:
-    build:
-      context: ..
-      dockerfile: Dockerfile
+    image: jobvanrestnl/ppa-app:latest
     container_name: ppa-app-local
     restart: unless-stopped
     depends_on:
@@ -42,9 +40,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   rserve:
-    build:
-      context: ..
-      dockerfile: rserve/Dockerfile
+    image: jobvanrestnl/ppa-rserve:latest
     container_name: ppa-rserve-local
     restart: unless-stopped
     ports:
