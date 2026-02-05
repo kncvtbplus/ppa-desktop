@@ -21,11 +21,6 @@ UninstallDisplayIcon={app}\windows\ppa-logo.ico
 SetupIconFile={#SourcePath}\ppa-logo.ico
 ; WizardSmallImageFile expects a BMP or PNG bitmap; using only the .ico for now
 ;WizardSmallImageFile=ppa-logo.ico
-; Reserve extra disk space in the Windows installer UI to account for Docker
-; Desktop (~3 GB) in addition to PPA Desktop itself (~300 MB).
-; This makes the standard "At least ... MB of free disk space is required."
-; text reflect the combined requirement.
-ExtraDiskSpaceRequired=3000000000
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -59,8 +54,11 @@ Name: "{group}\PPA Desktop (Stop)"; Filename: "powershell.exe"; Parameters: "-Ex
 Name: "{commondesktop}\PPA Desktop"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
 
 [Run]
+; Offer to start PPA Desktop immediately after installation (default checked)
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
+
 ; Offer to open the simple user guide after installation
-Filename: "notepad.exe"; Parameters: """{app}\windows\ppa-wizard-user-guide.txt"""; Description: "Open the quick PPA Desktop user guide in Notepad"; Flags: nowait postinstall skipifsilent
+Filename: "notepad.exe"; Parameters: """{app}\windows\ppa-wizard-user-guide.txt"""; Description: "Open the quick PPA Desktop user guide in Notepad"; Flags: nowait postinstall skipifsilent unchecked
 
 [Code]
 var
