@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   app:
-    image: jobvanrestnl/ppa-app:latest
+    image: kncvtbplus/ppa-app:latest
     container_name: ppa-app-local
     restart: unless-stopped
     depends_on:
@@ -40,7 +40,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   rserve:
-    image: jobvanrestnl/ppa-rserve:latest
+    image: kncvtbplus/ppa-rserve:latest
     container_name: ppa-rserve-local
     restart: unless-stopped
     ports:

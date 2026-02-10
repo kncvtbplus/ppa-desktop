@@ -73,6 +73,15 @@ Key settings (see `application.properties`) are provided via environment variabl
 
 ## Run the application
 
+### Docker images
+
+For local development and distribution, container images are published on Docker Hub under the `kncvtbplus` namespace. This Docker Hub account is registered to the email address `jobvanrest@live.nl`.
+
+- `kncvtbplus/ppa-app:latest` — main Spring Boot application image.
+- `kncvtbplus/ppa-rserve:latest` — Rserve sidecar image used by the app.
+
+The `local-dev/docker-compose.yml` file and the Windows installer use these images by default.
+
 Local start (after setting environment variables):
 
 ```bash

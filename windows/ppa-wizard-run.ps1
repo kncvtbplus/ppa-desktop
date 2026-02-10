@@ -94,6 +94,147 @@ function Wait-ForPpaDesktop {
   return $false
 }
 
+function Get-InstalledPpaDesktopVersion {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$AppRoot
+  )
+
+  $versionFile = Join-Path $AppRoot "version.txt"
+  if (-not (Test-Path $versionFile)) {
+    return $null
+  }
+
+  try {
+    $content = Get-Content -Path $versionFile -ErrorAction Stop | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($content)) {
+      return $null
+    }
+    return $content.Trim()
+  } catch {
+    return $null
+  }
+}
+
+function Get-LatestPpaDesktopRelease {
+  param(
+    [string]$ApiUrl = "https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest"
+  )
+
+  try {
+    $headers = @{
+      "User-Agent" = "PPA-Desktop-Updater"
+      "Accept"     = "application/vnd.github+json"
+    }
+
+    $response = Invoke-RestMethod -Uri $ApiUrl -Headers $headers -UseBasicParsing
+    if (-not $response) {
+      return $null
+    }
+
+    $tag = $response.tag_name
+    if (-not $tag) {
+      return $null
+    }
+
+    if ($tag -match '^v(.+)$') {
+      $latestVersion = $matches[1]
+    } else {
+      $latestVersion = $tag
+    }
+
+    $asset = $null
+    if ($response.assets) {
+      $asset = $response.assets | Where-Object { $_.name -like 'ppa-wizard-setup-*.exe' } | Select-Object -First 1
+    }
+
+    $downloadUrl = $null
+    if ($asset -and $asset.browser_download_url) {
+      $downloadUrl = $asset.browser_download_url
+    }
+
+    return [PSCustomObject]@{
+      Version     = $latestVersion
+      DownloadUrl = $downloadUrl
+      ReleaseUrl  = $response.html_url
+    }
+  } catch {
+    return $null
+  }
+}
+
+function Compare-PpaDesktopVersion {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$A,
+    [Parameter(Mandatory = $true)]
+    [string]$B
+  )
+
+  # Returns -1 if A < B, 0 if A == B, 1 if A > B
+  $aParts = $A.Split('.')
+  $bParts = $B.Split('.')
+  $max = [Math]::Max($aParts.Length, $bParts.Length)
+
+  for ($i = 0; $i -lt $max; $i++) {
+    $ai = if ($i -lt $aParts.Length) { [int]$aParts[$i] } else { 0 }
+    $bi = if ($i -lt $bParts.Length) { [int]$bParts[$i] } else { 0 }
+
+    if ($ai -lt $bi) { return -1 }
+    if ($ai -gt $bi) { return 1 }
+  }
+
+  return 0
+}
+
+function Check-ForPpaDesktopUpdate {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$AppRoot
+  )
+
+  $installedVersion = Get-InstalledPpaDesktopVersion -AppRoot $AppRoot
+  if (-not $installedVersion) {
+    return
+  }
+
+  $latest = Get-LatestPpaDesktopRelease
+  if (-not $latest -or -not $latest.Version) {
+    return
+  }
+
+  try {
+    $cmp = Compare-PpaDesktopVersion -A $installedVersion -B $latest.Version
+  } catch {
+    return
+  }
+
+  if ($cmp -ge 0) {
+    return
+  }
+
+  Write-Host ""
+  Write-Host "A newer PPA Desktop installer is available." -ForegroundColor Yellow
+  Write-Host ("  Installed version: {0}" -f $installedVersion)
+  Write-Host ("  Latest version:    {0}" -f $latest.Version)
+
+  $answer = Read-Host "Open the download page for the latest installer now? (Y/N)"
+  if ($answer -match '^(Y|y|J|j)$') {
+    $url = $latest.DownloadUrl
+    if (-not $url) {
+      $url = $latest.ReleaseUrl
+    }
+
+    if ($url) {
+      Write-Host "Opening the latest PPA Desktop release in your browser..." -ForegroundColor Cyan
+      Start-Process $url
+      Write-Host "After installing the new version, please start PPA Desktop again from the Start menu." -ForegroundColor Cyan
+      Read-Host "Press Enter to close this window"
+      exit 0
+    }
+  }
+}
+
 if (-not (Test-DockerInstalled)) {
   Write-Error "Docker Desktop does not seem to be installed. Please install Docker Desktop for Windows first."
   Read-Host "Press Enter to close this window"
@@ -123,6 +264,9 @@ if (-not (Test-DockerDaemonRunning)) {
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $ProjectRoot = Split-Path -Parent $ScriptDir
 $ComposeDir = Join-Path $ProjectRoot "local-dev"
+
+# Check if a newer PPA Desktop installer is available and offer to open the download page
+Check-ForPpaDesktopUpdate -AppRoot $ProjectRoot
 
 # Determine a user-writable data directory for Docker volumes (e.g. /s3 mount)
 $LocalDataRoot = Join-Path $env:LOCALAPPDATA "PPA-Wizard"

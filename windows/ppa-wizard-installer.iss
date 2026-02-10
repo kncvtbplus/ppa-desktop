@@ -33,6 +33,8 @@ Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "A
 Source: "..\application.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Dockerfile"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\local-dev\docker-compose.yml"; DestDir: "{app}\local-dev"; Flags: ignoreversion
+; Version file used by the Windows start script to check for updates
+Source: "..\version.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; R script used to generate PPA outputs (copied into a writable data directory on first run)
 Source: "..\local-dev\s3\script\Auto.PPA.UI.R"; DestDir: "{app}\local-dev\s3\script"; Flags: ignoreversion
 Source: "..\rserve\Dockerfile"; DestDir: "{app}\rserve"; Flags: ignoreversion
