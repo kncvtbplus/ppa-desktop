@@ -53,7 +53,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
    - `..\application.jar` → verwijst naar de JAR in de projectroot.
    - `..\Dockerfile` → Dockerfile in de projectroot.
    - `..\local-dev\docker-compose.yml` → compose file voor de stack.
-4. Klik op **Build → Compile** om bijvoorbeeld `ppa-desktop-setup-1.2.0.exe` te genereren (in dezelfde map als de `.iss`).
+4. Klik op **Build → Compile** om bijvoorbeeld `ppa-desktop-setup-1.3.0.exe` te genereren (in dezelfde map als de `.iss`).
 
 ### 3. Wat de installer doet
 
@@ -70,7 +70,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 ### 4. Gebruik voor eindgebruikers
 
 - **Installeren**:
-  - Voer de gegenereerde installer uit, bijvoorbeeld `ppa-desktop-setup-1.2.0.exe`.
+  - Voer de gegenereerde installer uit, bijvoorbeeld `ppa-desktop-setup-1.3.0.exe`.
   - De installer **checkt automatisch of Docker Desktop aanwezig is**:
     - Indien **Docker al is geïnstalleerd** → installatie gaat direct verder.
     - Indien **Docker ontbreekt**:

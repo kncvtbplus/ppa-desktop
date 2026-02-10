@@ -197,23 +197,30 @@ function Check-ForPpaDesktopUpdate {
     [string]$AppRoot
   )
 
+  Write-Host ""
+  Write-Host "Checking for a newer PPA Desktop installer via kncvtbplus/ppa-desktop..." -ForegroundColor Cyan
+
   $installedVersion = Get-InstalledPpaDesktopVersion -AppRoot $AppRoot
   if (-not $installedVersion) {
+    Write-Host "Could not determine installed PPA Desktop version (missing or empty version.txt); skipping update check." -ForegroundColor Yellow
     return
   }
 
   $latest = Get-LatestPpaDesktopRelease
   if (-not $latest -or -not $latest.Version) {
+    Write-Host "Could not retrieve latest installer information from GitHub; skipping update check." -ForegroundColor Yellow
     return
   }
 
   try {
     $cmp = Compare-PpaDesktopVersion -A $installedVersion -B $latest.Version
   } catch {
+    Write-Host "Could not compare installed version with latest release; skipping update check." -ForegroundColor Yellow
     return
   }
 
   if ($cmp -ge 0) {
+    Write-Host ("PPA Desktop is up to date (installed {0}, latest {1})." -f $installedVersion, $latest.Version) -ForegroundColor Green
     return
   }
 

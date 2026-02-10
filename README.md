@@ -119,16 +119,16 @@ Contact the team if you need assistance configuring RDS/S3/Rserve or setting up 
 ### Building a new Windows installer (maintainers)
 
 1. **Bump the version** in the source repo:
-   - Update the file `version.txt` with the new semantic version (for example `1.2.0`).
+   - Update the file `version.txt` with the new semantic version (for example `1.3.0`).
    - In `windows/ppa-wizard-installer.iss`:
-     - Set `AppVersion` to the same value (for example `1.2.0`).
-     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.2.0`).
+     - Set `AppVersion` to the same value (for example `1.3.0`).
+     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.3.0`).
 2. **Compile the installer** on Windows with Inno Setup:
    - Open `windows/ppa-wizard-installer.iss` in the Inno Setup IDE.
    - Choose **Build → Compile**.
-   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.2.0.exe`).
+   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.3.0.exe`).
 3. **Publish a new public release** in `kncvtbplus/ppa-desktop`:
-   - Create a GitHub release with tag `v<version>` (for example `v1.2.0`).
+   - Create a GitHub release with tag `v<version>` (for example `v1.3.0`).
    - Attach the generated installer `ppa-desktop-setup-<version>.exe` as a release asset.
 
 ### How the desktop auto‑update check works
@@ -137,7 +137,7 @@ Contact the team if you need assistance configuring RDS/S3/Rserve or setting up 
 - On startup, the Windows script `windows/ppa-desktop-run.ps1` (via `ppa-wizard-run.ps1`) will:
   1. Read the installed version from `version.txt`.
   2. Call the GitHub API `https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest`.
-  3. Compare the installed version with the latest release tag (expecting tags like `v1.2.0`).
+  3. Compare the installed version with the latest release tag (expecting tags like `v1.3.0`).
   4. Look for an installer asset named `ppa-desktop-setup-*.exe` (falling back to `ppa-wizard-setup-*.exe` for older releases).
   5. If a newer version is available, prompt the user and open the latest release / download URL in the browser.
 
