@@ -108,6 +108,41 @@ This folder contains the built artifacts (`application.jar`) but not the origina
 
 Contact the team if you need assistance configuring RDS/S3/Rserve or setting up Procfile‑based deployments.
 
+## Windows desktop packaging and updates
+
+- **Source code repository** (development, packaging scripts):  
+  [`FeriusS/ppa-wizard`](https://github.com/FeriusS/ppa-wizard)
+
+- **Distribution repository** (public installers + releases only):  
+  [`kncvtbplus/ppa-desktop`](https://github.com/kncvtbplus/ppa-desktop)
+
+### Building a new Windows installer (maintainers)
+
+1. **Bump the version** in the source repo:
+   - Update the file `version.txt` with the new semantic version (for example `1.2.0`).
+   - In `windows/ppa-wizard-installer.iss`:
+     - Set `AppVersion` to the same value (for example `1.2.0`).
+     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.2.0`).
+2. **Compile the installer** on Windows with Inno Setup:
+   - Open `windows/ppa-wizard-installer.iss` in the Inno Setup IDE.
+   - Choose **Build → Compile**.
+   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.2.0.exe`).
+3. **Publish a new public release** in `kncvtbplus/ppa-desktop`:
+   - Create a GitHub release with tag `v<version>` (for example `v1.2.0`).
+   - Attach the generated installer `ppa-desktop-setup-<version>.exe` as a release asset.
+
+### How the desktop auto‑update check works
+
+- The installed application keeps its version in `C:\Program Files\PPA Desktop\version.txt` (copied from `version.txt` in this repo by the installer).
+- On startup, the Windows script `windows/ppa-desktop-run.ps1` (via `ppa-wizard-run.ps1`) will:
+  1. Read the installed version from `version.txt`.
+  2. Call the GitHub API `https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest`.
+  3. Compare the installed version with the latest release tag (expecting tags like `v1.2.0`).
+  4. Look for an installer asset named `ppa-desktop-setup-*.exe` (falling back to `ppa-wizard-setup-*.exe` for older releases).
+  5. If a newer version is available, prompt the user and open the latest release / download URL in the browser.
+
+This means that **end users always download the latest installer from GitHub Releases**, while all source changes and packaging logic remain maintained in the `FeriusS/ppa-wizard` repository.
+
 ### Infrastructure (AWS)
 
 The repository now includes infrastructure‑as‑code under `ppa-infra/` (moved into this project for convenience). It provisions the application stack in AWS using CloudFormation/SAM and configures CloudFront and Route53.

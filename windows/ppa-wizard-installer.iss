@@ -4,14 +4,14 @@
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.1.0
+AppVersion=1.2.0
 AppPublisher=KNCV TB Plus
 DefaultDirName={pf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-wizard-setup-1.1.0
+OutputBaseFilename=ppa-desktop-setup-1.2.0
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\windows\ppa-logo.ico
@@ -47,17 +47,19 @@ Source: "..\scripts\restore_local.ps1"; DestDir: "{app}\scripts"; Flags: ignorev
 ; Windows helper scripts
 Source: "ppa-wizard-run.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
 Source: "ppa-wizard-stop.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
+Source: "ppa-desktop-run.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
+Source: "ppa-desktop-stop.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
 ; User guide
 Source: "ppa-wizard-user-guide.txt"; DestDir: "{app}\windows"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\PPA Desktop (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
-Name: "{group}\PPA Desktop (Stop)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-stop.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
-Name: "{commondesktop}\PPA Desktop"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{group}\PPA Desktop (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{group}\PPA Desktop (Stop)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-stop.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{commondesktop}\PPA Desktop"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
 
 [Run]
 ; Offer to start PPA Desktop immediately after installation (default checked)
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-wizard-run.ps1"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
 
 ; Offer to open the simple user guide after installation
 Filename: "notepad.exe"; Parameters: """{app}\windows\ppa-wizard-user-guide.txt"""; Description: "Open the quick PPA Desktop user guide in Notepad"; Flags: nowait postinstall skipifsilent unchecked

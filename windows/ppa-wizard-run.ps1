@@ -145,7 +145,11 @@ function Get-LatestPpaDesktopRelease {
 
     $asset = $null
     if ($response.assets) {
-      $asset = $response.assets | Where-Object { $_.name -like 'ppa-wizard-setup-*.exe' } | Select-Object -First 1
+      # Prefer new PPA Desktop installer name, fall back to legacy PPA Wizard name
+      $asset = $response.assets | Where-Object { $_.name -like 'ppa-desktop-setup-*.exe' } | Select-Object -First 1
+      if (-not $asset) {
+        $asset = $response.assets | Where-Object { $_.name -like 'ppa-wizard-setup-*.exe' } | Select-Object -First 1
+      }
     }
 
     $downloadUrl = $null

@@ -9,7 +9,7 @@ Deze map bevat een voorstel hoe je van PPA Desktop een installeerbare Windows‑
 - **R‑laag**: een aparte **Rserve‑container** (via `rserve/Dockerfile`) zodat R‑gebaseerde PPA‑functionaliteit lokaal beschikbaar is.
 - **Windows laag**:
   - PowerShell‑scripts om de stack te starten/stoppen.
-  - Een Inno Setup script (`ppa-wizard-installer.iss`) om een klassieke Windows‑installer (`ppa-wizard-setup.exe`) te bouwen.
+  - Een Inno Setup script (`ppa-wizard-installer.iss`) om een klassieke Windows‑installer (`ppa-desktop-setup-x.y.z.exe`) te bouwen.
 
 De gebruiker ziet uiteindelijk alleen:
 
@@ -30,7 +30,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 3. Start de stack:
 
    ```powershell
-   .\ppa-wizard-run.ps1
+   .\ppa-desktop-run.ps1
    ```
 
 4. De script:
@@ -42,7 +42,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 5. Stoppen kan met:
 
    ```powershell
-   .\ppa-wizard-stop.ps1
+   .\ppa-desktop-stop.ps1
    ```
 
 ### 2. Installer (.exe) genereren met Inno Setup
@@ -53,7 +53,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
    - `..\application.jar` → verwijst naar de JAR in de projectroot.
    - `..\Dockerfile` → Dockerfile in de projectroot.
    - `..\local-dev\docker-compose.yml` → compose file voor de stack.
-4. Klik op **Build → Compile** om `ppa-wizard-setup.exe` te genereren (in dezelfde map als de `.iss`).
+4. Klik op **Build → Compile** om bijvoorbeeld `ppa-desktop-setup-1.2.0.exe` te genereren (in dezelfde map als de `.iss`).
 
 ### 3. Wat de installer doet
 
@@ -61,16 +61,16 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
   - `application.jar` naar `C:\Program Files\PPA Desktop\`.
   - `Dockerfile` naar dezelfde map.
   - `local-dev/docker-compose.yml` naar `C:\Program Files\PPA Desktop\local-dev\`.
-  - `ppa-wizard-run.ps1` en `ppa-wizard-stop.ps1` naar `C:\Program Files\PPA Desktop\windows\`.
+  - `ppa-desktop-run.ps1` en `ppa-desktop-stop.ps1` naar `C:\Program Files\PPA Desktop\windows\`.
 - Maakt Start Menu‑shortcuts:
-  - **PPA Desktop (Start)** → start PowerShell met `ppa-wizard-run.ps1`.
+  - **PPA Desktop (Start)** → start PowerShell met `ppa-desktop-run.ps1`.
   - **PPA Desktop (Stop)** → stopt de Docker‑stack.
 - Optioneel: desktopicoon voor “PPA Desktop (Start)”.
 
 ### 4. Gebruik voor eindgebruikers
 
 - **Installeren**:
-  - Voer `ppa-wizard-setup.exe` uit.
+  - Voer de gegenereerde installer uit, bijvoorbeeld `ppa-desktop-setup-1.2.0.exe`.
   - De installer **checkt automatisch of Docker Desktop aanwezig is**:
     - Indien **Docker al is geïnstalleerd** → installatie gaat direct verder.
     - Indien **Docker ontbreekt**:

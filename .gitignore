@@ -20,6 +20,7 @@ ppa-*.dump
 
 # Installer binaries
 windows/ppa-wizard-setup*.exe
+windows/ppa-desktop-setup*.exe
 windows/data_seeded.flag
 
 # Local S3 data (large/generated)
