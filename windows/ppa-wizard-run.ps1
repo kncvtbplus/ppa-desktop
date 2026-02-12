@@ -318,8 +318,8 @@ if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
 
 Push-Location $ComposeDir
 try {
-  Write-Host "Downloading the latest PPA Desktop Docker images (this needs internet the first time)..." -ForegroundColor Yellow
-  docker-compose pull
+  Write-Host "Downloading the latest base Docker images (e.g. Postgres)..." -ForegroundColor Yellow
+  docker-compose pull postgres
 
   Write-Host "Starting the PPA Desktop services (this can take a few minutes the first time)..." -ForegroundColor Yellow
   docker-compose up -d

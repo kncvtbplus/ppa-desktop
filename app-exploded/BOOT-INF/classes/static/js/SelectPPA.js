@@ -145,6 +145,31 @@ application.controller
 											},
 									},
 									{
+										field: "export",
+										title: getMessage("SelectPPA.ppas.columns.export"),
+										width: 90,
+										fixed: true,
+										align: "center",
+										formatter:
+											function(value,row,index)
+											{
+												var output = "";
+												
+												if ($scope.editable)
+												{
+													output +=
+														"<a class='SelectPPA-ppas-export'" +
+														" ppaId='" + row["id"] + "'" +
+														"></a>"
+													;
+													
+												}
+												
+												return output;
+												
+											},
+									},
+									{
 										field: "duplicate",
 										title: getMessage("SelectPPA.ppas.columns.duplicate"),
 										width: 90,
@@ -215,6 +240,18 @@ application.controller
 											function()
 											{
 												$scope.createPpa();
+												
+											},
+									},
+									{
+										disabled: !$scope.editable,
+										id: "SelectPPA-ppas-importButton",
+										iconCls: "icon-download",
+										text: getMessage("SelectPPA.ppas.import"),
+										handler:
+											function()
+											{
+												$scope.openImportDialog();
 												
 											},
 									},
@@ -388,6 +425,32 @@ application.controller
 									)
 									;
 									
+									// render export
+									
+									$(".SelectPPA-ppas-export").each
+									(
+											function(index, element)
+											{
+												var ppaId = element.getAttribute("ppaId");
+												
+												$(this).linkbutton
+												(
+														{
+															iconCls: "icon-upload",
+															onClick:
+																function()
+																{
+																	$scope.exportPpa(ppaId);
+																	
+																},
+														}
+												)
+												;
+												
+											}
+									)
+									;
+									
 									// render delete
 									
 									$(".SelectPPA-ppas-delete").each
@@ -418,9 +481,7 @@ application.controller
 								},
 						}
 				)
-				.datagrid("getPanel")
-				.css("max-width", (1000 + $rootScope.tableScrollbarWidth).toString() + "px")
-				;
+				.datagrid("getPanel");
 				
 			}
 			
@@ -431,17 +492,114 @@ application.controller
 				if ($scope.editable)
 				{
 					$("#SelectPPA-ppas-addButton").linkbutton("enable");
+					$("#SelectPPA-ppas-importButton").linkbutton("enable");
 					
 				}
 				else
 				{
 					$("#SelectPPA-ppas-addButton").linkbutton("disable");
+					$("#SelectPPA-ppas-importButton").linkbutton("disable");
 					
 				}
 				
 				// delegate to index function
 				
 				call(null, "refreshSelectedPpa");
+				
+			}
+			
+			$scope.openImportDialog = function()
+			{
+				var $fileInput = $("#SelectPPA-importFile");
+				
+				// reset previous selection and handler
+				
+				$fileInput.val("");
+				$fileInput.off("change.SelectPPAImport");
+				
+				$fileInput.on
+				(
+						"change.SelectPPAImport",
+						function(event)
+						{
+							var files = this.files;
+							
+							if (!files || files.length == 0)
+							{
+								return;
+								
+							}
+							
+							var formData = new FormData();
+							
+							formData.append("file", files[0]);
+							
+							$.ajax
+							(
+									{
+										url: "data/importPpa",
+										type: "POST",
+										data: formData,
+										processData: false,
+										contentType: false,
+										success:
+											function(response)
+											{
+												$fileInput.val("");
+												
+												// refresh PPAs
+												
+												$scope.refreshPpas();
+												
+												// auto-select imported PPA when possible
+												
+												try
+												{
+													if (response && response.ppaId)
+													{
+														call(null, "selectPpa", [response.ppaId, ]);
+														
+													}
+												}
+												catch (e)
+												{
+												}
+												
+												showInformationMessage(getMessage("SelectPPA.import.success"));
+												
+											},
+										error:
+											function()
+											{
+												$fileInput.val("");
+												
+												$.messager.alert
+												(
+														getMessage("common.alert.error.title"),
+														getMessage("SelectPPA.import.error"),
+														"error"
+												);
+												
+											},
+									}
+							)
+							;
+							
+						}
+				)
+				;
+				
+				$fileInput.click();
+				
+			}
+			
+			$scope.exportPpa = function(ppaId)
+			{
+				if (ppaId)
+				{
+					window.location = "data/exportPpa?ppaId=" + ppaId;
+					
+				}
 				
 			}
 			

@@ -10,7 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Core R packages required by the Auto.PPA.UI.R script and Java glue code.
 # Use multiple CPUs when available to speed up compilation.
-RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','xlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI'), repos='https://cloud.r-project.org')"
+# Note: we use 'openxlsx' (no Java dependency) instead of 'xlsx' to avoid
+# rJava/Java toolchain issues inside the container while still writing .xlsx files.
+RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI'), repos='https://cloud.r-project.org')"
 
 EXPOSE 6311
 

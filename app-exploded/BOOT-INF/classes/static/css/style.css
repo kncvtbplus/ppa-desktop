@@ -371,6 +371,44 @@ input[type=checkbox]:disabled
 	color: #FFFFFF;
 }
 
+/* SelectPPA toolbar buttons (smaller wizard-style pills) */
+
+#SelectPPA-ppas-addButton.l-btn,
+#SelectPPA-ppas-importButton.l-btn,
+#SelectOutputTypeAndGo1-generateOutputButton.l-btn
+{
+	box-sizing: border-box;
+	height: 36px;
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 24px;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #FFFFFF;
+	border-color: #004745;
+	padding: 0 12px;
+	margin-right: 10px;
+}
+
+#SelectPPA-ppas-addButton.l-btn>.l-btn-left,
+#SelectPPA-ppas-importButton.l-btn>.l-btn-left,
+#SelectOutputTypeAndGo1-generateOutputButton.l-btn>.l-btn-left
+{
+	max-width: 100%;
+}
+
+#SelectPPA-ppas-addButton.l-btn>.l-btn-left>.l-btn-text,
+#SelectPPA-ppas-importButton.l-btn>.l-btn-left>.l-btn-text,
+#SelectOutputTypeAndGo1-generateOutputButton.l-btn>.l-btn-left>.l-btn-text
+{
+	vertical-align: middle;
+	text-align: center;
+	line-height: 32px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #004745;
+}
+
 /* security form */
 
 .security-form
@@ -1228,6 +1266,15 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 	color: white;
 	font-size: 16px;
 	font-weight: bold;
+}
+
+/* Improve message wrapping/alignment inside popups */
+.messager-window .messager-body > div:not(.messager-icon)
+{
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	line-height: 1.35;
 }
 
 /* window - panel */

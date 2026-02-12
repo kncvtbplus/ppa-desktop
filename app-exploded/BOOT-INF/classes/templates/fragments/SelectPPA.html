@@ -29,9 +29,10 @@
 		'
 	>
 	
-		<!-- form to support radiobutton functionality -->
-		<form class='width-full height-full'>
+		<!-- form to support radiobutton functionality and hidden import file input -->
+		<form id='SelectPPA-importForm' class='width-full height-full' method='post' enctype='multipart/form-data' action='data/importPpa'>
 		<table id='SelectPPA-ppas' class='easyui-datagrid'></table>
+		<input type='file' id='SelectPPA-importFile' name='file' style='display:none;' />
 		</form>
 	
 	</div>

@@ -132,6 +132,7 @@ application.controller
 								[
 									{
 										disabled: !$scope.editable,
+										id: "SelectOutputTypeAndGo1-generateOutputButton",
 										iconCls: "icon-add",
 										text: getMessage("SelectOutputTypeAndGo1.generateOutput"),
 										handler:

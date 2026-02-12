@@ -39,7 +39,7 @@ library(foreign)
 library(tools)
 library(dplyr)
 #library(tidyr)
-library("xlsx")
+library(openxlsx)
 
 
 ###########################
@@ -541,11 +541,11 @@ names(Master.Data)[names(Master.Data) == 'Subnational'] <- 'Subnational.Unit'
 Master.Data[is.na(Master.Data)] <- 0
 
 # write output
-write.xlsx2(Master.Data, outputFilePath, sheetName = "output", col.names = TRUE, row.names = FALSE, append = FALSE)
+openxlsx::write.xlsx(Master.Data, outputFilePath, sheetName = "output", colNames = TRUE, rowNames = FALSE, append = FALSE)
 
 # write input data
 InputData <- data.frame(unlist(Metadata))
-write.xlsx2(InputData, outputFilePath, sheetName = "input", col.names = FALSE, row.names = TRUE, append = TRUE)
+openxlsx::write.xlsx(InputData, outputFilePath, sheetName = "input", colNames = FALSE, rowNames = TRUE, append = TRUE)
 
 ###
 ### PPA Desktop automated ggplot2 visualizations

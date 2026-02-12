@@ -119,25 +119,25 @@ Contact the team if you need assistance configuring RDS/S3/Rserve or setting up 
 ### Building a new Windows installer (maintainers)
 
 1. **Bump the version** in the source repo:
-   - Update the file `version.txt` with the new semantic version (for example `1.3.0`).
-   - In `windows/ppa-wizard-installer.iss`:
-     - Set `AppVersion` to the same value (for example `1.3.0`).
-     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.3.0`).
+   - Update the file `version.txt` with the new semantic version (for example `1.4.1`).
+   - In `windows/ppa-desktop-installer.iss`:
+     - Set `AppVersion` to the same value (for example `1.4.1`).
+     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.4.1`).
 2. **Compile the installer** on Windows with Inno Setup:
-   - Open `windows/ppa-wizard-installer.iss` in the Inno Setup IDE.
+   - Open `windows/ppa-desktop-installer.iss` in the Inno Setup IDE.
    - Choose **Build → Compile**.
-   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.3.0.exe`).
+   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.4.1.exe`).
 3. **Publish a new public release** in `kncvtbplus/ppa-desktop`:
-   - Create a GitHub release with tag `v<version>` (for example `v1.3.0`).
+   - Create a GitHub release with tag `v<version>` (for example `v1.4.1`).
    - Attach the generated installer `ppa-desktop-setup-<version>.exe` as a release asset.
 
 ### How the desktop auto‑update check works
 
 - The installed application keeps its version in `C:\Program Files\PPA Desktop\version.txt` (copied from `version.txt` in this repo by the installer).
-- On startup, the Windows script `windows/ppa-desktop-run.ps1` (via `ppa-wizard-run.ps1`) will:
+- On startup, the Windows script `windows/ppa-desktop-run.ps1` will:
   1. Read the installed version from `version.txt`.
   2. Call the GitHub API `https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest`.
-  3. Compare the installed version with the latest release tag (expecting tags like `v1.3.0`).
+  3. Compare the installed version with the latest release tag (expecting tags like `v1.4.1`).
   4. Look for an installer asset named `ppa-desktop-setup-*.exe` (falling back to `ppa-wizard-setup-*.exe` for older releases).
   5. If a newer version is available, prompt the user and open the latest release / download URL in the browser.
 

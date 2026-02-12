@@ -95,6 +95,31 @@ _f.dialog("destroy");
 }}));
 var win=_f.dialog("dialog").addClass("messager-window");
 win.find(".dialog-button").addClass("messager-button").find("a:first").focus();
+setTimeout(function(){
+try{
+var vw=($(window)._outerWidth?$(window)._outerWidth():$(window).width());
+var vh=($(window)._outerHeight?$(window)._outerHeight():$(window).height());
+var maxW=Math.max(320,Math.floor(vw*0.75));
+var maxH=Math.max(240,Math.floor(vh*0.75));
+var minW=360;
+var minH=$.messager&&$.messager.defaults&&$.messager.defaults.minHeight?$.messager.defaults.minHeight:150;
+var measure=_f.clone().css({position:"absolute",left:-10000,top:-10000,visibility:"hidden",display:"block",width:"auto",height:"auto",maxWidth:"none",maxHeight:"none"}).appendTo("body");
+var contentW=measure.outerWidth();
+var w=Math.min(maxW,Math.max(minW,contentW+60));
+measure.css({width:Math.max(0,w-60)});
+var contentH=measure.outerHeight();
+measure.remove();
+// Always apply responsive width, but only force height when needed.
+_f.dialog("resize",{width:w});
+_f.dialog("center");
+var winEl=_f.dialog("dialog");
+var currentH=(winEl._outerHeight?winEl._outerHeight():winEl.outerHeight());
+if(currentH>maxH){
+	_f.dialog("resize",{width:w,height:maxH});
+	_f.dialog("center");
+}
+}catch(e){}
+},0);
 return _f;
 };
 function _6(dlg,_10){
@@ -180,7 +205,7 @@ bar.progressbar("setValue",v);
 }
 return dlg;
 }};
-$.messager.defaults=$.extend({},$.fn.dialog.defaults,{ok:"Ok",cancel:"Cancel",width:300,height:"auto",minHeight:150,modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,fn:function(){
+$.messager.defaults=$.extend({},$.fn.dialog.defaults,{ok:"Ok",cancel:"Cancel",width:300,height:"auto",minHeight:150,modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:true,fn:function(){
 }});
 })(jQuery);
 

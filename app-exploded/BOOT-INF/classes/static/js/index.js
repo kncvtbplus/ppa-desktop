@@ -336,6 +336,22 @@ application.controller
 				(
 						"appendItem",
 						{
+							id: "Home-userMenu-importExport",
+							text: getMessage("home.userMenu.importExport.text"),
+							onclick:
+								function()
+								{
+									call(null, "selectContentTab", ["SelectPPA", ]);
+									
+								},
+						}
+				)
+				;
+				
+				$("#Home-userMenu-authenticated").menu
+				(
+						"appendItem",
+						{
 							id: "Home-userMenu-myUserFiles",
 							text: getMessage("home.userMenu.myDataSources.text"),
 							onclick:
@@ -466,12 +482,14 @@ application.controller
 				{
 					$("#Home-userMenu-authenticated").menu("disableItem", $("#Home-userMenu-myPPAs")[0]);
 					$("#Home-userMenu-authenticated").menu("disableItem", $("#Home-userMenu-myUserFiles")[0]);
+					$("#Home-userMenu-authenticated").menu("disableItem", $("#Home-userMenu-importExport")[0]);
 					
 				}
 				else
 				{
 					$("#Home-userMenu-authenticated").menu("enableItem", $("#Home-userMenu-myPPAs")[0]);
 					$("#Home-userMenu-authenticated").menu("enableItem", $("#Home-userMenu-myUserFiles")[0]);
+					$("#Home-userMenu-authenticated").menu("enableItem", $("#Home-userMenu-importExport")[0]);
 					
 				}
 				

@@ -1,7 +1,9 @@
-version: "3.9"
 services:
   app:
-    image: kncvtbplus/ppa-app:latest
+    build:
+      context: ..
+      dockerfile: local-dev/Dockerfile.app
+    image: ppa-app-local:dev
     container_name: ppa-app-local
     restart: unless-stopped
     depends_on:
@@ -40,6 +42,9 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   rserve:
+    build:
+      context: ..
+      dockerfile: rserve/Dockerfile
     image: kncvtbplus/ppa-rserve:latest
     container_name: ppa-rserve-local
     restart: unless-stopped

@@ -9,7 +9,7 @@ Deze map bevat een voorstel hoe je van PPA Desktop een installeerbare Windows‑
 - **R‑laag**: een aparte **Rserve‑container** (via `rserve/Dockerfile`) zodat R‑gebaseerde PPA‑functionaliteit lokaal beschikbaar is.
 - **Windows laag**:
   - PowerShell‑scripts om de stack te starten/stoppen.
-  - Een Inno Setup script (`ppa-wizard-installer.iss`) om een klassieke Windows‑installer (`ppa-desktop-setup-x.y.z.exe`) te bouwen.
+  - Een Inno Setup script (`ppa-desktop-installer.iss`) om een klassieke Windows‑installer (`ppa-desktop-setup-x.y.z.exe`) te bouwen.
 
 De gebruiker ziet uiteindelijk alleen:
 
@@ -48,12 +48,12 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 ### 2. Installer (.exe) genereren met Inno Setup
 
 1. Installeer **Inno Setup** op je Windows‑machine.
-2. Open `windows/ppa-wizard-installer.iss` in de Inno Setup IDE.
+2. Open `windows/ppa-desktop-installer.iss` in de Inno Setup IDE.
 3. Controleer de paden in `[Files]`:
    - `..\application.jar` → verwijst naar de JAR in de projectroot.
    - `..\Dockerfile` → Dockerfile in de projectroot.
    - `..\local-dev\docker-compose.yml` → compose file voor de stack.
-4. Klik op **Build → Compile** om bijvoorbeeld `ppa-desktop-setup-1.3.0.exe` te genereren (in dezelfde map als de `.iss`).
+4. Klik op **Build → Compile** om bijvoorbeeld `ppa-desktop-setup-1.5.0.exe` te genereren (in dezelfde map als de `.iss`).
 
 ### 3. Wat de installer doet
 
@@ -70,7 +70,7 @@ Docker Desktop + internet (voor de eerste image‑pull) zijn vereist.
 ### 4. Gebruik voor eindgebruikers
 
 - **Installeren**:
-  - Voer de gegenereerde installer uit, bijvoorbeeld `ppa-desktop-setup-1.3.0.exe`.
+  - Voer de gegenereerde installer uit, bijvoorbeeld `ppa-desktop-setup-1.5.0.exe`.
   - De installer **checkt automatisch of Docker Desktop aanwezig is**:
     - Indien **Docker al is geïnstalleerd** → installatie gaat direct verder.
     - Indien **Docker ontbreekt**:
