@@ -139,7 +139,7 @@ Contact the team if you need assistance configuring RDS/S3/Rserve or setting up 
   2. Call the GitHub API `https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest`.
   3. Compare the installed version with the latest release tag (expecting tags like `v1.4.1`).
   4. Look for an installer asset named `ppa-desktop-setup-*.exe` (falling back to `ppa-wizard-setup-*.exe` for older releases).
-  5. If a newer version is available, prompt the user and open the latest release / download URL in the browser.
+  5. If a newer version is available, prompt the user and download + start the latest installer directly (falling back to opening the release page in the browser if the direct download fails).
 
 This means that **end users always download the latest installer from GitHub Releases**, while all source changes and packaging logic remain maintained in the `FeriusS/ppa-wizard` repository.
 

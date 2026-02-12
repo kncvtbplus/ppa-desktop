@@ -229,17 +229,37 @@ function Check-ForPpaDesktopUpdate {
   Write-Host ("  Installed version: {0}" -f $installedVersion)
   Write-Host ("  Latest version:    {0}" -f $latest.Version)
 
-  $answer = Read-Host "Open the download page for the latest installer now? (Y/N)"
+  $answer = Read-Host "Download and start the latest installer now? (Y/N)"
   if ($answer -match '^(Y|y|J|j)$') {
-    $url = $latest.DownloadUrl
-    if (-not $url) {
-      $url = $latest.ReleaseUrl
-    }
+    if ($latest.DownloadUrl) {
+      $tempDir = [System.IO.Path]::GetTempPath()
+      # Try to derive a friendly filename from the download URL; fall back to a generic name
+      $fileName = "ppa-desktop-setup-$($latest.Version).exe"
+      if ($latest.DownloadUrl -match '/([^/]+)$') {
+        $fileName = $matches[1]
+      }
+      $destPath = Join-Path $tempDir $fileName
 
-    if ($url) {
-      Write-Host "Opening the latest PPA Desktop release in your browser..." -ForegroundColor Cyan
-      Start-Process $url
-      Write-Host "After installing the new version, please start PPA Desktop again from the Start menu." -ForegroundColor Cyan
+      Write-Host "Downloading the latest installer to $destPath ..." -ForegroundColor Cyan
+      try {
+        Invoke-WebRequest -Uri $latest.DownloadUrl -OutFile $destPath -UseBasicParsing
+        Write-Host "Starting the installer..." -ForegroundColor Cyan
+        Start-Process -FilePath $destPath
+        Write-Host "Follow the installer steps to upgrade PPA Desktop, then start it again from the Start menu." -ForegroundColor Cyan
+        Read-Host "Press Enter to close this window"
+        exit 0
+      } catch {
+        Write-Warning "Automatic download of the latest installer failed."
+        if ($latest.ReleaseUrl) {
+          Write-Host "Opening the release page in your browser instead..." -ForegroundColor Yellow
+          Start-Process $latest.ReleaseUrl
+          Read-Host "Press Enter to close this window"
+          exit 0
+        }
+      }
+    } elseif ($latest.ReleaseUrl) {
+      Write-Host "No direct download URL found; opening the release page instead..." -ForegroundColor Yellow
+      Start-Process $latest.ReleaseUrl
       Read-Host "Press Enter to close this window"
       exit 0
     }
@@ -319,7 +339,7 @@ if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
 Push-Location $ComposeDir
 try {
   Write-Host "Downloading the latest base Docker images (e.g. Postgres)..." -ForegroundColor Yellow
-  docker-compose pull postgres
+  docker-compose pull
 
   Write-Host "Starting the PPA Desktop services (this can take a few minutes the first time)..." -ForegroundColor Yellow
   docker-compose up -d
