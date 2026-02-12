@@ -4,14 +4,14 @@
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.4.1
+AppVersion=1.5.0
 AppPublisher=KNCV TB Plus
 DefaultDirName={pf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-desktop-setup-1.4.1
+OutputBaseFilename=ppa-desktop-setup-1.5.0
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\windows\ppa-logo.ico
