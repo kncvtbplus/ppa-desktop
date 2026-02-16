@@ -3394,7 +3394,8 @@ public class DataController implements MessageSourceAware
 		// Prepare response
 		String baseName = sanitizeFileName(ppa.getName());
 		String datePart = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-		String fileName = String.format("%s_%s.ppa", baseName, datePart);
+		// Use new .ppaw extension for workspace files (legacy .ppa remains importable)
+		String fileName = String.format("%s_%s.ppaw", baseName, datePart);
 
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_OCTET_STREAM);

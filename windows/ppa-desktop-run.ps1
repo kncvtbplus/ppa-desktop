@@ -342,7 +342,10 @@ try {
   docker-compose pull
 
   Write-Host "Starting the PPA Desktop services (this can take a few minutes the first time)..." -ForegroundColor Yellow
-  docker-compose up -d
+  # Force recreate to ensure updated env vars (like PPA_DATA_DIR) are applied
+  # consistently to *all* services. This prevents situations where the app and
+  # Rserve end up mounting different host folders for /s3, which breaks uploads.
+  docker-compose up -d --force-recreate
 } finally {
   Pop-Location
 }

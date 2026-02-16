@@ -17,9 +17,10 @@ ASSETS_ROOT = Path(
 
 # (source PNG, destination ICO inside the repo)
 ICON_PAIRS: list[tuple[Path, Path]] = [
-    # Main PPA Desktop app icon
+    # Main PPA Desktop app icon – use the new round logo provided by the user
     (
-        ASSETS_ROOT / "ppa-desktop-logo.png",
+        ASSETS_ROOT
+        / "c__Users_jobva_AppData_Roaming_Cursor_User_workspaceStorage_5ca333fdc354a1a9cf7193bc46d32b38_images_image-bedad425-a105-4d3a-8088-772658d039e3.png",
         REPO_ROOT / "windows" / "ppa-logo.ico",
     ),
     # Dedicated .ppaw file-type icon

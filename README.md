@@ -82,6 +82,30 @@ For local development and distribution, container images are published on Docker
 
 The `local-dev/docker-compose.yml` file and the Windows installer use these images by default.
 
+The `kncvtbplus/ppa-rserve:latest` image is built from `rserve/Dockerfile` and:
+
+- Installs all R packages used by `local-dev/s3/script/Auto.PPA.UI.R`.
+- Installs `readstata13` and overrides `read.dta()` so modern Stata 13+ `.dta` files are read via `readstata13::read.dta13(...)` instead of the legacy `foreign::read.dta`.
+- Overrides `local({ ... })` so the Java side can safely call `exists("df")` and `colnames(df)` in follow‑up R commands.
+
+**Important: shared `/s3` volume**
+
+Both the Spring Boot app and the Rserve container must see the **same `/s3` directory**. If they mount different host folders, uploads will appear to succeed but R will not find the files, leading to errors like *“Cannot read column names from file.”*  
+For local use we standardise on:
+
+- Host directory (created automatically by the Windows run script):  
+  `%LOCALAPPDATA%\PPA-Wizard\s3`
+- Docker bind mount in `local-dev/docker-compose.yml` (for both `app` and `rserve`):  
+  `- ${PPA_DATA_DIR:-./s3}:/s3`
+
+When starting manually, ensure `PPA_DATA_DIR` is set so both services use the same host folder:
+
+```powershell
+$env:PPA_DATA_DIR = "$env:LOCALAPPDATA\PPA-Wizard\s3"
+cd local-dev
+docker-compose up -d --force-recreate
+```
+
 Local start (after setting environment variables):
 
 ```bash

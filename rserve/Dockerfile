@@ -15,9 +15,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Use multiple CPUs when available to speed up compilation.
 # Note: we use 'openxlsx' (no Java dependency) instead of 'xlsx' to avoid
 # rJava/Java toolchain issues inside the container while still writing .xlsx files.
-# Additionally install 'haven' and 'readstata13' so we can read modern Stata
-# .dta files (v13+) without hitting the legacy foreign::read.dta limitations.
-RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI','haven','readstata13'), repos='https://cloud.r-project.org')"
+# Additionally install 'readstata13' so we can read modern Stata .dta files (v13+)
+# without hitting the legacy foreign::read.dta limitations.
+RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI','readstata13'), repos='https://cloud.r-project.org')"
+
+# Bootstrap script that defines safer read.dta/read.csv wrappers before Rserve starts
+COPY rserve/init.R /usr/local/bin/ppa-rserve-init.R
+
+# Ensure the bootstrap is applied for every R session as well (including
+# any Rserve worker/forked sessions) by sourcing it from the site profile.
+RUN mkdir -p /usr/local/lib/R/etc && \
+    printf "source('/usr/local/bin/ppa-rserve-init.R')\n" > /usr/local/lib/R/etc/Rprofile.site
 
 EXPOSE 6311
 
@@ -25,4 +33,4 @@ EXPOSE 6311
 ## Rserve::Rserve() starts Rserve in daemon mode and normally returns,
 ## which would let the R process exit. We explicitly keep the R session
 ## alive afterwards so that the Docker container does not stop.
-CMD ["R", "-q", "-e", "Rserve::Rserve(args='--RS-enable-remote --no-save'); while(TRUE) Sys.sleep(3600)"]
+CMD ["R", "-q", "-e", "source('/usr/local/bin/ppa-rserve-init.R'); Rserve::Rserve(args='--RS-enable-remote --no-save'); while(TRUE) Sys.sleep(3600)"]

@@ -23,13 +23,13 @@ If Docker is not yet installed, the installer will offer to download it for you.
 
 2. Installing PPA Desktop
 ------------------------
-1. Double‑click the file **ppa-desktop-setup-1.5.0.exe** (or the latest available version).
+1. Double‑click the file **ppa-desktop-setup-1.5.1.exe** (or the latest available version).
 2. Follow the steps on screen.
 3. If Docker Desktop is not installed:
    - A message will appear that PPA Desktop needs Docker Desktop.
    - Choose **Yes** to download and start the Docker Desktop installer.
    - Complete the Docker Desktop installation and start Docker Desktop once.
-   - Run **ppa-desktop-setup-1.5.0.exe** again (or the latest available version) to finish the PPA Desktop installation.
+   - Run **ppa-desktop-setup-1.5.1.exe** again (or the latest available version) to finish the PPA Desktop installation.
 4. When the installer is finished you will have:
    - A Start Menu folder **PPA Desktop**
    - Shortcuts:
