@@ -1,0 +1,6 @@
+Some dumps just to record (backup?) configuration.
+
+-0-
+
+aws elasticbeanstalk describe-configuration-options --environment-name PPA-Corretto17 > PPA-Corretto17.options
+aws elasticbeanstalk describe-environment-resources --environment-name PPA-Corretto17 > PPA-Corretto17.resources

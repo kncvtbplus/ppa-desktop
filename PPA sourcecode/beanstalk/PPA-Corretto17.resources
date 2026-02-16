@@ -1,0 +1,28 @@
+{
+    "EnvironmentResources": {
+        "EnvironmentName": "PPA-Corretto17",
+        "AutoScalingGroups": [
+            {
+                "Name": "awseb-e-5vxpp3cpwj-stack-AWSEBAutoScalingGroup-R34ofCz0CqNQ"
+            }
+        ],
+        "Instances": [
+            {
+                "Id": "i-0d6c03aeb1a5867ac"
+            }
+        ],
+        "LaunchConfigurations": [
+            {
+                "Name": "awseb-e-5vxpp3cpwj-stack-AWSEBAutoScalingLaunchConfiguration-dZI82r4hPr0r"
+            }
+        ],
+        "LaunchTemplates": [],
+        "LoadBalancers": [
+            {
+                "Name": "awseb-e-5-AWSEBLoa-MDMPDASREFQP"
+            }
+        ],
+        "Triggers": [],
+        "Queues": []
+    }
+}

@@ -1,0 +1,61 @@
+<div class='easyui-layout'
+	data-options=
+	'
+		fit: true,
+	'
+>
+
+	<!-- buttons - begin -->
+	<div class='page-navigation'
+		data-options=
+		'
+			region: "south",
+			border: false,
+		'
+	>
+	
+		<a class='easyui-linkbutton navigation-button navigation-button-wizard'
+			data-options=
+			'
+				text: getMessage("common.button.back"),
+				onClick:
+					function()
+					{
+						call("Wizard", "selectWizardTab", ["ReadInRawAndSummaryData1", ]);
+						
+					},
+			'
+		></a>
+		<a class='easyui-linkbutton navigation-button navigation-button-wizard'
+			data-options=
+			'
+				text: getMessage("common.button.continue"),
+				onClick:
+					function()
+					{
+						call("Wizard", "selectWizardTab", ["SubsetDataSources", ]);
+						
+					},
+			'
+		></a>
+	
+	</div>
+	<!-- buttons - end -->
+
+	<!-- content pane - begin -->
+	<div class='page-center'
+		data-options=
+		'
+			region: "center",
+			border: false,
+		'
+	>
+	
+		<div id='SetPPASpecifications-ppaSpecifications'>
+		</div>
+	
+	</div>
+	<!-- content pane - end -->
+	
+</div>
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+export PGPASSWORD="Automation"
+psql -h ppa-development-ng.ck8is3jzwsda.us-east-1.rds.amazonaws.com -U ppa -d ppa

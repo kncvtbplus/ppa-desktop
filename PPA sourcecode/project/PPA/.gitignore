@@ -1,0 +1,5 @@
+/target/
+!.mvn/wrapper/maver-wrapper.jar
+.classpath
+.project
+project/PPA/.settings/org.eclipse.jdt.core.prefs

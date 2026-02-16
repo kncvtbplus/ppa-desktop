@@ -1,0 +1,329 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Metadata":
+	{
+		"AWS::CloudFormation::Interface":
+		{
+			"ParameterGroups":
+			[
+				{
+					"Label": { "default": "Network Configuration" },
+					"Parameters":
+					[ "VPCId" ]
+				},
+				{
+					"Label": { "default":"Application Configuration" },
+					"Parameters":
+					[ "ElasticBeanstalkApplicationName", "ElasticBeanstalkEnvironmentName", "KeyPairName", "AccessKey", "SecretKey", "DatabaseUsername", "DatabasePassword" ]
+				}
+			]
+		}
+	},
+	"Parameters":
+	{
+		"VPCId":
+		{
+			"Type": "AWS::EC2::VPC::Id",
+			"Description": "VPC ID where environment resides",
+			"AllowedPattern" : ".+",
+			"Default": "-- select VPC --"
+		},
+		"ElasticBeanstalkApplicationName":
+		{
+			"Type": "String",
+			"Description": "Existing Elastic Beanstalk application name where you want to create new environment",
+			"AllowedPattern" : ".+",
+			"Default": "ppa"
+		},
+		"ElasticBeanstalkEnvironmentName":
+		{
+			"Type": "String",
+			"Description": "Elastic Beanstalk Environment Name which you want to create",
+			"AllowedPattern" : ".+"
+		},
+		"KeyPairName":
+		{
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Description": "KeyPair Name to SSH to all created EC2 instances",
+			"AllowedPattern" : ".+",
+			"Default": "linksbridge"
+		},
+		"AccessKey":
+		{
+			"Type": "String",
+			"Description": "AWS Access Key to allow Elastic Beanstalk environment to access their S3 bucket",
+			"AllowedPattern" : ".+"
+		},
+		"SecretKey":
+		{
+			"Type": "String",
+			"Description": "AWS Access Key to allow Elastic Beanstalk environment to access their S3 bucket",
+			"AllowedPattern" : ".+"
+		},
+		"DatabaseUsername":
+		{
+			"Type": "String",
+			"Description": "Username that application uses to access the database",
+			"AllowedPattern" : ".+",
+			"Default": "ppa"
+		},
+		"DatabasePassword":
+		{
+			"Type": "String",
+			"Description": "Password that application uses to access the database",
+			"AllowedPattern" : ".+",
+			"Default": "Automation"
+		}
+	},
+	"Resources":
+	{
+		"ApplicationS3Bucket":
+		{
+			"Type": "AWS::S3::Bucket",
+			"DeletionPolicy": "Delete",
+			"Properties":
+			{
+				"BucketName": { "Fn::Sub": "linksbridge-${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}" },
+				"AccessControl": "Private",
+				"VersioningConfiguration":
+				{
+					"Status": "Suspended"
+				}
+			}
+		},
+		"ApplicationSecurityGroup":
+		{
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties":
+			{
+				"GroupName": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-application" },
+				"GroupDescription": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-application" },
+				"VpcId": {"Ref": "VPCId"},
+				"Tags":
+				[
+					{
+						"Key": "Name",
+						"Value": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-application" }
+					}
+				],
+				"SecurityGroupIngress":
+				[
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "80",
+						"ToPort": "80",
+						"CidrIp": "0.0.0.0/0"
+					}
+				]
+			}
+		},
+		"DatabaseSecurityGroup":
+		{
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties":
+			{
+				"GroupName": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-database" },
+				"GroupDescription": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-database" },
+				"VpcId": {"Ref": "VPCId"},
+				"Tags":
+				[
+					{
+						"Key": "Name",
+						"Value": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-database" }
+					}
+				],
+				"SecurityGroupIngress":
+				[
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "5432",
+						"ToPort": "5432",
+						"SourceSecurityGroupId": {"Fn::GetAtt": ["ApplicationSecurityGroup", "GroupId"]}
+					}
+				]
+			}
+		},
+		"RServeSecurityGroup":
+		{
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties":
+			{
+				"GroupName": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-rserve" },
+				"GroupDescription": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-rserve" },
+				"VpcId": {"Ref": "VPCId"},
+				"Tags":
+				[
+					{
+						"Key": "Name",
+						"Value": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-rserve" }
+					}
+				],
+				"SecurityGroupIngress":
+				[
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "6311",
+						"ToPort": "6311",
+						"SourceSecurityGroupId": {"Fn::GetAtt": ["ApplicationSecurityGroup", "GroupId"]}
+					}
+				]
+			}
+		},
+		"ApplicationElasticBeanstalkEnvironment":
+		{
+			"DependsOn": [ "ApplicationSecurityGroup", "RServeInstance", "DatabaseInstance" ],
+			"Type": "AWS::ElasticBeanstalk::Environment",
+			"Properties":
+			{
+				"ApplicationName": { "Ref": "ElasticBeanstalkApplicationName" },
+				"EnvironmentName": {"Ref": "ElasticBeanstalkEnvironmentName"},
+				"CNAMEPrefix": { "Fn::Sub": "linksbridge-${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}" },
+				"SolutionStackName": "64bit Amazon Linux 2018.03 v2.7.4 running Java 8",
+				"Tier":
+				{
+					"Name": "WebServer",
+					"Type": "Standard"
+				},
+				"OptionSettings":
+				[
+					{
+						"Namespace": "aws:autoscaling:launchconfiguration",
+						"OptionName": "EC2KeyName",
+						"Value": { "Ref": "KeyPairName" }
+					},
+					{
+						"Namespace": "aws:autoscaling:launchconfiguration",
+						"OptionName": "InstanceType",
+						"Value": "t2.xlarge"
+					},
+					{
+						"Namespace": "aws:autoscaling:launchconfiguration",
+						"OptionName": "SecurityGroups",
+						"Value": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-application" }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "GRADLE_HOME",
+						"Value": "/usr/local/gradle"
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "JAVA_HOME",
+						"Value": "/usr/lib/jvm/java"
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "M2",
+						"Value": "/usr/local/apache-maven/bin"
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "M2_HOME",
+						"Value": "/usr/local/apache-maven"
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RDS_HOSTNAME",
+						"Value": { "Fn::GetAtt": ["DatabaseInstance", "Endpoint.Address" ] }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RDS_PORT",
+						"Value": { "Fn::GetAtt": ["DatabaseInstance", "Endpoint.Port" ] }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RDS_USERNAME",
+						"Value": { "Ref": "DatabaseUsername" }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RDS_PASSWORD",
+						"Value": { "Ref": "DatabasePassword" }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RSERVE_HOST",
+						"Value": { "Fn::GetAtt": ["RServeInstance", "PublicDnsName" ] }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "RSERVE_PORT",
+						"Value": "6311"
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "S3_BUCKET",
+						"Value": { "Ref": "ApplicationS3Bucket" }
+					},
+					{
+						"Namespace": "aws:elasticbeanstalk:application:environment",
+						"OptionName": "SERVER_PORT",
+						"Value": "5000"
+					}
+				]
+			 }
+		},
+		"RServeInstance":
+		{
+			"Type": "AWS::EC2::Instance",
+			"DependsOn" : [ "ApplicationS3Bucket" ],
+			"Properties":
+			{
+				"ImageId": "ami-035f6f3d16b328f43",
+				"InstanceType": "t2.xlarge",
+				"KeyName": "linksbridge",
+				"SecurityGroupIds":
+				[
+					{"Ref": "RServeSecurityGroup"}
+				],
+				"Tags":
+				[
+					{
+						"Key": "Name",
+						"Value": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}-rserve" }
+					}
+				],
+				"UserData":
+				{
+					"Fn::Base64":
+					{
+						"Fn::Join":
+						[
+							"\n",
+							[
+								"#!/bin/bash -e",
+								{"Fn::Sub": "sed -i 's/linksbridge-ppa-development-2/linksbridge-${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}/g' /etc/fstab"},
+								"umount /s3; mount /s3;",
+								"mkdir /s3/datasource /s3/output /s3/script"
+							]
+						]
+					}
+				}
+			}
+		},
+		"DatabaseInstance":
+		{
+			"DependsOn": ["DatabaseSecurityGroup"],
+			"Type": "AWS::RDS::DBInstance",
+			"Properties":
+			{
+				"DBInstanceClass": "db.t2.micro",
+				"AllocatedStorage" : "20",
+				"Port": "5432",
+				"PubliclyAccessible": "true",
+				"MasterUsername": { "Ref": "DatabaseUsername" },
+				"MasterUserPassword": { "Ref": "DatabasePassword" },
+				"DBInstanceIdentifier": { "Fn::Sub": "${ElasticBeanstalkApplicationName}-${ElasticBeanstalkEnvironmentName}" },
+				"DBName": "ppa",
+				"Engine": "postgres",
+				"EngineVersion": "9.6.6",
+				"VPCSecurityGroups":
+				[
+					{"Ref": "DatabaseSecurityGroup"}
+				]
+			}
+		}
+	},
+	"Description": "Linksbridge PPA environment"
+}

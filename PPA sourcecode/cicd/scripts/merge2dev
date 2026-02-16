@@ -1,0 +1,13 @@
+#!/bin/sh
+
+source=$(git name-rev HEAD --name-only)
+destination="development"
+repo=$(basename $(git rev-parse --show-toplevel))
+
+echo "Merging from ${repo}:${source} => ${destination}..."
+title="$*"
+description="$*"
+
+pullRequestId=$(aws codecommit create-pull-request --title "auto-$title" --targets repositoryName=${repo},sourceReference=${source},destinationReference=${destination} --query 'pullRequest.pullRequestId' --output text)
+echo "pullRequestId=$pullRequestId"
+aws codecommit merge-pull-request-by-fast-forward --repository-name "${repo}" --pull-request-id "${pullRequestId}" 

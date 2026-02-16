@@ -1,0 +1,67 @@
+<div class='easyui-layout page-layout-service'
+	data-options=
+	'
+		fit: true,
+	'
+>
+
+	<!-- page title - begin -->
+	<div class='page-title'
+		data-options=
+		'
+			region: "north",
+			border: false,
+		'
+	>
+	
+		<div class='page-title-text-title' data-ng-bind='title'>A</div>
+		<div class='page-title-text-subtitle' data-ng-bind-html='subtitle'>A</div>
+		
+	</div>
+	<!-- page title - end -->
+	
+	<!-- content pane - begin -->
+	<div class='page-center'
+		data-options=
+		'
+			region: "center",
+			border: false,
+		'
+	>
+	
+		<!-- form to support radiobutton functionality and hidden import file input -->
+		<form id='SelectPPA-importForm' class='width-full height-full' method='post' enctype='multipart/form-data' action='data/importPpa'>
+		<table id='SelectPPA-ppas' class='easyui-datagrid'></table>
+		<input type='file' id='SelectPPA-importFile' name='file' style='display:none;' />
+		</form>
+	
+	</div>
+	<!-- content pane - end -->
+	
+	<!-- buttons - begin -->
+	<div class='page-navigation'
+		data-options=
+		'
+			region: "south",
+			border: false,
+		'
+	>
+	
+		<a class='easyui-linkbutton navigation-button navigation-button-wizard back-button' style='width: auto; '
+			data-options=
+			'
+				text: getMessage("SelectPPA.buttons.back.text"),
+				onClick:
+					function()
+					{
+						call(null, "selectContentTab", ["SelectPpaMetrics1", ]);
+						
+					},
+			'
+		></a>
+	
+	</div>
+	<!-- buttons - end -->
+	
+</div>
+
