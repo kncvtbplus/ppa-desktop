@@ -6,13 +6,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     littler \
     default-jdk \
     libpq-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Core R packages required by the Auto.PPA.UI.R script and Java glue code.
 # Use multiple CPUs when available to speed up compilation.
 # Note: we use 'openxlsx' (no Java dependency) instead of 'xlsx' to avoid
 # rJava/Java toolchain issues inside the container while still writing .xlsx files.
-RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI'), repos='https://cloud.r-project.org')"
+# Additionally install 'haven' and 'readstata13' so we can read modern Stata
+# .dta files (v13+) without hitting the legacy foreign::read.dta limitations.
+RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI','haven','readstata13'), repos='https://cloud.r-project.org')"
 
 EXPOSE 6311
 

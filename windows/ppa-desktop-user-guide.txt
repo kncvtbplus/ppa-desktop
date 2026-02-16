@@ -44,10 +44,11 @@ To start:
 1. Make sure **Docker Desktop** is running (the whale icon is visible in the taskbar).
 2. Click **Start → PPA Desktop → PPA Desktop (Start)**  
    or double‑click the **PPA Desktop** desktop icon.
-3. A PowerShell window will open. The first time this can take a few minutes:
+3. You can also double‑click a **.ppaw** file in Windows Explorer; this starts PPA Desktop and opens it in your browser. Importing or exporting the contents of the file still happens inside the app.
+4. A PowerShell window will open. The first time this can take a few minutes:
    - The program prepares a local database.
    - It starts three background components (application, database, R).
-4. Your default browser will open at: **http://localhost:8080**.  
+5. Your default browser will open at: **http://localhost:8080**.  
    This is the PPA Desktop home page.
 
 To stop:

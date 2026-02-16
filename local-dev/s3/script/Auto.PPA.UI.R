@@ -50,18 +50,36 @@ library(openxlsx)
 
 read.PPA <- function(data)
 {
-  switch (toupper(file_ext(data)),
-          "DTA"=
-          {
-            read.dta(data, convert.factors = FALSE)
-          },
-          "CSV"=
-          {
-            read.csv(data, stringsAsFactors = FALSE, header = TRUE)
-          },
-          {
-            stop("Unsupported data source file extension: ",  toupper(file_ext(data)))
-          }
+  ext <- toupper(file_ext(data))
+  
+  switch(
+    ext,
+    "DTA" = {
+      # Prefer modern Stata readers that support newer .dta versions.
+      if (requireNamespace("readstata13", quietly = TRUE)) {
+        df <- readstata13::read.dta13(
+          data,
+          convert.factors = FALSE,
+          generate.factors = FALSE
+        )
+      } else if (requireNamespace("haven", quietly = TRUE)) {
+        df <- haven::read_dta(data)
+      } else {
+        # Fallback to foreign::read.dta (Stata 5–12 only).
+        df <- read.dta(data, convert.factors = FALSE)
+      }
+      
+      # Always return a plain data.frame
+      as.data.frame(df)
+    },
+    "CSV" = {
+      # Standard CSV with header row; this is what the UI
+      # expects for user-uploaded facility and survey files.
+      read.csv(data, stringsAsFactors = FALSE, header = TRUE)
+    },
+    {
+      stop("Unsupported data source file extension: ", ext)
+    }
   )
 }
 

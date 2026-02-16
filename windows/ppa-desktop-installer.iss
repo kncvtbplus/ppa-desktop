@@ -14,6 +14,7 @@ OutputDir=.
 OutputBaseFilename=ppa-desktop-setup-1.5.0
 Compression=lzma
 SolidCompression=yes
+ChangesAssociations=yes
 UninstallDisplayIcon={app}\windows\ppa-logo.ico
 ; Custom PPA logo for installer executable and wizard
 ; Use absolute path from the script directory so the icon is always found.
@@ -40,6 +41,8 @@ Source: "..\local-dev\s3\script\Auto.PPA.UI.R"; DestDir: "{app}\local-dev\s3\scr
 Source: "..\rserve\Dockerfile"; DestDir: "{app}\rserve"; Flags: ignoreversion
 ; PPA logo icon for Start Menu / desktop shortcuts
 Source: "ppa-logo.ico"; DestDir: "{app}\windows"; Flags: ignoreversion
+; Dedicated .ppaw file-type icon
+Source: "ppaw-file.ico"; DestDir: "{app}\windows"; Flags: ignoreversion
 
 ; Database tools (no pre-loaded data dump; local installs start with an empty DB)
 Source: "..\scripts\restore_local.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
@@ -54,6 +57,18 @@ Source: "ppa-desktop-user-guide.txt"; DestDir: "{app}\windows"; Flags: ignorever
 Name: "{group}\PPA Desktop (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
 Name: "{group}\PPA Desktop (Stop)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-stop.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
 Name: "{commondesktop}\PPA Desktop"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
+
+[Registry]
+; Associate .ppaw files with PPA Desktop
+; This registers a custom ProgID and uses the PPA Desktop workspace icon.
+Root: HKCR; Subkey: ".ppaw"; ValueType: string; ValueData: "PPADesktop.PPAW"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "PPADesktop.PPAW"; ValueType: string; ValueData: "PPA Desktop Workspace (.ppaw)"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "PPADesktop.PPAW\DefaultIcon"; ValueType: string; ValueData: "{app}\windows\ppaw-file.ico,0"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "PPADesktop.PPAW\shell\open\command"; ValueType: string; ValueData: """powershell.exe"" -ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"" ""%1"""; Flags: uninsdeletekey
+
+; Legacy .ppa export/import files still produced by the backend
+; Map them to the same ProgID so double-click also opens PPA Desktop.
+Root: HKCR; Subkey: ".ppa"; ValueType: string; ValueData: "PPADesktop.PPAW"; Flags: uninsdeletevalue
 
 [Run]
 ; Offer to start PPA Desktop immediately after installation (default checked)

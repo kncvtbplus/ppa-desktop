@@ -39,7 +39,9 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   rserve:
-    image: kncvtbplus/ppa-rserve:latest
+    build:
+      context: ..
+      dockerfile: rserve/Dockerfile
     container_name: ppa-rserve-local
     restart: unless-stopped
     ports:
