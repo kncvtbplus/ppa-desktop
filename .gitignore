@@ -28,7 +28,9 @@ local-dev/s3/datasource/
 local-dev/s3/output/
 
 # Original PPA source drop (contains certs/keys; keep local only)
-PPA sourcecode/
+PPA sourcecode/ceritifcate/
+PPA sourcecode/**/artifacts/
+PPA sourcecode/Jdbc/postgresql-*.jar
 
 # AWS infra repo (keep local, not tracked)
 ppa-infra/
