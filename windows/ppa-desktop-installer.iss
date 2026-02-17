@@ -4,14 +4,14 @@
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.5.1
+AppVersion=1.5.2
 AppPublisher=KNCV TB Plus
 DefaultDirName={pf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-desktop-setup-1.5.1
+OutputBaseFilename=ppa-desktop-setup-1.5.2
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -50,8 +50,9 @@ Source: "..\scripts\restore_local.ps1"; DestDir: "{app}\scripts"; Flags: ignorev
 ; Windows helper scripts
 Source: "ppa-desktop-run.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
 Source: "ppa-desktop-stop.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
-; User guide
-Source: "ppa-desktop-user-guide.txt"; DestDir: "{app}\windows"; Flags: ignoreversion
+; User guide (Word + PDF documents)
+Source: "PPA Desktop Installation and Local Use Guide.docx"; DestDir: "{app}\windows"; Flags: ignoreversion
+Source: "PPA Desktop Installation and Local Use Guide.pdf"; DestDir: "{app}\windows"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\PPA Desktop (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
@@ -74,8 +75,8 @@ Root: HKCR; Subkey: ".ppa"; ValueType: string; ValueData: "PPADesktop.PPAW"; Fla
 ; Offer to start PPA Desktop immediately after installation (default checked)
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
 
-; Offer to open the simple user guide after installation
-Filename: "notepad.exe"; Parameters: """{app}\windows\ppa-desktop-user-guide.txt"""; Description: "Open the quick PPA Desktop user guide in Notepad"; Flags: nowait postinstall skipifsilent unchecked
+; Offer to open the PDF installation guide after installation (uses the default .pdf handler)
+Filename: "{app}\windows\PPA Desktop Installation and Local Use Guide.pdf"; Description: "Open the PPA Desktop installation guide (PDF)"; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Code]
 var

@@ -3,6 +3,9 @@ PPA Desktop – important information before installation
 
 - PPA Desktop itself requires roughly 300 MB of disk space.
 - **Docker Desktop** is required and typically needs **at least 3 GB** of free disk space for installation and images.
+- Hardware virtualization (Intel VT‑x or AMD‑V) and Windows features for WSL 2
+  (Windows Subsystem for Linux and Virtual Machine Platform) must be enabled so
+  Docker Desktop can run correctly.
 - Docker Desktop may ask you to create or sign in to a Docker account, but **this is not required for PPA Desktop**:
   you can choose the option to skip account creation / sign-in and continue using Docker without logging in.
 

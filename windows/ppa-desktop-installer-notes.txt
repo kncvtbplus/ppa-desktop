@@ -3,12 +3,14 @@ PPA Desktop installation completed
 
 Thank you for installing **PPA Desktop**.
 
-- A simple step-by-step user guide has been installed at:
-  `{app}\windows\ppa-desktop-user-guide.txt`
-- We recommend opening this guide in **Notepad** and keeping it nearby while you work.
+- A step-by-step installation and local use guide has been installed at:
+  `{app}\windows\PPA Desktop Installation and Local Use Guide.pdf`
+- A Word version of the same guide is also installed at:
+  `{app}\windows\PPA Desktop Installation and Local Use Guide.docx`
+- We recommend using the PDF during installation (it opens automatically if you tick the checkbox), and the Word version if you need to adapt the text.
 
 On the final installer screen you can choose to open the guide immediately.  
-Later, you can always open it again via Notepad or from the installed files.
+Later, you can always open it again from the installed files.
 
 
 
