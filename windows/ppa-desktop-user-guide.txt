@@ -1,0 +1,206 @@
+PPA Desktop – Installation and Local Use Guide (for Windows users)
+==================================================================
+
+
+1. What is the PPA Desktop?
+---------------------------
+The PPA Desktop is a Desktop application that runs on your computer.
+It opens offline in your web browser and helps you create a Patient Pathway Analysis (PPA).
+
+
+2. Before you start: system requirements
+---------------------------------------
+System requirements:
+- Windows 10 or 11 (64‑bit)
+- At least 4 GB of memory is required, 8GB is recommended
+- Internet connection the first time you run PPA Desktop (to download components)
+- Hardware virtualization enabled in the BIOS/UEFI (Intel VT‑x or AMD‑V)
+- Windows features for WSL 2 and virtualization enabled
+
+PPA Desktop uses **Docker Desktop** with the **WSL 2 backend**. Docker Desktop
+and WSL 2 together provide the containers that run the application, database
+and R layer.
+
+
+3. – Optional - Ensure that hardware virtualization is enabled
+--------------------------------------------------------
+1. Close all programs and restart your computer.
+2. When the computer starts, press the key for the BIOS/UEFI setup (often
+   **F2**, **Del**, **Esc** or **F10** – the exact key depends on the computer).
+3. In the BIOS/UEFI menus, look for a setting called for example:
+   - “Intel Virtualization Technology (VT‑x)” or “Intel VT‑x”
+   - “SVM Mode” or “AMD‑V”
+4. Make sure this setting is **Enabled**.
+5. Save the changes and exit the BIOS/UEFI. The computer will restart.
+6. In Windows, press **Ctrl + Shift + Esc** to open **Task Manager**,
+   choose the **Performance** tab, click **CPU** and check the line
+   “Virtualization:”:
+   - If it says **Enabled**, you are ready for WSL 2 and Docker Desktop.
+   - If it says **Disabled**, virtualization is still off – ask your IT
+     support person to help you enable it.
+
+
+4. - Optional - Enable Windows features for WSL 2
+---------------------------------------------
+To run Docker Desktop with WSL 2, Windows must have two features enabled:
+**Windows Subsystem for Linux** and **Virtual Machine Platform**.
+For Windows 11 or fully updated Windows 10:
+1. Right‑click the **Start** button and choose **Windows Terminal (Admin)**
+   or **PowerShell (Admin)**.
+2. Run:   wsl --install
+3. If asked, restart the computer.
+This command enables the required features and installs a default Linux
+distribution. If WSL is already installed and you only need to ensure the
+features are on, you can instead run:
+1. Open **PowerShell (Admin)**.
+2. Run:
+   dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+   dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+3. Restart the computer when Windows asks for it.
+After the restart, open **PowerShell** and set WSL 2 as the default:
+   wsl --set-default-version 2
+
+
+5. - Optional - Install or update WSL
+---------------------------------
+If you have never used WSL before:
+1. Open **PowerShell (Admin)**.
+2. Run: wsl --install -d Ubuntu
+3. Restart the computer if asked.
+4. When Ubuntu opens for the first time, choose a username and password.
+If WSL is already installed:
+1. Open **PowerShell** (normal user is enough).
+2. To update WSL and its kernel to the latest version, run:
+   wsl --update
+3. To see the status (version and default distribution), run:
+   wsl --status
+Make sure the “Default version” is **2**. If it is 1, run:
+   wsl --set-default-version 2
+
+
+6. Install Docker Desktop for Windows
+----------------------------------------------
+PPA Desktop uses **Docker Desktop** to run its background services.
+
+Docker will be installed as part of the PPA Desktop installation, if not installed yet.
+- If Docker Desktop is not installed yet, the PPA Desktop installer can
+  download and start the Docker Desktop installer for you (see the next
+  section on “Installing PPA Desktop”).
+- Run the installer and follow the steps:
+   - When asked, choose the **WSL 2** backend (not Hyper‑V, unless your IT
+     department instructs otherwise).
+   - If Docker Desktop offers to enable WSL 2 features, accept and restart
+     the computer when asked.
+4. After installation, start Docker Desktop once and wait until it shows
+   that it is **running** (the whale icon in the taskbar).
+
+If Docker Desktop shows errors about virtualization or WSL 2, go back to
+steps 3 and 4 in this guide and make sure hardware virtualization and the
+required Windows features are enabled.
+
+
+7. Install PPA Desktop
+-------------------------------
+1. Double‑click the installer file, for example:
+   **ppa-desktop-setup-1.5.1.exe** or a newer version such as
+   **ppa-desktop-setup-1.6.0.exe**.
+2. Follow the steps on screen.
+3. If Docker Desktop is not installed:
+   - A message will appear that PPA Desktop needs Docker Desktop.
+   - Choose **Yes** to download and start the Docker Desktop installer.
+   - Complete the Docker Desktop installation and start Docker Desktop once.
+   - Then run the PPA Desktop installer again to finish the installation.
+4. When the installer is finished you will have:
+   - A Start Menu folder **PPA Desktop**
+   - Shortcuts:
+     - **PPA Desktop (Start)**
+     - **PPA Desktop (Stop)**
+   - Optionally a desktop icon **PPA Desktop**.
+
+
+8. Starting and stopping PPA Desktop
+--------------------------------------------
+To start:
+1. Click **Start → PPA Desktop → PPA Desktop (Start)**  
+   or double‑click the **PPA Desktop** desktop icon.
+2. You can also double‑click a **.ppaw** file in Windows Explorer; this
+   starts PPA Desktop and opens it in your browser. Importing or exporting
+   the contents of the file still happens inside the app.
+3. A PowerShell window will open. The first time this can take a few minutes:
+   - The program prepares a local database.
+   - It downloads and starts the background containers (application,
+     database and R).
+5. Your default browser will open at: http://localhost:8080  
+   This is the PPA Desktop home page.
+
+To stop:
+1. Click **Start → PPA Desktop → PPA Desktop (Stop)**.
+2. This will stop all background components including the PPA Desktop and Docker.
+
+
+9. Updating PPA Desktop to a newer version
+---------------------------------------------------
+PPA Desktop can automatically check for a newer installer when you start
+it from the **PPA Desktop (Start)** shortcut.
+
+What happens:
+1. When you start PPA Desktop, the start script reads the installed version
+   from its local `version.txt` file.
+2. It contacts the public releases on GitHub
+   (https://github.com/kncvtbplus/ppa-desktop)
+   and looks for the latest installer version.
+3. If the newest version is the same as your installed version, it shows
+   a short message that PPA Desktop is up to date and continues starting.
+4. If a newer version is available, it shows both versions and asks:
+
+   Download and start the latest installer now? (Y/N)
+
+How to update using this flow:
+1. At the question above, type **Y** and press **Enter**.
+2. The script downloads the latest installer to a temporary folder and
+   starts it automatically. If not started automatically double click the installer file.
+3. Follow the installer steps. You do **not** need to uninstall the old
+   version; the new installer will replace it.
+4. After the installer finishes, start PPA Desktop again from the Start
+   menu. You are now on the latest version.
+
+If the automatic download fails, the script can open the release page in
+your browser so that you or your IT support can download the installer
+manually.
+
+You can always download the latest public installer yourself from the
+PPA Desktop releases page: https://github.com/kncvtbplus/ppa-desktop/releases
+
+
+10. Quick check: is everything running?
+---------------------------------------
+- If the browser does not open automatically, open it yourself and go to  
+  http://localhost:8080
+  .
+- If the page does not load:
+  - Make sure Docker Desktop is running and shows “running”.
+  - Try **PPA Desktop (Start)** again.
+
+
+11. Where are my files stored?
+------------------------------
+PPA Desktop keeps its internal files in a dedicated working folder that is
+managed by Docker. You do not need to open this folder.
+
+When you click **Download** in the “Create Output” step of the app, your
+browser saves a ZIP file to your usual “Downloads” folder. You can copy
+or rename that file as you like.
+
+
+12. Getting help
+----------------
+If you run into problems:
+- Note any error message you see on the screen (from PPA Desktop,
+  Docker Desktop, or Windows).
+- If possible, take a screenshot.
+- Contact your technical contact person or PPA support team and share:
+  - What you were trying to do (for example: “Generate output for country X – National PPA”).
+  - The exact error text or screenshot.
+  - Whether Docker Desktop is running and whether virtualization/WSL 2
+    are enabled.
+
