@@ -2,6 +2,8 @@
     new-ppa-release.ps1
 
     Single-entry workflow to:
+    - Build application.jar from source via Maven
+    - Build and push the Docker image to Docker Hub (--no-cache)
     - Update the root version.txt
     - Update the Inno Setup (.iss) script with the new version and output name
     - Build the Windows installer with Inno Setup
@@ -21,6 +23,7 @@
     ------------
     - Inno Setup 6 installed with ISCC.exe available either on PATH or at a
       standard location (e.g. "C:\Program Files (x86)\Inno Setup 6\ISCC.exe").
+    - Docker Desktop installed and running (for Docker image build/push).
     - GitHub CLI installed and authenticated (`gh auth login`) for the
       distribution repository.
 #>
@@ -37,7 +40,10 @@ param(
     [string]$IsccPath,
 
     # Build everything but do not publish to GitHub releases.
-    [switch]$SkipPublish
+    [switch]$SkipPublish,
+
+    # Skip Docker image build and push.
+    [switch]$SkipDocker
 )
 
 Set-StrictMode -Version Latest
@@ -352,6 +358,60 @@ Then rerun this script.
     }
 }
 
+function Build-DockerImage {
+    param(
+        [string]$RepoRoot,
+        [string]$Version
+    )
+
+    $dockerfile = Join-Path $RepoRoot "Dockerfile"
+    if (-not (Test-Path $dockerfile)) {
+        throw "Dockerfile not found at '$dockerfile'."
+    }
+
+    $imageBase = "kncvtbplus/ppa-app"
+    $tagVersion = "${imageBase}:${Version}"
+    $tagLatest  = "${imageBase}:latest"
+
+    Write-Host "Building Docker image $tagVersion (--no-cache)..." -ForegroundColor Cyan
+    Push-Location $RepoRoot
+    try {
+        & docker build --no-cache -t $tagVersion -f Dockerfile .
+        if ($LASTEXITCODE -ne 0) {
+            throw "Docker build failed with exit code $LASTEXITCODE."
+        }
+
+        docker tag $tagVersion $tagLatest
+        Write-Host "Docker image built and tagged as $tagVersion and $tagLatest." -ForegroundColor Green
+    } finally {
+        Pop-Location
+    }
+}
+
+function Push-DockerImage {
+    param(
+        [string]$Version
+    )
+
+    $imageBase = "kncvtbplus/ppa-app"
+    $tagVersion = "${imageBase}:${Version}"
+    $tagLatest  = "${imageBase}:latest"
+
+    Write-Host "Pushing Docker image $tagVersion to Docker Hub..." -ForegroundColor Cyan
+    & docker push $tagVersion
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker push of $tagVersion failed with exit code $LASTEXITCODE."
+    }
+
+    Write-Host "Pushing Docker image $tagLatest to Docker Hub..." -ForegroundColor Cyan
+    & docker push $tagLatest
+    if ($LASTEXITCODE -ne 0) {
+        throw "Docker push of $tagLatest failed with exit code $LASTEXITCODE."
+    }
+
+    Write-Host "Docker images pushed successfully." -ForegroundColor Green
+}
+
 function Publish-Installer {
     param(
         [string]$WindowsDir,
@@ -386,6 +446,13 @@ try {
 
     # Ensure we have a fresh application.jar at repo root (required by the .iss script)
     Build-ApplicationJar -RepoRoot $repoRoot
+
+    # Build and push the Docker image so PPA Desktop users get the updated app.
+    # Uses --no-cache to guarantee the freshly built JAR is included.
+    if (-not $SkipDocker) {
+        Build-DockerImage -RepoRoot $repoRoot -Version $Version
+        Push-DockerImage -Version $Version
+    }
 
     Update-VersionFiles -RepoRoot $repoRoot -Version $Version
     Update-InnoSetupScript -WindowsDir $windowsDir -Version $Version

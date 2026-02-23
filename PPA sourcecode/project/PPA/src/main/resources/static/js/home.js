@@ -253,6 +253,15 @@ application.controller
 				)
 				;
 
+				$("#home-guestButton").linkbutton
+				(
+						{
+							text: "Continue without login",
+							onClick: $scope.guestLogin,
+						}
+				)
+				;
+
 			}
 			
 			// registerUser
@@ -494,6 +503,25 @@ application.controller
 						{
 							// redirect user to application site
 							
+							window.location.href = "/";
+							
+						}
+				)
+				;
+				
+			}
+			
+			// guestLogin
+			
+			$scope.guestLogin = function()
+			{
+				postData
+				(
+						"guestLogin",
+						{},
+						true,
+						function()
+						{
 							window.location.href = "/";
 							
 						}

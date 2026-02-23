@@ -70,7 +70,10 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,6 +131,7 @@ import com.linksbridge.ppa.repository.SubnationalUnitMappingRepository;
 import com.linksbridge.ppa.repository.SubnationalUnitRepository;
 import com.linksbridge.ppa.repository.UserFileRepository;
 import com.linksbridge.ppa.repository.UserRepository;
+import com.linksbridge.ppa.user.MyUserDetails;
 import com.linksbridge.ppa.util.Common;
 import com.linksbridge.ppa.controller.PpaExportDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -2395,7 +2399,75 @@ public class DataController implements MessageSourceAware
 		User user = createUser(username, password, false);
 		sendConfirmationEmail(user);
 	}
-	
+
+	/**
+	 * Programmatic guest login for local/desktop mode.
+	 * Creates the guest user and Public account on first use, then
+	 * authenticates the current session as the guest user.
+	 */
+	@RequestMapping(value = "/guestLogin")
+	@PreAuthorize("permitAll()")
+	@Transactional
+	public void guestLogin(HttpServletRequest request)
+	{
+		if (!localMode)
+		{
+			throw new ApplicationException("Guest login is only available in local/desktop mode.");
+		}
+
+		String guestUsername = "guest@ppa-desktop";
+
+		User guestUser = userRepository.findByUsername(guestUsername);
+
+		if (guestUser == null)
+		{
+			Account publicAccount = accountRepository.findByName("Public");
+
+			if (publicAccount == null)
+			{
+				publicAccount = new Account();
+				publicAccount.setName("Public");
+				publicAccount.setDemo(false);
+				accountRepository.save(publicAccount);
+			}
+
+			guestUser = new User();
+			guestUser.setUsername(guestUsername);
+			guestUser.setEmail(guestUsername);
+			guestUser.setName("Guest");
+			guestUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+			guestUser.setEnabled(true);
+			guestUser.setSelectedAccount(publicAccount);
+
+			UserRole userRole = new UserRole();
+			guestUser.addUserRole(userRole);
+			userRole.setRole(ROLE_USER);
+
+			userRepository.save(guestUser);
+
+			AccountUserAssociation association = new AccountUserAssociation();
+			publicAccount.addAccountUserAssociation(guestUser, association);
+		}
+
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		for (UserRole userRole : guestUser.getUserRoles())
+		{
+			authorities.add(new SimpleGrantedAuthority(userRole.getRole()));
+		}
+
+		UsernamePasswordAuthenticationToken authToken =
+				new UsernamePasswordAuthenticationToken(
+						new MyUserDetails(guestUser.getUsername(), guestUser.getPassword(), authorities),
+						null,
+						authorities
+				);
+
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+		request.getSession(true);
+
+		guestUser.setLogged(true);
+	}
+
 	/**
 	 * Accepts user invitation.
 	 * 
@@ -3358,7 +3430,10 @@ public class DataController implements MessageSourceAware
 			zipOutputStream.putNextEntry(new ZipEntry("ppa.json"));
 			zipOutputStream.write(ppaBytes);
 
-			// data/* entries
+			// data/* entries — skip files that are not available locally
+			// (e.g. data sources uploaded in a cloud environment whose files
+			// are not present on the local /s3 mount).
+			List<String> skippedFiles = new ArrayList<>();
 			for (UserFile userFile : userFilesById.values())
 			{
 				String fileRef = userFileIdToRef.get(userFile.getId());
@@ -3367,10 +3442,24 @@ public class DataController implements MessageSourceAware
 					continue;
 				}
 
-				byte[] dataBytes = readBytesFromS3OrLocal(userFile.getS3FileName(), "datasource file '" + userFile.getFileName() + "'");
+				try
+				{
+					byte[] dataBytes = readBytesFromS3OrLocal(userFile.getS3FileName(), "datasource file '" + userFile.getFileName() + "'");
+					zipOutputStream.putNextEntry(new ZipEntry(fileRef));
+					zipOutputStream.write(dataBytes);
+				}
+				catch (ApplicationException e)
+				{
+					System.err.println("Export: skipping unavailable datasource file '"
+							+ userFile.getFileName() + "' (" + userFile.getS3FileName() + "): " + e.getMessage());
+					skippedFiles.add(userFile.getFileName());
+				}
+			}
 
-				zipOutputStream.putNextEntry(new ZipEntry(fileRef));
-				zipOutputStream.write(dataBytes);
+			if (!skippedFiles.isEmpty())
+			{
+				System.out.println("Export completed with " + skippedFiles.size()
+						+ " datasource file(s) skipped because they were not available locally: " + skippedFiles);
 			}
 		}
 		catch (IOException e)
@@ -3589,25 +3678,84 @@ public class DataController implements MessageSourceAware
 			throw new ApplicationException("Empty PPA export payload.");
 		}
 
-		// Recreate user files using the existing upload pipeline
+		// Recreate user files using the existing upload pipeline.
+		// Data files that were not available during export (e.g. cloud-only
+		// datasources) are skipped so the import can still succeed.
 		Map<Long, UserFile> userFileByOriginalId = new HashMap<>();
+		List<String> skippedUserFiles = new ArrayList<>();
 		for (PpaExportDto.UserFileDto userFileDto : exportDto.userFiles)
 		{
 			byte[] bytes = dataEntries.get(userFileDto.fileRef);
 			if (bytes == null)
 			{
-				throw new ApplicationException("Missing data file '" + userFileDto.fileRef + "' inside .ppa archive.");
+				System.err.println("Import: skipping user file '"
+						+ userFileDto.fileName + "' (ref=" + userFileDto.fileRef
+						+ ") — data entry not present in archive.");
+				skippedUserFiles.add(userFileDto.fileName != null ? userFileDto.fileName : userFileDto.fileRef);
+				continue;
 			}
 
-			MultipartFile inMemoryFile =
-					new InMemoryMultipartFile("file", userFileDto.fileName, "application/octet-stream", bytes);
+			// Base name from export; fall back to a generic label if missing
+			String originalFileName =
+					(StringUtils.isNotBlank(userFileDto.fileName) ? userFileDto.fileName : "imported-data.csv");
 
-			Map<String, Object> loadUserFileResponse = loadUserFile(inMemoryFile);
-			Long newUserFileId = (Long)loadUserFileResponse.get("userFileId");
+			// First attempt: proactively choose a name that does not clash with any
+			// existing user files in this account.
+			String candidateFileName = generateUniqueUserFileNameForImport(account, originalFileName);
 
-			if (newUserFileId == null)
+			int renameAttempts = 0;
+			Long newUserFileId = null;
+			while (true)
 			{
-				throw new ApplicationException("System error. Method loadUserFile didn't return userFileId.");
+				try
+				{
+					if (!candidateFileName.equals(originalFileName) && renameAttempts == 0)
+					{
+						System.out.println(String.format(
+								"Auto-renaming imported user file '%s' to '%s' to avoid name collision.",
+								originalFileName,
+								candidateFileName));
+					}
+
+					MultipartFile inMemoryFile =
+							new InMemoryMultipartFile("file", candidateFileName, "application/octet-stream", bytes);
+
+					Map<String, Object> loadUserFileResponse = loadUserFile(inMemoryFile);
+					newUserFileId = (Long)loadUserFileResponse.get("userFileId");
+
+					if (newUserFileId == null)
+					{
+						throw new ApplicationException("System error. Method loadUserFile didn't return userFileId.");
+					}
+
+					// Success – break out of retry loop
+					break;
+				}
+				catch (ApplicationException e)
+				{
+					String message = e.getMessage();
+
+					// If the duplicate-name guard in loadUserFile still triggers for this
+					// account (e.g. due to concurrent imports or multiple user files with
+					// the same exported name), transparently retry with a fresh unique
+					// name a few times instead of surfacing the error to the user.
+					if (message != null
+							&& message.contains("You have already loaded file with this name.")
+							&& renameAttempts < 3)
+					{
+						renameAttempts++;
+						candidateFileName = generateUniqueUserFileNameForImport(account, candidateFileName);
+						System.out.println(String.format(
+								"PPA import retry %d for user file '%s' after duplicate-name error, new candidate '%s'.",
+								renameAttempts,
+								originalFileName,
+								candidateFileName));
+						continue;
+					}
+
+					// Any other error (or too many retries) should behave as before
+					throw e;
+				}
 			}
 
 			UserFile newUserFile = userFileRepository.getOne(newUserFileId);
@@ -3648,11 +3796,13 @@ public class DataController implements MessageSourceAware
 				if (dataSourceDto.userFileOriginalId != null)
 				{
 					UserFile newUserFile = userFileByOriginalId.get(dataSourceDto.userFileOriginalId);
-					if (newUserFile == null)
+					if (newUserFile != null)
 					{
-						throw new ApplicationException("PPA import error: missing UserFile for data source.");
+						dataSource.setUserFile(newUserFile);
 					}
-					dataSource.setUserFile(newUserFile);
+					// If the UserFile was skipped (e.g. data file missing from
+					// archive), the DataSource is still created but without an
+					// associated file. The user can re-upload the data later.
 				}
 
 				dataSource.setSubnationalUnitColumnName(dataSourceDto.subnationalUnitColumnName != null ? dataSourceDto.subnationalUnitColumnName : "");
@@ -3764,6 +3914,11 @@ public class DataController implements MessageSourceAware
 			}
 		}
 
+		// Flush sectors+levels so that PpaSectorLevel entities receive their IDs
+		// before PpaSectorMapping objects reference them (the @ManyToOne from
+		// PpaSectorMapping to PpaSectorLevel has no cascade).
+		ppaRepository.flush();
+
 		// Subnational units
 		if (exportDto.subnationalUnits != null)
 		{
@@ -3857,6 +4012,55 @@ public class DataController implements MessageSourceAware
 
 		// Return basic info for the frontend to auto-select the imported PPA
 		return ImmutableMap.of("ppaId", newPpa.getId(), "name", newPpa.getName());
+	}
+
+	/**
+	 * Generates a user-friendly file name for imported user files that is
+	 * guaranteed to be unique within the given account. If the original name is
+	 * already free, it's returned unchanged; otherwise an "imported" suffix with
+	 * the current date (and, if needed, an incrementing number) is appended.
+	 */
+	private String generateUniqueUserFileNameForImport(Account account, String originalFileName)
+	{
+		if (account == null || StringUtils.isBlank(originalFileName))
+		{
+			return originalFileName;
+		}
+
+		String extension = FilenameUtils.getExtension(originalFileName);
+		String baseName = FilenameUtils.getBaseName(originalFileName);
+
+		// Start with the original name; if it collides, append " (imported yyyy-MM-dd)"
+		// and, if necessary, " (imported yyyy-MM-dd N)" variants until we find a free one.
+		String candidate = originalFileName;
+		String datePart = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		int counter = 0;
+
+		while (!userFileRepository.findAllByAccountIdAndFileName(account.getId(), candidate).isEmpty())
+		{
+			counter++;
+
+			String suffix;
+			if (counter == 1)
+			{
+				suffix = String.format(" (imported %s)", datePart);
+			}
+			else
+			{
+				suffix = String.format(" (imported %s %d)", datePart, counter);
+			}
+
+			if (StringUtils.isBlank(extension))
+			{
+				candidate = baseName + suffix;
+			}
+			else
+			{
+				candidate = baseName + suffix + "." + extension;
+			}
+		}
+
+		return candidate;
 	}
 
 	@RequestMapping(value = "/duplicatePpas")

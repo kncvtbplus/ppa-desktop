@@ -126,7 +126,9 @@ To start:
 2. You can also double‑click a **.ppaw** file in Windows Explorer; this
    starts PPA Desktop and opens it in your browser. Importing or exporting
    the contents of the file still happens inside the app.
-3. A PowerShell window will open. The first time this can take a few minutes:
+3. A small **“Starting PPA Desktop”** window will appear instead of a
+   PowerShell script window. It shows the current step and a progress bar.
+   The first time this can take a few minutes:
    - The program prepares a local database.
    - It downloads and starts the background containers (application,
      database and R).
@@ -150,15 +152,17 @@ What happens:
    (https://github.com/kncvtbplus/ppa-desktop)
    and looks for the latest installer version.
 3. If the newest version is the same as your installed version, it shows
-   a short message that PPA Desktop is up to date and continues starting.
-4. If a newer version is available, it shows both versions and asks:
-
-   Download and start the latest installer now? (Y/N)
+   a short message in the startup window that PPA Desktop is up to date and
+   continues starting.
+4. If a newer version is available, the startup window shows both versions
+   and asks whether to download and start the latest installer.
 
 How to update using this flow:
-1. At the question above, type **Y** and press **Enter**.
-2. The script downloads the latest installer to a temporary folder and
-   starts it automatically. If not started automatically double click the installer file.
+1. In the question dialog, choose **Yes** to download and start the latest
+   installer, or **No** to continue with your current version.
+2. When you choose **Yes**, the startup window downloads the latest
+   installer to a temporary folder and starts it automatically. If it does
+   not start automatically, double‑click the downloaded installer file.
 3. Follow the installer steps. You do **not** need to uninstall the old
    version; the new installer will replace it.
 4. After the installer finishes, start PPA Desktop again from the Start

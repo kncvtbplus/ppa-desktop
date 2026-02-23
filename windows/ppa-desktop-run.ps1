@@ -1,19 +1,300 @@
+param(
+  # Optional workspace file argument when started via .ppaw/.ppa association.
+  [string]$WorkspaceFile
+)
+
 $ErrorActionPreference = 'Stop'
 
-# Keep the window open and show a clear message if anything goes wrong
-trap {
-  Write-Host ""
-  Write-Host "Something went wrong while starting PPA Desktop:" -ForegroundColor Red
-  if ($_.InvocationInfo -ne $null) {
-    Write-Host $_.InvocationInfo.PositionMessage -ForegroundColor Yellow
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
+# Tell Windows this is its own application so the taskbar shows our icon
+# instead of the generic powershell.exe icon.
+try {
+  Add-Type -MemberDefinition @'
+[DllImport("shell32.dll", SetLastError = true)]
+public static extern void SetCurrentProcessExplicitAppUserModelID(
+    [MarshalAs(UnmanagedType.LPWStr)] string AppID);
+'@ -Namespace "PPA" -Name "AppId"
+  [PPA.AppId]::SetCurrentProcessExplicitAppUserModelID("KNCV.PPA.Desktop")
+} catch { }
+
+# Resolve key paths early so we can set the window title/icon correctly
+$ScriptDir   = Split-Path -Parent $MyInvocation.MyCommand.Path
+$ProjectRoot = Split-Path -Parent $ScriptDir
+$ComposeDir  = Join-Path $ProjectRoot "local-dev"
+
+# --- UI helpers --------------------------------------------------------------
+
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "Starting PPA Desktop"
+$form.StartPosition = "CenterScreen"
+$form.FormBorderStyle = 'FixedDialog'
+$form.MaximizeBox = $false
+$form.MinimizeBox = $false
+$form.ClientSize = New-Object System.Drawing.Size(600, 380)
+
+$iconPath = Join-Path $ScriptDir "ppa-logo.ico"
+if (Test-Path $iconPath) {
+  try {
+    $form.Icon = New-Object System.Drawing.Icon($iconPath)
+  } catch {
+    # Non-fatal if the icon cannot be loaded
   }
-  Write-Host $_.Exception.Message -ForegroundColor Red
-  Write-Host ""
-  Read-Host "Press Enter to close this window"
-  exit 1
 }
 
-Write-Host "Starting PPA Desktop and its background services..." -ForegroundColor Cyan
+$titleLabel = New-Object System.Windows.Forms.Label
+$titleLabel.AutoSize = $true
+$titleLabel.Location = New-Object System.Drawing.Point(12, 12)
+$titleLabel.Font = New-Object System.Drawing.Font(
+  [System.Drawing.SystemFonts]::DefaultFont.FontFamily,
+  11,
+  [System.Drawing.FontStyle]::Bold
+)
+$titleLabel.Text = "PPA Desktop is starting..."
+$form.Controls.Add($titleLabel)
+
+$statusLabel = New-Object System.Windows.Forms.Label
+$statusLabel.AutoSize = $true
+$statusLabel.Location = New-Object System.Drawing.Point(12, 40)
+$statusLabel.Text = "Preparing startup..."
+$form.Controls.Add($statusLabel)
+
+$progressBar = New-Object System.Windows.Forms.ProgressBar
+$progressBar.Location = New-Object System.Drawing.Point(12, 65)
+$progressBar.Size = New-Object System.Drawing.Size(560, 20)
+$progressBar.Minimum = 0
+$progressBar.Maximum = 100
+$form.Controls.Add($progressBar)
+
+$logTextBox = New-Object System.Windows.Forms.TextBox
+$logTextBox.Location = New-Object System.Drawing.Point(12, 95)
+$logTextBox.Size = New-Object System.Drawing.Size(560, 240)
+$logTextBox.Multiline = $true
+$logTextBox.ScrollBars = 'Vertical'
+$logTextBox.ReadOnly = $true
+$logTextBox.BackColor = [System.Drawing.Color]::White
+$form.Controls.Add($logTextBox)
+
+$closeButton = New-Object System.Windows.Forms.Button
+$closeButton.Text = "Close"
+$closeButton.Enabled = $false
+$closeButton.Size = New-Object System.Drawing.Size(90, 28)
+$closeButton.Location = New-Object System.Drawing.Point(482, 340)
+$closeButton.Add_Click({ $form.Close() })
+$form.Controls.Add($closeButton)
+
+$script:UiStatusLabel = $statusLabel
+$script:UiProgressBar = $progressBar
+$script:UiLogTextBox  = $logTextBox
+$script:UiForm        = $form
+$script:UiCloseButton = $closeButton
+$script:ExitAfterUpdate = $false
+
+function Write-UiLog {
+  param(
+    [string]$Message,
+    [switch]$IsError
+  )
+
+  $timestamp = (Get-Date).ToString("HH:mm:ss")
+  $line = "[$timestamp] $Message"
+
+  $wroteToUi = $false
+
+  try {
+    if ($script:UiLogTextBox -and
+        -not $script:UiLogTextBox.IsDisposed -and
+        $script:UiLogTextBox.IsHandleCreated) {
+      $script:UiLogTextBox.AppendText($line + [Environment]::NewLine)
+      $script:UiLogTextBox.SelectionStart = $script:UiLogTextBox.Text.Length
+      $script:UiLogTextBox.ScrollToCaret()
+      $wroteToUi = $true
+    }
+  } catch {
+    # If the UI control is gone, fall back to console output
+  }
+
+  if (-not $wroteToUi) {
+    if ($IsError) {
+      Write-Host $line -ForegroundColor Red
+    } else {
+      Write-Host $line
+    }
+  }
+}
+
+function Set-UiStatus {
+  param(
+    [string]$Text,
+    [int]$Percent = -1
+  )
+
+  $wroteStatus = $false
+
+  try {
+    if ($script:UiStatusLabel -and
+        -not $script:UiStatusLabel.IsDisposed -and
+        $script:UiStatusLabel.IsHandleCreated) {
+      $script:UiStatusLabel.Text = $Text
+      $wroteStatus = $true
+    }
+  } catch {
+    # Ignore UI errors and fall back to console
+  }
+
+  if (-not $wroteStatus) {
+    Write-Host $Text
+  }
+
+  if ($Percent -ge 0) {
+    try {
+      if ($script:UiProgressBar -and
+          -not $script:UiProgressBar.IsDisposed -and
+          $script:UiProgressBar.IsHandleCreated) {
+        $value = [Math]::Min([Math]::Max($Percent, $script:UiProgressBar.Minimum), $script:UiProgressBar.Maximum)
+        $script:UiProgressBar.Value = $value
+      }
+    } catch {
+      # Ignore progress bar errors
+    }
+  }
+
+  try {
+    [System.Windows.Forms.Application]::DoEvents()
+  } catch {
+    # Ignore DoEvents errors (for example, if the form is closing)
+  }
+}
+
+function Throw-UiError {
+  param(
+    [string]$Message
+  )
+
+  Write-UiLog -Message $Message -IsError
+  throw $Message
+}
+
+# --- Download helper with progress bar ---------------------------------------
+
+function Invoke-DownloadWithProgress {
+  param(
+    [string]$Url,
+    [string]$DestPath,
+    [string]$Label = "Downloading..."
+  )
+
+  $webClient = New-Object System.Net.WebClient
+  $script:downloadDone  = $false
+  $script:downloadError = $null
+
+  $webClient.Add_DownloadProgressChanged({
+    param($sender, $e)
+    try {
+      $pct = $e.ProgressPercentage
+      $mbDone  = [math]::Round($e.BytesReceived / 1MB, 1)
+      $mbTotal = [math]::Round($e.TotalBytesToReceive / 1MB, 1)
+      Set-UiStatus "$Label  ${mbDone} / ${mbTotal} MB ($pct%)" $pct
+    } catch { }
+  })
+
+  $webClient.Add_DownloadFileCompleted({
+    param($sender, $e)
+    if ($e.Error) { $script:downloadError = $e.Error }
+    $script:downloadDone = $true
+  })
+
+  $webClient.DownloadFileAsync([Uri]$Url, $DestPath)
+
+  while (-not $script:downloadDone) {
+    [System.Windows.Forms.Application]::DoEvents()
+    Start-Sleep -Milliseconds 100
+  }
+
+  $webClient.Dispose()
+
+  if ($script:downloadError) {
+    throw $script:downloadError
+  }
+}
+
+# --- Run external process with live UI feedback -----------------------------
+
+function Invoke-ProcessWithUiOutput {
+  param(
+    [string]$FilePath,
+    [string]$Arguments,
+    [string]$WorkingDirectory,
+    [string]$StatusText = "Running..."
+  )
+
+  $stderrFile = [System.IO.Path]::GetTempFileName()
+  $stdoutFile = [System.IO.Path]::GetTempFileName()
+
+  $proc = Start-Process -FilePath $FilePath -ArgumentList $Arguments `
+            -WindowStyle Hidden -PassThru `
+            -WorkingDirectory $WorkingDirectory `
+            -RedirectStandardError $stderrFile `
+            -RedirectStandardOutput $stdoutFile
+
+  $lastStderrLen = 0
+  $lastStdoutLen = 0
+
+  while (-not $proc.HasExited) {
+    [System.Windows.Forms.Application]::DoEvents()
+    Start-Sleep -Milliseconds 500
+
+    # Read new stderr lines (docker-compose writes progress here)
+    try {
+      $content = [System.IO.File]::ReadAllText($stderrFile)
+      if ($content.Length -gt $lastStderrLen) {
+        $newText = $content.Substring($lastStderrLen).Trim()
+        $lastStderrLen = $content.Length
+        if ($newText) {
+          $lastLine = ($newText -split "`n")[-1].Trim()
+          if ($lastLine) {
+            Set-UiStatus "$StatusText  $lastLine" -1
+            Write-UiLog $lastLine
+          }
+        }
+      }
+    } catch { }
+
+    # Read new stdout lines
+    try {
+      $content = [System.IO.File]::ReadAllText($stdoutFile)
+      if ($content.Length -gt $lastStdoutLen) {
+        $newText = $content.Substring($lastStdoutLen).Trim()
+        $lastStdoutLen = $content.Length
+        if ($newText) {
+          foreach ($line in ($newText -split "`n")) {
+            $l = $line.Trim()
+            if ($l) { Write-UiLog $l }
+          }
+        }
+      }
+    } catch { }
+  }
+
+  # Read any remaining output
+  try {
+    $remaining = [System.IO.File]::ReadAllText($stderrFile).Substring($lastStderrLen).Trim()
+    if ($remaining) { foreach ($l in ($remaining -split "`n")) { $t = $l.Trim(); if ($t) { Write-UiLog $t } } }
+  } catch { }
+  try {
+    $remaining = [System.IO.File]::ReadAllText($stdoutFile).Substring($lastStdoutLen).Trim()
+    if ($remaining) { foreach ($l in ($remaining -split "`n")) { $t = $l.Trim(); if ($t) { Write-UiLog $t } } }
+  } catch { }
+
+  Remove-Item -Force $stderrFile -ErrorAction SilentlyContinue
+  Remove-Item -Force $stdoutFile -ErrorAction SilentlyContinue
+
+  return $proc.ExitCode
+}
+
+# --- Core startup helpers (logic from the original script) -------------------
 
 function Test-DockerInstalled {
   try {
@@ -34,21 +315,45 @@ function Test-DockerDaemonRunning {
 }
 
 function Start-DockerDesktop {
-  # Common install locations for Docker Desktop
   $candidatePaths = @(
     (Join-Path $env:ProgramFiles "Docker\Docker\Docker Desktop.exe"),
     (Join-Path ${env:ProgramFiles(x86)} "Docker\Docker\Docker Desktop.exe"),
-    (Join-Path $env:LocalAppData "Docker\Docker\Docker Desktop.exe")
+    (Join-Path $env:LocalAppData "Docker\Docker Desktop\Docker Desktop.exe"),
+    (Join-Path $env:LocalAppData "Docker\Docker\Docker Desktop.exe"),
+    (Join-Path $env:APPDATA "Docker\Docker Desktop.exe")
   ) | Where-Object { $_ -ne $null }
+
+  # Also search any Docker* folders under ProgramFiles
+  foreach ($base in @($env:ProgramFiles, ${env:ProgramFiles(x86)})) {
+    if ($base) {
+      try {
+        Get-ChildItem -LiteralPath $base -Directory -Filter "Docker*" -ErrorAction SilentlyContinue |
+          ForEach-Object {
+            $p = Join-Path $_.FullName "Docker Desktop.exe"
+            if (Test-Path $p) { $candidatePaths += $p }
+            $p2 = Join-Path $_.FullName "Docker\Docker Desktop.exe"
+            if (Test-Path $p2) { $candidatePaths += $p2 }
+          } | Out-Null
+      } catch { }
+    }
+  }
 
   $dockerDesktopExe = $candidatePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
 
   if (-not $dockerDesktopExe) {
-    Write-Warning "We could not find Docker Desktop automatically. Please start Docker Desktop yourself."
+    # Last resort: try to launch via the Start menu shortcut name
+    Write-UiLog "Could not find Docker Desktop at a standard path; trying Start menu..."
+    try {
+      Start-Process "Docker Desktop" -ErrorAction Stop | Out-Null
+      return $true
+    } catch { }
+
+    Write-UiLog "Could not find or start Docker Desktop automatically."
+    Write-UiLog "Please start Docker Desktop yourself, then try again."
     return $false
   }
 
-  Write-Host "Docker Desktop is not running; starting it now..." -ForegroundColor Yellow
+  Write-UiLog "Starting Docker Desktop ($dockerDesktopExe)..."
   Start-Process -FilePath $dockerDesktopExe | Out-Null
   return $true
 }
@@ -63,7 +368,7 @@ function Wait-ForDockerDaemon {
     if (Test-DockerDaemonRunning) {
       return $true
     }
-    Write-Host "Waiting for Docker Desktop to start..." -ForegroundColor Yellow
+    Write-UiLog "Waiting for Docker Desktop to start..."
     Start-Sleep -Seconds 5
   }
 
@@ -72,22 +377,26 @@ function Wait-ForDockerDaemon {
 
 function Wait-ForPpaDesktop {
   param(
-    [string]$Url = "http://localhost:8080",
+    [string]$Url = "http://localhost:8080/home",
     [int]$TimeoutSeconds = 300
   )
 
   $startTime = Get-Date
   while ((Get-Date) - $startTime -lt [TimeSpan]::FromSeconds($TimeoutSeconds)) {
     try {
-      $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -Headers @{ "Cache-Control" = "no-cache"; "Pragma" = "no-cache" }
+      $response = Invoke-WebRequest -Uri $Url -UseBasicParsing -MaximumRedirection 0 -Headers @{ "Cache-Control" = "no-cache"; "Pragma" = "no-cache" }
       if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 400) {
         return $true
       }
     } catch {
-      # Service not up yet; ignore and keep waiting
+      $status = $null
+      try { $status = $_.Exception.Response.StatusCode.value__ } catch { }
+      if ($status -ge 200 -and $status -lt 400) {
+        return $true
+      }
     }
 
-    Write-Host "Waiting for PPA Desktop to start at $Url ..." -ForegroundColor Yellow
+    Write-UiLog "Waiting for PPA Desktop to start at $Url ..."
     Start-Sleep -Seconds 5
   }
 
@@ -197,166 +506,260 @@ function Check-ForPpaDesktopUpdate {
     [string]$AppRoot
   )
 
-  Write-Host ""
-  Write-Host "Checking for a newer PPA Desktop installer via kncvtbplus/ppa-desktop..." -ForegroundColor Cyan
+  Write-UiLog ""
+  Write-UiLog "Checking for a newer PPA Desktop installer via kncvtbplus/ppa-desktop..."
 
   $installedVersion = Get-InstalledPpaDesktopVersion -AppRoot $AppRoot
   if (-not $installedVersion) {
-    Write-Host "Could not determine installed PPA Desktop version (missing or empty version.txt); skipping update check." -ForegroundColor Yellow
-    return
+    Write-UiLog "Could not determine installed PPA Desktop version (missing or empty version.txt); skipping update check."
+    return $true
   }
 
   $latest = Get-LatestPpaDesktopRelease
   if (-not $latest -or -not $latest.Version) {
-    Write-Host "Could not retrieve latest installer information from GitHub; skipping update check." -ForegroundColor Yellow
-    return
+    Write-UiLog "Could not retrieve latest installer information from GitHub; skipping update check."
+    return $true
   }
 
   try {
     $cmp = Compare-PpaDesktopVersion -A $installedVersion -B $latest.Version
   } catch {
-    Write-Host "Could not compare installed version with latest release; skipping update check." -ForegroundColor Yellow
-    return
+    Write-UiLog "Could not compare installed version with latest release; skipping update check."
+    return $true
   }
 
   if ($cmp -ge 0) {
-    Write-Host ("PPA Desktop is up to date (installed {0}, latest {1})." -f $installedVersion, $latest.Version) -ForegroundColor Green
+    Write-UiLog ("PPA Desktop is up to date (installed {0}, latest {1})." -f $installedVersion, $latest.Version)
+    return $true
+  }
+
+  Write-UiLog ""
+  Write-UiLog "A newer PPA Desktop installer is available."
+  Write-UiLog ("  Installed version: {0}" -f $installedVersion)
+  Write-UiLog ("  Latest version:    {0}" -f $latest.Version)
+
+  $question = "A newer PPA Desktop installer is available.`r`n`r`nInstalled version: $installedVersion`r`nLatest version: $($latest.Version)`r`n`r`nDownload and start the latest installer now?"
+  $dialogResult = [System.Windows.Forms.MessageBox]::Show(
+    $question,
+    "PPA Desktop update available",
+    [System.Windows.Forms.MessageBoxButtons]::YesNo,
+    [System.Windows.Forms.MessageBoxIcon]::Question
+  )
+
+  if ($dialogResult -ne [System.Windows.Forms.DialogResult]::Yes) {
+    Write-UiLog "Continuing with the currently installed version."
+    return $true
+  }
+
+  if ($latest.DownloadUrl) {
+    $tempDir = [System.IO.Path]::GetTempPath()
+    # Try to derive a friendly filename from the download URL; fall back to a generic name
+    $fileName = "ppa-desktop-setup-$($latest.Version).exe"
+    if ($latest.DownloadUrl -match '/([^/]+)$') {
+      $fileName = $matches[1]
+    }
+    $destPath = Join-Path $tempDir $fileName
+
+    Write-UiLog "Downloading the latest installer to $destPath ..."
+    try {
+      Invoke-DownloadWithProgress -Url $latest.DownloadUrl -DestPath $destPath -Label "Downloading PPA Desktop $($latest.Version)..."
+      Write-UiLog "Download complete. Starting the installer..."
+      Start-Process -FilePath $destPath | Out-Null
+      Write-UiLog "Follow the installer steps to upgrade PPA Desktop, then start it again from the Start menu."
+      $script:ExitAfterUpdate = $true
+      return $false
+    } catch {
+      Write-UiLog "Automatic download of the latest installer failed." -IsError
+      if ($latest.ReleaseUrl) {
+        Write-UiLog "Opening the release page in your browser instead..."
+        Start-Process $latest.ReleaseUrl | Out-Null
+        $script:ExitAfterUpdate = $true
+        return $false
+      }
+
+      # If we cannot even open the release page, continue starting the current version
+      Write-UiLog "Could not open the release page; continuing with the current version." -IsError
+      return $true
+    }
+  } elseif ($latest.ReleaseUrl) {
+    Write-UiLog "Opening the release page for the latest installer..." 
+    Start-Process $latest.ReleaseUrl | Out-Null
+    $script:ExitAfterUpdate = $true
+    return $false
+  }
+
+  return $true
+}
+
+function Start-PpaDesktop {
+  # 1. Docker Desktop presence and daemon
+  Set-UiStatus "Checking Docker Desktop installation..." 5
+  Write-UiLog "Checking whether Docker Desktop is installed..."
+
+  if (-not (Test-DockerInstalled)) {
+    Throw-UiError "Docker Desktop does not seem to be installed. Please install Docker Desktop for Windows first."
+  }
+
+  Set-UiStatus "Ensuring Docker Desktop is running..." 10
+
+  if (-not (Test-DockerDaemonRunning)) {
+    if (-not (Start-DockerDesktop)) {
+      Throw-UiError "Docker Desktop is not running and could not be started automatically. Please start Docker Desktop yourself and run this shortcut again."
+    }
+
+    if (-not (Wait-ForDockerDaemon -TimeoutSeconds 300)) {
+      Throw-UiError "Docker Desktop did not start in time. Please check Docker Desktop and try again."
+    }
+
+    Write-UiLog "Docker Desktop is now running."
+  } else {
+    Write-UiLog "Docker Desktop is already running."
+  }
+
+  # 2. Optional update check
+  Set-UiStatus "Checking for PPA Desktop updates..." 25
+  if (-not (Check-ForPpaDesktopUpdate -AppRoot $ProjectRoot)) {
     return
   }
 
-  Write-Host ""
-  Write-Host "A newer PPA Desktop installer is available." -ForegroundColor Yellow
-  Write-Host ("  Installed version: {0}" -f $installedVersion)
-  Write-Host ("  Latest version:    {0}" -f $latest.Version)
+  if ($script:ExitAfterUpdate) {
+    return
+  }
 
-  $answer = Read-Host "Download and start the latest installer now? (Y/N)"
-  if ($answer -match '^(Y|y|J|j)$') {
-    if ($latest.DownloadUrl) {
-      $tempDir = [System.IO.Path]::GetTempPath()
-      # Try to derive a friendly filename from the download URL; fall back to a generic name
-      $fileName = "ppa-desktop-setup-$($latest.Version).exe"
-      if ($latest.DownloadUrl -match '/([^/]+)$') {
-        $fileName = $matches[1]
-      }
-      $destPath = Join-Path $tempDir $fileName
+  # 3. Prepare local data directory used as /s3 mount
+  Set-UiStatus "Preparing local data folders..." 35
 
-      Write-Host "Downloading the latest installer to $destPath ..." -ForegroundColor Cyan
-      try {
-        Invoke-WebRequest -Uri $latest.DownloadUrl -OutFile $destPath -UseBasicParsing
-        Write-Host "Starting the installer..." -ForegroundColor Cyan
-        Start-Process -FilePath $destPath
-        Write-Host "Follow the installer steps to upgrade PPA Desktop, then start it again from the Start menu." -ForegroundColor Cyan
-        Read-Host "Press Enter to close this window"
-        exit 0
-      } catch {
-        Write-Warning "Automatic download of the latest installer failed."
-        if ($latest.ReleaseUrl) {
-          Write-Host "Opening the release page in your browser instead..." -ForegroundColor Yellow
-          Start-Process $latest.ReleaseUrl
-          Read-Host "Press Enter to close this window"
-          exit 0
-        }
-      }
-    } elseif ($latest.ReleaseUrl) {
-      Write-Host "No direct download URL found; opening the release page instead..." -ForegroundColor Yellow
-      Start-Process $latest.ReleaseUrl
-      Read-Host "Press Enter to close this window"
-      exit 0
+  $LocalDataRoot = Join-Path $env:LOCALAPPDATA "PPA-Wizard"
+  $S3LocalDir = Join-Path $LocalDataRoot "s3"
+  if (-not (Test-Path $S3LocalDir)) {
+    Write-UiLog "Creating local data directory for PPA Desktop at $S3LocalDir"
+    New-Item -ItemType Directory -Path $S3LocalDir -Force | Out-Null
+  }
+
+  $S3ScriptDir     = Join-Path $S3LocalDir "script"
+  $S3DatasourceDir = Join-Path $S3LocalDir "datasource"
+  $S3OutputDir     = Join-Path $S3LocalDir "output"
+
+  foreach ($dir in @($S3ScriptDir, $S3DatasourceDir, $S3OutputDir)) {
+    if (-not (Test-Path $dir)) {
+      New-Item -ItemType Directory -Path $dir -Force | Out-Null
     }
   }
-}
 
-if (-not (Test-DockerInstalled)) {
-  Write-Error "Docker Desktop does not seem to be installed. Please install Docker Desktop for Windows first."
-  Read-Host "Press Enter to close this window"
-  exit 1
-}
+  # 4. Seed/update the R script into the writable /s3 area
+  Set-UiStatus "Copying PPA R script..." 45
 
-# Make sure Docker Desktop is running; if not, try to start it
-if (-not (Test-DockerDaemonRunning)) {
-  if (-not (Start-DockerDesktop)) {
-    Write-Error "Docker Desktop is not running and could not be started automatically. Please start Docker Desktop yourself and run this shortcut again."
-    Read-Host "Press Enter to close this window"
-    exit 1
+  $BundledScript = Join-Path $ProjectRoot "local-dev\s3\script\Auto.PPA.UI.R"
+  $TargetScript  = Join-Path $S3ScriptDir "Auto.PPA.UI.R"
+
+  if (Test-Path $BundledScript) {
+    Write-UiLog "Copying latest PPA R script to data directory ($TargetScript)..."
+    Copy-Item $BundledScript $TargetScript -Force
   }
 
-  if (-not (Wait-ForDockerDaemon -TimeoutSeconds 300)) {
-    Write-Error "Docker Desktop did not start in time. Please check Docker Desktop and try again."
-    Read-Host "Press Enter to close this window"
-    exit 1
+  # Expose this path to docker-compose so it can mount it as /s3 inside containers
+  $env:PPA_DATA_DIR = $S3LocalDir
+
+  # 5. Sanity check on application.jar
+  Set-UiStatus "Checking application files..." 55
+
+  if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
+    Throw-UiError "We could not find the main application file 'application.jar'. Please reinstall PPA Desktop or contact support."
   }
 
-  Write-Host "Docker Desktop is now running." -ForegroundColor Green
-} else {
-  Write-Host "Docker Desktop is already running." -ForegroundColor Green
-}
+  # 6. Start docker-compose services
+  Set-UiStatus "Downloading Docker images (if needed)..." 65
 
-# Determine script location and project root
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ProjectRoot = Split-Path -Parent $ScriptDir
-$ComposeDir = Join-Path $ProjectRoot "local-dev"
+  Write-UiLog "Downloading the latest Docker images (this can take a few minutes the first time)..."
+  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "pull" `
+    -WorkingDirectory $ComposeDir -StatusText "Pulling images..."
 
-# Check if a newer PPA Desktop installer is available and offer to open the download page
-Check-ForPpaDesktopUpdate -AppRoot $ProjectRoot
+  Set-UiStatus "Starting PPA Desktop services..." 75
+  Write-UiLog "Starting the PPA Desktop services..."
+  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "up -d --force-recreate" `
+    -WorkingDirectory $ComposeDir -StatusText "Starting services..."
 
-# Determine a user-writable data directory for Docker volumes (e.g. /s3 mount)
-$LocalDataRoot = Join-Path $env:LOCALAPPDATA "PPA-Wizard"
-$S3LocalDir = Join-Path $LocalDataRoot "s3"
-if (-not (Test-Path $S3LocalDir)) {
-  Write-Host "Creating local data directory for PPA Desktop at $S3LocalDir" -ForegroundColor Cyan
-  New-Item -ItemType Directory -Path $S3LocalDir -Force | Out-Null
-}
+  # 7. Wait for the app to respond and open it
+  $HealthUrl = "http://localhost:8080/home"
+  $AppUrl    = "http://localhost:8080"
+  Set-UiStatus "Waiting for PPA Desktop to respond..." 85
+  Write-UiLog "Waiting for PPA Desktop to start..."
 
-# Ensure subfolders exist for script, datasource, and output under the shared /s3 mount
-$S3ScriptDir     = Join-Path $S3LocalDir "script"
-$S3DatasourceDir = Join-Path $S3LocalDir "datasource"
-$S3OutputDir     = Join-Path $S3LocalDir "output"
-
-foreach ($dir in @($S3ScriptDir, $S3DatasourceDir, $S3OutputDir)) {
-  if (-not (Test-Path $dir)) {
-    New-Item -ItemType Directory -Path $dir -Force | Out-Null
+  if (Wait-ForPpaDesktop -Url $HealthUrl -TimeoutSeconds 300) {
+    Write-UiLog "PPA Desktop is ready. Opening it in your browser at $AppUrl"
+    Start-Process $AppUrl | Out-Null
+  } else {
+    Write-UiLog "PPA Desktop did not start within the expected time. You can still try opening $AppUrl in your browser." -IsError
+    Start-Process $AppUrl | Out-Null
   }
+
+  Set-UiStatus "PPA Desktop has started." 100
 }
 
-# Seed/update the R script into the writable /s3 area every time
-$BundledScript = Join-Path $ProjectRoot "local-dev\s3\script\Auto.PPA.UI.R"
-$TargetScript  = Join-Path $S3ScriptDir "Auto.PPA.UI.R"
+$form.Add_Shown({
+  param($sender, $eventArgs)
 
-if (Test-Path $BundledScript) {
-  Write-Host "Copying latest PPA R script to data directory ($TargetScript)..." -ForegroundColor Cyan
-  Copy-Item $BundledScript $TargetScript -Force
-}
+  $script:UiForm.Cursor = [System.Windows.Forms.Cursors]::WaitCursor
+  Set-UiStatus "Starting PPA Desktop..." 0
+  Write-UiLog "Starting PPA Desktop and its background services..."
 
-# Expose this path to docker-compose so it can mount it as /s3 inside containers
-$env:PPA_DATA_DIR = $S3LocalDir
+  try {
+    Start-PpaDesktop
 
-if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
-  Write-Error "We could not find the main application file 'application.jar'. Please reinstall PPA Desktop or contact support."
-  Read-Host "Press Enter to close this window"
-  exit 1
-}
+    $script:UiForm.Cursor = [System.Windows.Forms.Cursors]::Default
+    $script:UiCloseButton.Enabled = $true
 
-Push-Location $ComposeDir
-try {
-  Write-Host "Downloading the latest base Docker images (e.g. Postgres)..." -ForegroundColor Yellow
-  docker-compose pull
+    if ($script:ExitAfterUpdate) {
+      Set-UiStatus "PPA Desktop update started." 100
+      Write-UiLog "The installer has been started. This window will close automatically."
 
-  Write-Host "Starting the PPA Desktop services (this can take a few minutes the first time)..." -ForegroundColor Yellow
-  # Force recreate to ensure updated env vars (like PPA_DATA_DIR) are applied
-  # consistently to *all* services. This prevents situations where the app and
-  # Rserve end up mounting different host folders for /s3, which breaks uploads.
-  docker-compose up -d --force-recreate
-} finally {
-  Pop-Location
-}
+      $timer = New-Object System.Windows.Forms.Timer
+      $timer.Interval = 2000
+      $timer.Add_Tick({
+        param($sender, $eventArgs)
+        try { $sender.Stop() } catch { }
+        try { if ($script:UiForm -ne $null -and -not $script:UiForm.IsDisposed) { $script:UiForm.Close() } } catch { }
+      })
+      $timer.Start()
+      return
+    }
 
-${AppUrl} = "http://localhost:8080"
-Write-Host "Waiting for PPA Desktop to start..." -ForegroundColor Yellow
+    Write-UiLog "PPA Desktop is ready. This window will close automatically in a few seconds."
 
-if (Wait-ForPpaDesktop -Url $AppUrl -TimeoutSeconds 300) {
-  Write-Host "PPA Desktop is ready. Opening it in your browser at $AppUrl" -ForegroundColor Green
-  Start-Process $AppUrl
-} else {
-  Write-Warning "PPA Desktop did not start within the expected time. You can still try opening $AppUrl in your browser."
-  Start-Process $AppUrl
-}
+    $timer = New-Object System.Windows.Forms.Timer
+    $timer.Interval = 4000
+    $timer.Add_Tick({
+      param($sender, $eventArgs)
+
+      try {
+        if ($sender -ne $null) {
+          $sender.Stop()
+        }
+      } catch {
+        # Ignore timer stop errors
+      }
+
+      try {
+        if ($script:UiForm -ne $null -and -not $script:UiForm.IsDisposed) {
+          $script:UiForm.Close()
+        }
+      } catch {
+        # Ignore close errors; form may already be closing/closed
+      }
+    })
+    $timer.Start()
+  } catch {
+    $script:UiForm.Cursor = [System.Windows.Forms.Cursors]::Default
+    $script:UiCloseButton.Enabled = $true
+
+    $errorMessage = $_.Exception.Message
+    Set-UiStatus $errorMessage 0
+    Write-UiLog "Error: $errorMessage" -IsError
+
+    if ($_.InvocationInfo -ne $null -and $_.InvocationInfo.PositionMessage) {
+      Write-UiLog $_.InvocationInfo.PositionMessage -IsError
+    }
+  }
+})
+
+[System.Windows.Forms.Application]::Run($form)

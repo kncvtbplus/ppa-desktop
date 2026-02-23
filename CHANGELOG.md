@@ -14,10 +14,10 @@ This document summarizes the functional changes made to the packaged PPA Desktop
   - Improved the local database restore script and Rserve Dockerfile so developers can reliably spin up a realistic environment, restore data, and run PPA calculations locally.
 
 - **Demo / convenience users for testing (Dec 2025)**  
-  - Introduced SQL helper scripts to create demo users and local test accounts (including a dedicated “Job van Rest” user and a generic “local” user).  
+  - Introduced SQL helper scripts to create demo users and local test accounts (including a dedicated "Job van Rest" user and a generic "local" user).  
   - This makes it much easier to log in and demonstrate or debug the application without manual user setup each time.
 
-- **Upgrade of bundled PPA application and UI assets to v3/v4/v5 (Dec 2025 – Feb 2026)**  
+- **Upgrade of bundled PPA application and UI assets to v3/v4/v5 (Dec 2025 - Feb 2026)**  
   - Updated the bundled application and exploded JAR contents to a newer upstream PPA application release (v3, then v4, then v5), bringing in the latest core workflow, security, and data-handling logic from the original project.  
   - Refreshed the front-end stack: new/updated CSS, JavaScript and UI libraries (Angular, Bootstrap, jQuery EasyUI themes, icons, fonts, intro.js, GoJS, etc.), giving the wizard a more modern and consistent look.  
   - Reworked the home/index templates and step fragments (e.g. Identify Variables, Map Aggregation Levels, Upload & Prep Data, Select Output) to align with the current PPA process and make the step-by-step navigation clearer.  
@@ -25,7 +25,7 @@ This document summarizes the functional changes made to the packaged PPA Desktop
   - Improved Windows installer metadata and icon, plus the run script, so the installed app feels more polished and easier to start/stop for non-technical users.
 
 - **Local data, S3 content and Windows documentation (Feb 2026)**  
-  - Added sample PPA datasets to the local S3 folder and refined the R script / Docker configuration, so developers can run realistic end‑to‑end scenarios (upload → mapping → outputs) out of the box.  
+  - Added sample PPA datasets to the local S3 folder and refined the R script / Docker configuration, so developers can run realistic end-to-end scenarios (upload, mapping, outputs) out of the box.  
   - Extended the Windows user guide and installer notes, clarifying how the local stack works (Docker, database, Rserve) and how end users should install and operate the Windows version.
 
 - **Repository scope and AWS infra clean-up (Feb 2026)**  
@@ -33,9 +33,13 @@ This document summarizes the functional changes made to the packaged PPA Desktop
   - This reduces noise in the repo and avoids accidental changes to infrastructure when the goal is only to update the wizard and its packaging.
 
 - **Account screen behaviour changes (Feb 2026)**  
-  - In the single-account view (`Account.js`), fixed the logout confirmation logic by making the alert title/message local variables instead of implicitly global, preventing side‑effects between controllers or screens.  
-  - In the accounts overview (`Accounts.js`), removed the in‑UI `createAccount` action, so accounts are no longer created directly from this screen and must be created via a controlled path (e.g. elsewhere in the system or by admins), aligning the UI with the intended account‑management policy.
+  - In the single-account view (`Account.js`), fixed the logout confirmation logic by making the alert title/message local variables instead of implicitly global, preventing side-effects between controllers or screens.  
+  - In the accounts overview (`Accounts.js`), removed the in-UI `createAccount` action, so accounts are no longer created directly from this screen and must be created via a controlled path (e.g. elsewhere in the system or by admins), aligning the UI with the intended account-management policy.
 
 - **Rebranding to PPA Desktop (Feb 2026)**  
-  - Renamed the application from “PPA Wizard” to “PPA Desktop” across documentation, Windows installer assets, and user-facing UI text, so the branding clearly reflects that this is an installable desktop version of the PPA tool.
+  - Renamed the application from "PPA Wizard" to "PPA Desktop" across documentation, Windows installer assets, and user-facing UI text, so the branding clearly reflects that this is an installable desktop version of the PPA tool.
 
+- **Guest login / skip-login mode (Feb 2026)**  
+  - Added a "Continue without login" button on the home screen so that users can access PPAs on a shared desktop PC without creating an account or logging in.
+  - Behind the scenes a dedicated guest user (with ROLE_USER only, no admin rights) is automatically created on first use and linked to a "Public" account. PPAs attached to this Public account are available to everyone; PPAs in other accounts still require a real login.
+  - This feature is only active when the application runs in local/desktop mode (`LOCAL_MODE=true`). In cloud/hosted mode the guest login endpoint is rejected.

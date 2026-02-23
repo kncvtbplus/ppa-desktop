@@ -10,7 +10,7 @@ import com.linksbridge.ppa.model.User;
 
 public interface AccountRepository extends CustomJpaRepository<Account, Long>
 {
-	User findByName(String name);
+	Account findByName(String name);
 
 	List<Account> findAllByName(String name);
 

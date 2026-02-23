@@ -4,14 +4,14 @@
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.5.2
+AppVersion=1.7.0
 AppPublisher=KNCV TB Plus
 DefaultDirName={pf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-desktop-setup-1.5.2
+OutputBaseFilename=ppa-desktop-setup-1.7.0
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -50,22 +50,27 @@ Source: "..\scripts\restore_local.ps1"; DestDir: "{app}\scripts"; Flags: ignorev
 ; Windows helper scripts
 Source: "ppa-desktop-run.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
 Source: "ppa-desktop-stop.ps1"; DestDir: "{app}\windows"; Flags: ignoreversion
-; User guide (Word + PDF documents)
-Source: "PPA Desktop Installation and Local Use Guide.docx"; DestDir: "{app}\windows"; Flags: ignoreversion
+; VBS launchers suppress the brief PowerShell console flash on startup
+Source: "ppa-desktop-run.vbs"; DestDir: "{app}\windows"; Flags: ignoreversion
+Source: "ppa-desktop-stop.vbs"; DestDir: "{app}\windows"; Flags: ignoreversion
+; User guide (PDF document only; DOCX is kept locally for editing but not shipped)
 Source: "PPA Desktop Installation and Local Use Guide.pdf"; DestDir: "{app}\windows"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\PPA Desktop (Start)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
-Name: "{group}\PPA Desktop (Stop)"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-stop.ps1"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
-Name: "{commondesktop}\PPA Desktop"; Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{group}\PPA Desktop (Start)"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-run.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{group}\PPA Desktop (Stop)"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-stop.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{commondesktop}\PPA Desktop"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-run.vbs"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
 
 [Registry]
 ; Associate .ppaw files with PPA Desktop
 ; This registers a custom ProgID and uses the PPA Desktop workspace icon.
 Root: HKCR; Subkey: ".ppaw"; ValueType: string; ValueData: "PPADesktop.PPAW"; Flags: uninsdeletevalue
+; Explicitly set the default icon on both the ProgID and the extension key
+; so Windows Explorer reliably picks up the custom .ppaw icon.
+Root: HKCR; Subkey: ".ppaw\DefaultIcon"; ValueType: string; ValueData: "{app}\windows\ppaw-file.ico,0"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "PPADesktop.PPAW"; ValueType: string; ValueData: "PPA Desktop Workspace (.ppaw)"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "PPADesktop.PPAW\DefaultIcon"; ValueType: string; ValueData: "{app}\windows\ppaw-file.ico,0"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "PPADesktop.PPAW\shell\open\command"; ValueType: string; ValueData: """powershell.exe"" -ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"" ""%1"""; Flags: uninsdeletekey
+Root: HKCR; Subkey: "PPADesktop.PPAW\shell\open\command"; ValueType: string; ValueData: """wscript.exe"" ""{app}\windows\ppa-desktop-run.vbs"" ""%1"""; Flags: uninsdeletekey
 
 ; Legacy .ppa export/import files still produced by the backend
 ; Map them to the same ProgID so double-click also opens PPA Desktop.
@@ -73,7 +78,7 @@ Root: HKCR; Subkey: ".ppa"; ValueType: string; ValueData: "PPADesktop.PPAW"; Fla
 
 [Run]
 ; Offer to start PPA Desktop immediately after installation (default checked)
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\windows\ppa-desktop-run.ps1"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
+Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-run.vbs"""; WorkingDir: "{app}"; Description: "Start PPA Desktop now"; Flags: nowait postinstall skipifsilent
 
 ; Offer to open the PDF installation guide after installation (uses the default .pdf handler)
 Filename: "{app}\windows\PPA Desktop Installation and Local Use Guide.pdf"; Description: "Open the PPA Desktop installation guide (PDF)"; Flags: nowait postinstall skipifsilent shellexec unchecked
