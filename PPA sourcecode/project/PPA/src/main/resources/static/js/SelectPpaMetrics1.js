@@ -56,7 +56,7 @@ application.controller
 								function(index, row)
 								{
 									var t = window.event ? window.event.target : null;
-									if (t && $(t).closest('input,textarea,select,.textbox,.combo').length) return;
+									if (t && $(t).closest('input,textarea,select,.textbox,.combo,.datagrid-cell-check').length) return;
 									if (row["required"]) return;
 									var dg = $(this);
 									var checked = dg.datagrid("getChecked");
