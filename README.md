@@ -1,39 +1,37 @@
-## PPA Desktop — Overview, structure and usage
+## PPA Desktop
 
-The PPA Desktop is a Java Spring Boot web application that guides the Patient Pathway Analysis (PPA) process end‑to‑end: uploading data, mapping variables, and generating PPA outputs. This repository contains a prebuilt application (`application.jar`) and a `Procfile` to run the app as a web process.
+PPA Desktop is a Windows application that guides the Patient Pathway Analysis (PPA) process end‑to‑end: uploading data, mapping variables, and generating PPA outputs. It runs locally on your machine using Docker containers — no internet connection is required after installation.
 
-## Architecture and tech stack
+PPA Desktop is developed and maintained by **KNCV TB Plus**.
 
-- **Platform**: Java (Spring Boot, embedded Tomcat)
-- **Web layer**: Spring MVC, Thymeleaf extras, static assets using jQuery EasyUI
-- **Security**: Spring Security with custom handlers/listeners
-- **Data**: Spring Data JPA (Hibernate), PostgreSQL dialect
-- **Files/Cloud**: AWS S3 for scripts, uploads, and output
-- **R integration**: Rserve (external) and Renjin libraries for R script execution
+## Installation
 
-### Runtime structure (from `application.jar`)
+1. Download the latest installer from [Releases](https://github.com/kncvtbplus/ppa-desktop/releases/latest).
+2. Run `ppa-desktop-setup-<version>.exe` and follow the on‑screen instructions.
+3. The installer will check for Docker Desktop and offer to download it if not already installed.
+4. After installation, launch PPA Desktop from the Start Menu or desktop shortcut.
 
-- `BOOT-INF/classes/`
-  - `application.properties`, `messages.properties`
-  - `static/` — JS/CSS/images (jQuery EasyUI, etc.)
-  - `templates/` — Thymeleaf templates (if present)
-  - `com/linksbridge/ppa/` (original Java package namespace used in the JAR)
-    - core: `Application` (Spring Boot main)
-    - config: `WebMvcConfiguration`, `WebSecurityConfiguration`, `RefreshSessionInterceptor`
-    - security: custom authentication/authorization handlers
-    - controllers: `controller/DataController`, `RestControllerAdvice`
-    - domain: `model/*` (e.g., `Ppa`, `PpaSector`, `Metric`, `User`, `Account`, …)
-    - persistence: `repository/*` (Spring Data repositories)
-    - users: `user/MyUserDetailsService`, `MyUserDetails`
-    - utilities and Thymeleaf dialect extensions
+See the included **PPA Desktop Installation and Local Use Guide** (PDF) for detailed instructions.
 
-The PPA Desktop was originally built under the `com.linksbridge.ppa` namespace and is now fully maintained and distributed by **KNCV TB Plus**.
+### Auto‑updates
+
+On startup, PPA Desktop checks for newer releases. If a new version is available, you are prompted to download and install the update automatically.
+
+## How it works
+
+PPA Desktop runs as a set of Docker containers on your local machine:
+
+- **ppa-app** — the main Spring Boot web application, accessible at `http://localhost:8080`
+- **ppa-postgres** — a PostgreSQL database for storing PPA data locally
+- **ppa-rserve** — an R execution environment used to generate PPA outputs
+
+All user data stays on your computer. The application opens in your default web browser.
 
 ## Functional overview
 
-The application supports a step‑by‑step PPA workflow (as reflected in `messages.properties`):
+The application supports a step‑by‑step PPA workflow:
 
-- **Team spaces & user management**: create spaces, invite/expel users, manage roles.
+- **Team spaces & user management**: create spaces, manage users and roles.
 - **PPA management**: PPAs per team, duplicate/delete, national/subnational aggregation.
 - **Data sources**: upload (.csv/.dta), manage, subset, apply sample weights.
 - **Identify variables**:
@@ -43,196 +41,78 @@ The application supports a step‑by‑step PPA workflow (as reflected in `messa
   - Define health sectors & levels and map data values
   - Define geographies and map data source values
 - **Output**: generate, preview, and download PPA outputs.
-- **Email flows**: registration/confirm email, invitations, password reset.
 
-## Configuration (environment variables)
+## Architecture and tech stack
 
-Key settings (see `application.properties`) are provided via environment variables:
+- **Platform**: Java (Spring Boot, embedded Tomcat)
+- **Web layer**: Spring MVC, Thymeleaf, jQuery EasyUI
+- **Security**: Spring Security with custom handlers/listeners
+- **Data**: Spring Data JPA (Hibernate), PostgreSQL
+- **R integration**: Rserve for R script execution
+- **Packaging**: Docker containers orchestrated via Docker Compose
+- **Installer**: Inno Setup (Windows)
 
-- **PostgreSQL**:
-  - `RDS_HOSTNAME`, `RDS_PORT`, `RDS_USERNAME`, `RDS_PASSWORD`
-  - JDBC: `jdbc:postgresql://${RDS_HOSTNAME}:${RDS_PORT}/ppa`
-- **AWS S3**:
-  - `S3_BUCKET` — bucket name
-  - Paths: `s3.rscript.key=script/Auto.PPA.UI.R`, `s3.userfile.directory=datasource`, `s3.output.directory=output`
-- **Rserve**:
-  - `RSERVE_HOST`, `RSERVE_PORT`
-- **Sessions and uploads**:
-  - `server.servlet.session.timeout=3600`
-  - Upload limits: 10 GB (max file/request), temp directory via `spring.servlet.multipart.location`
-- **Other**:
-  - `messages.properties.path=messages.properties`
-  - Token key and timeouts for links (confirm/invite/reset)
+### Background
 
-## Requirements
+PPA Desktop was originally developed as a cloud‑hosted web application (under the `com.linksbridge.ppa` namespace). It has since been converted into a standalone desktop application that runs entirely on the user's machine via Docker. Some legacy code related to the original cloud deployment (e.g. email flows, S3 references) remains in the repository but is not used in the desktop version.
 
-- Java Runtime (JRE/JDK) installed
-- Reachable PostgreSQL instance with database `ppa`
-- Reachable Rserve endpoint
-- AWS credentials configured to access `S3_BUCKET`
+## Docker images
 
-## Run the application
+Container images are published on Docker Hub under the `kncvtbplus` namespace:
 
-### Docker images
+- `kncvtbplus/ppa-app:latest` — main Spring Boot application image
+- `kncvtbplus/ppa-rserve:latest` — Rserve sidecar image
 
-For local development and distribution, container images are published on Docker Hub under the `kncvtbplus` namespace. This Docker Hub account is registered to the email address `jobvanrest@live.nl`.
+The `local-dev/docker-compose.yml` file and the Windows installer use these images.
 
-- `kncvtbplus/ppa-app:latest` — main Spring Boot application image.
-- `kncvtbplus/ppa-rserve:latest` — Rserve sidecar image used by the app.
+Both the app and Rserve containers share a `/s3` volume for file exchange (data uploads, R scripts, and generated output). On Windows this maps to `%LOCALAPPDATA%\PPA-Wizard\s3`.
 
-The `local-dev/docker-compose.yml` file and the Windows installer use these images by default.
+## Building from source (for developers)
 
-The `kncvtbplus/ppa-rserve:latest` image is built from `rserve/Dockerfile` and:
+### Prerequisites
 
-- Installs all R packages used by `local-dev/s3/script/Auto.PPA.UI.R`.
-- Installs `readstata13` and overrides `read.dta()` so modern Stata 13+ `.dta` files are read via `readstata13::read.dta13(...)` instead of the legacy `foreign::read.dta`.
-- Overrides `local({ ... })` so the Java side can safely call `exists("df")` and `colnames(df)` in follow‑up R commands.
+- Java JDK 11+
+- Maven (or use the included `mvnw` wrapper)
+- Docker Desktop
+- Inno Setup 6 (for building the Windows installer)
 
-**Important: shared `/s3` volume**
+### Build and release
 
-Both the Spring Boot app and the Rserve container must see the **same `/s3` directory**. If they mount different host folders, uploads will appear to succeed but R will not find the files, leading to errors like *“Cannot read column names from file.”*  
-For local use we standardise on:
-
-- Host directory (created automatically by the Windows run script):  
-  `%LOCALAPPDATA%\PPA-Wizard\s3`
-- Docker bind mount in `local-dev/docker-compose.yml` (for both `app` and `rserve`):  
-  `- ${PPA_DATA_DIR:-./s3}:/s3`
-
-When starting manually, ensure `PPA_DATA_DIR` is set so both services use the same host folder:
+The release script builds the JAR, Docker images, Windows installer, and publishes everything in a single command:
 
 ```powershell
-$env:PPA_DATA_DIR = "$env:LOCALAPPDATA\PPA-Wizard\s3"
-cd local-dev
-docker-compose up -d --force-recreate
+pwsh .\windows\new-ppa-release.ps1 -Version 1.7.2
 ```
 
-Local start (after setting environment variables):
+To build without publishing:
 
-```bash
-java -Xms2g -Xmx14g -Djava.io.tmpdir=%TEMP% -jar application.jar
+```powershell
+pwsh .\windows\new-ppa-release.ps1 -Version 1.7.2 -SkipPublish
 ```
 
-Via `Procfile` (e.g., on Heroku/Procfile‑based platforms):
+### Manual steps
 
-```
-web: java -Xms2g -Xmx14g -Djava.io.tmpdir=/var/tmp -jar application.jar
-```
+1. Build the application JAR:
+   ```powershell
+   cd "PPA sourcecode\project\PPA"
+   .\mvnw -DskipTests package
+   ```
+2. Build the Docker image:
+   ```powershell
+   docker build --no-cache -t kncvtbplus/ppa-app:1.7.2 .
+   ```
+3. Build the Windows installer with Inno Setup:
+   - Open `windows/ppa-desktop-installer.iss` in the Inno Setup IDE
+   - Build → Compile
 
-By default the app runs on the Spring Boot port (on PaaS often via the `PORT` env var).
+## Database
 
-## Data layer and migrations
+PPA Desktop uses a local PostgreSQL instance (running in Docker). The database is created automatically on first run. SQL migration scripts are located in `PPA sourcecode/project/PPA/database/`.
 
-The JPA/Hibernate configuration uses the PostgreSQL9 dialect and the `public` schema. Migrations/tooling are not visible in this JAR; schema and migration management are handled externally (or in the original source/build).
+## License
 
-## Repository scope
-
-This folder contains the built artifacts (`application.jar`) but not the original source code or build scripts. To change logic/UI you will need the source; runtime configuration is possible via the environment variables above.
+This project is licensed under the [MIT License](LICENSE).
 
 ## Support
 
-Contact the team if you need assistance configuring RDS/S3/Rserve or setting up Procfile‑based deployments.
-
-## Windows desktop packaging and updates
-
-- **Source code repository** (development, packaging scripts):  
-  [`FeriusS/ppa-wizard`](https://github.com/FeriusS/ppa-wizard)
-
-- **Distribution repository** (public installers + releases only):  
-  [`kncvtbplus/ppa-desktop`](https://github.com/kncvtbplus/ppa-desktop)
-
-### Building a new Windows installer (maintainers)
-
-1. **Bump the version** in the source repo:
-   - Update the file `version.txt` with the new semantic version (for example `1.4.1`).
-   - In `windows/ppa-desktop-installer.iss`:
-     - Set `AppVersion` to the same value (for example `1.4.1`).
-     - Set `OutputBaseFilename` to `ppa-desktop-setup-<version>` (for example `ppa-desktop-setup-1.4.1`).
-2. **Compile the installer** on Windows with Inno Setup:
-   - Open `windows/ppa-desktop-installer.iss` in the Inno Setup IDE.
-   - Choose **Build → Compile**.
-   - This produces `windows/ppa-desktop-setup-<version>.exe` (for example `ppa-desktop-setup-1.4.1.exe`).
-3. **Publish a new public release** in `kncvtbplus/ppa-desktop`:
-   - Create a GitHub release with tag `v<version>` (for example `v1.4.1`).
-   - Attach the generated installer `ppa-desktop-setup-<version>.exe` as a release asset.
-
-### How the desktop auto‑update check works
-
-- The installed application keeps its version in `C:\Program Files\PPA Desktop\version.txt` (copied from `version.txt` in this repo by the installer).
-- On startup, the Windows script `windows/ppa-desktop-run.ps1` will:
-  1. Read the installed version from `version.txt`.
-  2. Call the GitHub API `https://api.github.com/repos/kncvtbplus/ppa-desktop/releases/latest`.
-  3. Compare the installed version with the latest release tag (expecting tags like `v1.4.1`).
-  4. Look for an installer asset named `ppa-desktop-setup-*.exe` (falling back to `ppa-wizard-setup-*.exe` for older releases).
-  5. If a newer version is available, prompt the user and download + start the latest installer directly (falling back to opening the release page in the browser if the direct download fails).
-
-This means that **end users always download the latest installer from GitHub Releases**, while all source changes and packaging logic remain maintained in the `FeriusS/ppa-wizard` repository.
-
-### Infrastructure (AWS)
-
-The repository now includes infrastructure‑as‑code under `ppa-infra/` (moved into this project for convenience). It provisions the application stack in AWS using CloudFormation/SAM and configures CloudFront and Route53.
-
-- Components:
-  - `ppa-infra/backend.yaml`: Elastic Beanstalk environment, RDS PostgreSQL, EC2 for Rserve, S3 bucket, security groups, IAM, DNS records.
-  - `ppa-infra/cloudfront-eb.yaml`: CloudFront distribution and Route53 A/alias records.
-  - `ppa-infra/Makefile`: entrypoints for deploying dev/accept/prod and populating S3 content.
-- Environments: development, accept, production.
-- Prerequisites: AWS CLI v2, AWS SAM CLI, an existing Beanstalk application named `ppa`, certificate in ACM for `ppa.kncvtbc.org`.
-
-Deploy development environment (from `ppa-infra/`):
-
-```bash
-make development
-```
-
-This runs the EB stack, CloudFront, and content restore targets shown below:
-
-```92:110:ppa-infra/Makefile
-ppa-development-ng-cloudfront:
-	aws cloudformation deploy \
-	 	--no-fail-on-empty-changeset \
-		--template-file cloudfront-eb.yaml \
-		--stack-name $@ \
-		--capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-		--role-arn arn:aws:iam::365027787595:role/ppa-infra-cfn \
-		--parameter-overrides \
-			ElasticBeanstalkEnvironmentName=development-ng \
-			ACMCertificateArn=$(CERT) \
-			DomainName=ppa.kncvtbc.org 
-```
-
-Key environment variables injected into the app servers are defined in the EB settings of the backend stack:
-
-```450:503:ppa-infra/backend.yaml
-      - Namespace: aws:elasticbeanstalk:application:environment
-        OptionName: RDS_HOSTNAME
-        Value: 
-          Fn::GetAtt:
-          - DatabaseInstance
-          - Endpoint.Address
-      - Namespace: aws:elasticbeanstalk:application:environment
-        OptionName: RSERVE_HOST
-        Value:
-          Fn::GetAtt:
-          - RServeInstance
-          - PrivateDnsName
-      - Namespace: aws:elasticbeanstalk:application:environment
-        OptionName: S3_BUCKET
-        Value:
-          Ref: ApplicationS3Bucket
-```
-
-Notes and safety:
-- Production should not be recreated casually; dev can be created/destroyed on demand.
-- Use temporary credentials or a role‑based environment (e.g., Cloud9) to deploy; avoid long‑lived secrets.
-- DNS and certificates are managed in Route53/ACM for `ppa.kncvtbc.org` and subdomains.
-
-### Deploy from Cloud9
-
-For step‑by‑step Cloud9 instructions, validation commands, and a parameter checklist, see `ppa-infra/README.md`. Quick start:
-
-```bash
-cd ppa-infra
-make development   # provisions EB, RDS, Rserve, S3, CloudFront + DNS
-```
-
-
+For questions or issues, please open a [GitHub issue](https://github.com/kncvtbplus/ppa-desktop/issues) or contact the KNCV TB Plus team.

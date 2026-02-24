@@ -43,7 +43,10 @@ param(
     [switch]$SkipPublish,
 
     # Skip Docker image build and push.
-    [switch]$SkipDocker
+    [switch]$SkipDocker,
+
+    # Skip pushing source code to the distribution repository.
+    [switch]$SkipSourcePush
 )
 
 Set-StrictMode -Version Latest
@@ -412,6 +415,43 @@ function Push-DockerImage {
     Write-Host "Docker images pushed successfully." -ForegroundColor Green
 }
 
+function Push-SourceToDistribution {
+    param(
+        [string]$DistributionRepo
+    )
+
+    $remoteUrl = "https://github.com/$DistributionRepo.git"
+
+    # Find an existing remote that points to the distribution repo, or create one.
+    $remoteName = $null
+    foreach ($line in (git remote -v 2>$null)) {
+        if ($line -match '^\S+' -and $line -like "*$DistributionRepo*" -and $line -like '*(push)*') {
+            $remoteName = ($line -split '\s+')[0]
+            break
+        }
+    }
+
+    if (-not $remoteName) {
+        $remoteName = "distribution"
+        Write-Host "Adding git remote '$remoteName' -> $remoteUrl" -ForegroundColor Cyan
+        git remote add $remoteName $remoteUrl
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to add git remote '$remoteName'."
+        }
+    }
+
+    $branch = (git rev-parse --abbrev-ref HEAD 2>$null)
+    if (-not $branch) { $branch = "main" }
+
+    Write-Host "Pushing branch '$branch' to $remoteName ($remoteUrl)..." -ForegroundColor Cyan
+    git push $remoteName "${branch}:main" --force
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to push source code to '$DistributionRepo'. Make sure you have push access (gh auth login or SSH key)."
+    }
+
+    Write-Host "Source code pushed to $DistributionRepo." -ForegroundColor Green
+}
+
 function Publish-Installer {
     param(
         [string]$WindowsDir,
@@ -457,6 +497,11 @@ try {
     Update-VersionFiles -RepoRoot $repoRoot -Version $Version
     Update-InnoSetupScript -WindowsDir $windowsDir -Version $Version
     Build-Installer -WindowsDir $windowsDir -Version $Version -CompilerPath $compilerPath
+
+    if (-not $SkipSourcePush) {
+        Push-SourceToDistribution -DistributionRepo $DistributionRepo
+    }
+
     if (-not $SkipPublish) {
         Publish-Installer -WindowsDir $windowsDir -Version $Version -DistributionRepo $DistributionRepo
     }

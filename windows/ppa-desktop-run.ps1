@@ -68,9 +68,24 @@ $progressBar.Minimum = 0
 $progressBar.Maximum = 100
 $form.Controls.Add($progressBar)
 
+$subStatusLabel = New-Object System.Windows.Forms.Label
+$subStatusLabel.AutoSize = $true
+$subStatusLabel.Location = New-Object System.Drawing.Point(12, 90)
+$subStatusLabel.Text = ""
+$subStatusLabel.Visible = $false
+$form.Controls.Add($subStatusLabel)
+
+$subProgressBar = New-Object System.Windows.Forms.ProgressBar
+$subProgressBar.Location = New-Object System.Drawing.Point(12, 108)
+$subProgressBar.Size = New-Object System.Drawing.Size(560, 16)
+$subProgressBar.Minimum = 0
+$subProgressBar.Maximum = 100
+$subProgressBar.Visible = $false
+$form.Controls.Add($subProgressBar)
+
 $logTextBox = New-Object System.Windows.Forms.TextBox
-$logTextBox.Location = New-Object System.Drawing.Point(12, 95)
-$logTextBox.Size = New-Object System.Drawing.Size(560, 240)
+$logTextBox.Location = New-Object System.Drawing.Point(12, 130)
+$logTextBox.Size = New-Object System.Drawing.Size(560, 205)
 $logTextBox.Multiline = $true
 $logTextBox.ScrollBars = 'Vertical'
 $logTextBox.ReadOnly = $true
@@ -85,12 +100,14 @@ $closeButton.Location = New-Object System.Drawing.Point(482, 340)
 $closeButton.Add_Click({ $form.Close() })
 $form.Controls.Add($closeButton)
 
-$script:UiStatusLabel = $statusLabel
-$script:UiProgressBar = $progressBar
-$script:UiLogTextBox  = $logTextBox
-$script:UiForm        = $form
-$script:UiCloseButton = $closeButton
-$script:ExitAfterUpdate = $false
+$script:UiStatusLabel    = $statusLabel
+$script:UiProgressBar    = $progressBar
+$script:UiSubStatusLabel = $subStatusLabel
+$script:UiSubProgressBar = $subProgressBar
+$script:UiLogTextBox     = $logTextBox
+$script:UiForm           = $form
+$script:UiCloseButton    = $closeButton
+$script:ExitAfterUpdate  = $false
 
 function Write-UiLog {
   param(
@@ -177,7 +194,73 @@ function Throw-UiError {
   throw $Message
 }
 
-# --- Download helper with progress bar ---------------------------------------
+# --- Sub-progress helpers ----------------------------------------------------
+
+function Show-SubProgress {
+  param(
+    [string]$Text = "",
+    [switch]$Marquee
+  )
+
+  try {
+    if ($script:UiSubStatusLabel -and -not $script:UiSubStatusLabel.IsDisposed) {
+      $script:UiSubStatusLabel.Text    = $Text
+      $script:UiSubStatusLabel.Visible = $true
+    }
+    if ($script:UiSubProgressBar -and -not $script:UiSubProgressBar.IsDisposed) {
+      if ($Marquee) {
+        $script:UiSubProgressBar.Style = [System.Windows.Forms.ProgressBarStyle]::Marquee
+        $script:UiSubProgressBar.MarqueeAnimationSpeed = 30
+      } else {
+        $script:UiSubProgressBar.Style = [System.Windows.Forms.ProgressBarStyle]::Continuous
+        $script:UiSubProgressBar.Value = 0
+      }
+      $script:UiSubProgressBar.Visible = $true
+    }
+    [System.Windows.Forms.Application]::DoEvents()
+  } catch { }
+}
+
+function Set-SubProgress {
+  param(
+    [string]$Text,
+    [int]$Percent = -1
+  )
+
+  try {
+    if ($Text -and $script:UiSubStatusLabel -and
+        -not $script:UiSubStatusLabel.IsDisposed -and
+        $script:UiSubStatusLabel.IsHandleCreated) {
+      $script:UiSubStatusLabel.Text = $Text
+    }
+    if ($Percent -ge 0 -and $script:UiSubProgressBar -and
+        -not $script:UiSubProgressBar.IsDisposed -and
+        $script:UiSubProgressBar.IsHandleCreated) {
+      if ($script:UiSubProgressBar.Style -ne [System.Windows.Forms.ProgressBarStyle]::Continuous) {
+        $script:UiSubProgressBar.Style = [System.Windows.Forms.ProgressBarStyle]::Continuous
+      }
+      $val = [Math]::Min([Math]::Max($Percent, 0), 100)
+      $script:UiSubProgressBar.Value = $val
+    }
+    [System.Windows.Forms.Application]::DoEvents()
+  } catch { }
+}
+
+function Hide-SubProgress {
+  try {
+    if ($script:UiSubStatusLabel -and -not $script:UiSubStatusLabel.IsDisposed) {
+      $script:UiSubStatusLabel.Visible = $false
+    }
+    if ($script:UiSubProgressBar -and -not $script:UiSubProgressBar.IsDisposed) {
+      $script:UiSubProgressBar.Visible = $false
+      $script:UiSubProgressBar.Style   = [System.Windows.Forms.ProgressBarStyle]::Continuous
+      $script:UiSubProgressBar.Value   = 0
+    }
+    [System.Windows.Forms.Application]::DoEvents()
+  } catch { }
+}
+
+# --- Download helper with sub-progress bar -----------------------------------
 
 function Invoke-DownloadWithProgress {
   param(
@@ -185,6 +268,8 @@ function Invoke-DownloadWithProgress {
     [string]$DestPath,
     [string]$Label = "Downloading..."
   )
+
+  Show-SubProgress -Text $Label
 
   $webClient = New-Object System.Net.WebClient
   $script:downloadDone  = $false
@@ -196,7 +281,7 @@ function Invoke-DownloadWithProgress {
       $pct = $e.ProgressPercentage
       $mbDone  = [math]::Round($e.BytesReceived / 1MB, 1)
       $mbTotal = [math]::Round($e.TotalBytesToReceive / 1MB, 1)
-      Set-UiStatus "$Label  ${mbDone} / ${mbTotal} MB ($pct%)" $pct
+      Set-SubProgress -Text "$Label  ${mbDone} / ${mbTotal} MB" -Percent $pct
     } catch { }
   })
 
@@ -214,21 +299,27 @@ function Invoke-DownloadWithProgress {
   }
 
   $webClient.Dispose()
+  Hide-SubProgress
 
   if ($script:downloadError) {
     throw $script:downloadError
   }
 }
 
-# --- Run external process with live UI feedback -----------------------------
+# --- Run external process with live UI feedback and sub-progress -------------
 
 function Invoke-ProcessWithUiOutput {
   param(
     [string]$FilePath,
     [string]$Arguments,
     [string]$WorkingDirectory,
-    [string]$StatusText = "Running..."
+    [string]$StatusText = "Running...",
+    [switch]$ShowSubProgress
   )
+
+  if ($ShowSubProgress) {
+    Show-SubProgress -Text $StatusText -Marquee
+  }
 
   $stderrFile = [System.IO.Path]::GetTempFileName()
   $stdoutFile = [System.IO.Path]::GetTempFileName()
@@ -241,6 +332,8 @@ function Invoke-ProcessWithUiOutput {
 
   $lastStderrLen = 0
   $lastStdoutLen = 0
+  $script:pullImagesDone  = 0
+  $script:pullImagesTotal = 0
 
   while (-not $proc.HasExited) {
     [System.Windows.Forms.Application]::DoEvents()
@@ -253,10 +346,31 @@ function Invoke-ProcessWithUiOutput {
         $newText = $content.Substring($lastStderrLen).Trim()
         $lastStderrLen = $content.Length
         if ($newText) {
-          $lastLine = ($newText -split "`n")[-1].Trim()
-          if ($lastLine) {
-            Set-UiStatus "$StatusText  $lastLine" -1
-            Write-UiLog $lastLine
+          foreach ($rawLine in ($newText -split "`n")) {
+            $l = $rawLine.Trim()
+            if (-not $l) { continue }
+
+            # Parse docker pull progress lines like "Image X Pulling" / "Image X Pulled"
+            if ($ShowSubProgress) {
+              if ($l -match 'Pulling\s*$') {
+                $script:pullImagesTotal++
+                Set-SubProgress -Text "$StatusText  $l"
+              } elseif ($l -match 'Pulled\s*$' -or $l -match 'up to date') {
+                $script:pullImagesDone++
+                if ($script:pullImagesTotal -gt 0) {
+                  $pct = [int]([math]::Min(($script:pullImagesDone / $script:pullImagesTotal) * 100, 100))
+                  Set-SubProgress -Text "$StatusText  $l" -Percent $pct
+                }
+              } elseif ($l -match 'Creating\s*$' -or $l -match 'Starting\s*$') {
+                Set-SubProgress -Text "$StatusText  $l"
+              } elseif ($l -match 'Created\s*$' -or $l -match 'Started\s*$') {
+                Set-SubProgress -Text "$StatusText  $l"
+              } else {
+                Set-SubProgress -Text "$StatusText  $l"
+              }
+            }
+
+            Write-UiLog $l
           }
         }
       }
@@ -290,6 +404,10 @@ function Invoke-ProcessWithUiOutput {
 
   Remove-Item -Force $stderrFile -ErrorAction SilentlyContinue
   Remove-Item -Force $stdoutFile -ErrorAction SilentlyContinue
+
+  if ($ShowSubProgress) {
+    Hide-SubProgress
+  }
 
   return $proc.ExitCode
 }
@@ -672,12 +790,12 @@ function Start-PpaDesktop {
 
   Write-UiLog "Downloading the latest Docker images (this can take a few minutes the first time)..."
   Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "pull" `
-    -WorkingDirectory $ComposeDir -StatusText "Pulling images..."
+    -WorkingDirectory $ComposeDir -StatusText "Pulling images..." -ShowSubProgress
 
   Set-UiStatus "Starting PPA Desktop services..." 75
   Write-UiLog "Starting the PPA Desktop services..."
   Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "up -d --force-recreate" `
-    -WorkingDirectory $ComposeDir -StatusText "Starting services..."
+    -WorkingDirectory $ComposeDir -StatusText "Starting services..." -ShowSubProgress
 
   # 7. Wait for the app to respond and open it
   $HealthUrl = "http://localhost:8080/home"
