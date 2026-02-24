@@ -147,6 +147,7 @@ public class DataController implements MessageSourceAware
 	
 	private static final String ROLE_USER = "ROLE_USER";
 	private static final String ROLE_ADMIN = "ROLE_ADMIN";
+	private static final String GUEST_USERNAME = "guest@ppa-desktop";
 	
 	private static final String FILE_TABLE_NAME_PREFIX = "z_file_content";
 	private static final String FILE_TABLE_ROW_NUMBER_COLUMN_NAME = "row.names";
@@ -698,6 +699,19 @@ public class DataController implements MessageSourceAware
 		
 		return accountUserAssociation.getAdministrator();
 		
+	}
+
+	private boolean isGuestUser(User user)
+	{
+		return GUEST_USERNAME.equals(user.getUsername());
+	}
+
+	private void assertNotGuestUser(User user)
+	{
+		if (isGuestUser(user))
+		{
+			throw new ApplicationException("The guest user cannot be modified or removed.");
+		}
 	}
 
 	private void assertAccountAdministrator(Account account)
@@ -2045,11 +2059,12 @@ public class DataController implements MessageSourceAware
 			row.put("username", otherAccountUser.getUsername());
 			row.put("owner", otherAccountUserOwner);
 			row.put("administrator", otherAccountUserAdministrator);
+			row.put("guest", isGuestUser(otherAccountUser));
 			
-			// can expel non-owner only
+			// can expel non-owner and non-guest only
 			// can expel from non-demo account only
 			
-			row.put("expel", !otherAccountUserOwner && !account.getDemo());
+			row.put("expel", !otherAccountUserOwner && !account.getDemo() && !isGuestUser(otherAccountUser));
 			
 		}
 		
@@ -2296,6 +2311,8 @@ public class DataController implements MessageSourceAware
 		// get accountUser
 		
 		User accountUser = userRepository.getOne(userId);
+
+		assertNotGuestUser(accountUser);
 		
 		// get accountUserAssociation
 		
@@ -2415,9 +2432,7 @@ public class DataController implements MessageSourceAware
 			throw new ApplicationException("Guest login is only available in local/desktop mode.");
 		}
 
-		String guestUsername = "guest@ppa-desktop";
-
-		User guestUser = userRepository.findByUsername(guestUsername);
+		User guestUser = userRepository.findByUsername(GUEST_USERNAME);
 
 		if (guestUser == null)
 		{
@@ -2432,8 +2447,8 @@ public class DataController implements MessageSourceAware
 			}
 
 			guestUser = new User();
-			guestUser.setUsername(guestUsername);
-			guestUser.setEmail(guestUsername);
+			guestUser.setUsername(GUEST_USERNAME);
+			guestUser.setEmail(GUEST_USERNAME);
 			guestUser.setName("Guest");
 			guestUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
 			guestUser.setEnabled(true);
@@ -2564,6 +2579,8 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = getUser();
+
+		assertNotGuestUser(user);
 		
 		if (StringUtils.isNotEmpty(username))
 		{
@@ -2616,7 +2633,9 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = userRepository.getOne(userId);
-		
+
+		assertNotGuestUser(user);
+
 		user.setEmail(email);
 
 	}
@@ -2631,7 +2650,9 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = userRepository.getOne(userId);
-		
+
+		assertNotGuestUser(user);
+
 		user.setUsername(username);
 		user.setEmail(username);
 
@@ -2646,7 +2667,9 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = getUser();
-		
+
+		assertNotGuestUser(user);
+
 		user.setUsername(username);
 		user.setEmail(username);
 
@@ -2661,7 +2684,9 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = getUser();
-		
+
+		assertNotGuestUser(user);
+
 		user.setPassword(passwordEncoder.encode(password));
 
 	}
@@ -2676,7 +2701,9 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		User user = userRepository.getOne(userId);
-		
+
+		assertNotGuestUser(user);
+
 		user.setEnabled(enabled);
 
 	}
@@ -2692,15 +2719,17 @@ public class DataController implements MessageSourceAware
 	)
 	{
 		// get account
-		
+
 		Account account = accountRepository.getOne(accountId);
-		
+
 		// get user
-		
+
 		User user = userRepository.getOne(userId);
-		
+
+		assertNotGuestUser(user);
+
 		// get accountUserAssociation
-		
+
 		AccountUserAssociation accountUserAssociation = getAccountUserAssociation(account, user);
 		
 		// set administrator

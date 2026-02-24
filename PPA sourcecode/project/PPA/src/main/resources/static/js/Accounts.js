@@ -22,10 +22,9 @@ application.controller
 				{
 					$scope.initialized = true;
 					
-					$scope.initializeVariables();
-					$scope.initializeAccounts();
-					$scope.initializeCreateAccountDialog();
-					$scope.initializeManageAccountUsersDialog();
+				$scope.initializeVariables();
+				$scope.initializeAccounts();
+				$scope.initializeCreateAccountDialog();
 					
 				}
 				else
@@ -111,95 +110,7 @@ application.controller
 //												
 //											},
 									},
-									{
-										field: "owner",
-										title: getMessage("Accounts.accounts.columns.owner"),
-										sortable: true,
-										width: 80,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												return (value ? "<div class='datagid-checkmark'>" : "");
-												
-											},
-									},
-									{
-										field: "administrator",
-										title: getMessage("Accounts.accounts.columns.administrator"),
-										sortable: true,
-										width: 130,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												return (value ? "<div class='datagid-checkmark'>" : "");
-												
-											},
-									},
-									{
-										field: "leave",
-										title: getMessage("Accounts.accounts.columns.leave"),
-										width: 120,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												var output;
-												
-												if (value)
-												{
-													output =
-														"<a class='Accounts-accounts-leave'" +
-														" accountId='" + row["id"] + "'" +
-														" accountName='" + row["name"] + "'" +
-														"></a>"
-													;
-													
-												}
-												else
-												{
-													output = "";
-													
-												}
-												
-												return output;
-												
-											},
-									},
-									{
-										field: "manage",
-										title: getMessage("Accounts.accounts.columns.manage"),
-										width: 130,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												var output;
-												
-												if (value)
-												{
-													output =
-														"<a class='Accounts-accounts-manage'" +
-														" accountId='" + row["id"] + "'" +
-														"></a>"
-													;
-													
-												}
-												else
-												{
-													output = "";
-													
-												}
-												
-												return output;
-												
-											},
-									},
+								
 									{
 										field: "delete",
 										title: getMessage("Accounts.accounts.columns.delete"),
@@ -277,59 +188,6 @@ application.controller
 									)
 									;
 									
-									// render leave
-									
-									$(".Accounts-accounts-leave").each
-									(
-											function(index, element)
-											{
-												var accountId = element.getAttribute("accountId");
-												var accountName = element.getAttribute("accountName");
-												
-												$(this).linkbutton
-												(
-														{
-															iconCls: "icon-exit",
-															onClick:
-																function()
-																{
-																	$scope.leaveAccount(accountId, accountName);
-																	
-																},
-														}
-												)
-												;
-												
-											}
-									)
-									;
-									
-									// render manage
-									
-									$(".Accounts-accounts-manage").each
-									(
-											function(index, element)
-											{
-												var accountId = element.getAttribute("accountId");
-												
-												$(this).linkbutton
-												(
-														{
-															iconCls: "icon-users",
-															onClick:
-																function()
-																{
-																	$scope.manageAccount(accountId);
-																	
-																},
-														}
-												)
-												;
-												
-											}
-									)
-									;
-									
 									// render delete
 									
 									$(".Accounts-accounts-delete").each
@@ -360,7 +218,7 @@ application.controller
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", (1160 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", (700 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}
@@ -713,6 +571,10 @@ application.controller
 									formatter:
 										function(value,row,index)
 										{
+											if (row["guest"])
+											{
+												return (value ? "<div class='datagid-checkmark'>" : "");
+											}
 											var output =
 												"<div style='height: 22px;'>" +
 												"<input type='checkbox' class='Accounts-manageAccountUsersDialog-users-administrator' " +
