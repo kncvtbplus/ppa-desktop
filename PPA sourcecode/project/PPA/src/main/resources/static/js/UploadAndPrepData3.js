@@ -325,17 +325,6 @@ application.controller
 							fit: true,
 							/*fitColumns: true,*/
 							onBeforeSelect: function(){return false;},
-							onClickRow:
-								function(index, row)
-								{
-									var t = window.event ? window.event.target : null;
-									if (t && $(t).closest('input,textarea,select,.textbox,.combo,.datagrid-cell-check').length) return;
-									var dg = $(this);
-									var checked = dg.datagrid("getChecked");
-									var isChecked = false;
-									for (var i = 0; i < checked.length; i++) { if (checked[i] === row) { isChecked = true; break; } }
-									dg.datagrid(isChecked ? "uncheckRow" : "checkRow", index);
-								},
 							url: "data/getDataSourceSubsetColumn1Values",
 							columns:
 								[[
@@ -391,6 +380,18 @@ application.controller
 				)
 				.datagrid("getPanel")
 				.css("max-width", (200 + $rootScope.tableScrollbarWidth + $rootScope.tableCheckColumnWidth).toString() + "px")
+				.on("click", ".datagrid-row", function(e)
+				{
+					if ($(e.target).closest('input,textarea,select,.textbox,.combo,.datagrid-cell-check').length) return;
+					var index = parseInt($(this).attr("datagrid-row-index"));
+					if (isNaN(index)) return;
+					var dg = $("#UploadAndPrepData3-subsetColumn1Values");
+					var ck = dg.datagrid("getPanel").find("tr[datagrid-row-index=" + index + "] .datagrid-cell-check input[type=checkbox]");
+					if (ck.length && !ck.prop("disabled"))
+					{
+						dg.datagrid(ck.prop("checked") ? "uncheckRow" : "checkRow", index);
+					}
+				})
 				;
 				
 			}
@@ -454,17 +455,6 @@ application.controller
 							fit: true,
 							/*fitColumns: true,*/
 							onBeforeSelect: function(){return false;},
-							onClickRow:
-								function(index, row)
-								{
-									var t = window.event ? window.event.target : null;
-									if (t && $(t).closest('input,textarea,select,.textbox,.combo,.datagrid-cell-check').length) return;
-									var dg = $(this);
-									var checked = dg.datagrid("getChecked");
-									var isChecked = false;
-									for (var i = 0; i < checked.length; i++) { if (checked[i] === row) { isChecked = true; break; } }
-									dg.datagrid(isChecked ? "uncheckRow" : "checkRow", index);
-								},
 							url: "data/getDataSourceSubsetColumn2Values",
 							columns:
 								[[
@@ -520,6 +510,18 @@ application.controller
 				)
 				.datagrid("getPanel")
 				.css("max-width", (200 + $rootScope.tableScrollbarWidth + $rootScope.tableCheckColumnWidth).toString() + "px")
+				.on("click", ".datagrid-row", function(e)
+				{
+					if ($(e.target).closest('input,textarea,select,.textbox,.combo,.datagrid-cell-check').length) return;
+					var index = parseInt($(this).attr("datagrid-row-index"));
+					if (isNaN(index)) return;
+					var dg = $("#UploadAndPrepData3-subsetColumn2Values");
+					var ck = dg.datagrid("getPanel").find("tr[datagrid-row-index=" + index + "] .datagrid-cell-check input[type=checkbox]");
+					if (ck.length && !ck.prop("disabled"))
+					{
+						dg.datagrid(ck.prop("checked") ? "uncheckRow" : "checkRow", index);
+					}
+				})
 				;
 				
 			}
