@@ -61,25 +61,42 @@ application.controller
 										width: 350,
 										fixed: true,
 									},
-									{
-										field: "userFileId",
-										title: getMessage("UploadAndPrepData1.ppaMetrics.column.userFile"),
-										width: 500,
-										fixed: true,
-										formatter:
-											function(value,row,index)
+								{
+									field: "userFileId",
+									title: getMessage("UploadAndPrepData1.ppaMetrics.column.userFile"),
+									width: 500,
+									fixed: true,
+									formatter:
+										function(value,row,index)
+										{
+											var output =
+												"<input class='easyui-element UploadAndPrepData1-userFileCombobox' style='width: 100%; '" +
+												" value='" + value + "'" +
+												" metricId='" + row["id"] + "'" +
+												"/>"
+											;
+											
+											return output;
+											
+										},
+								},
+								{
+									field: "deleteDataSource",
+									width: 50,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											if (row["userFileId"] && $scope.editable)
 											{
-												var output =
-													"<input class='easyui-element UploadAndPrepData1-userFileCombobox' style='width: 100%; '" +
-													" value='" + value + "'" +
+												return "<a class='UploadAndPrepData1-deleteDataSource'" +
 													" metricId='" + row["id"] + "'" +
-													"/>"
-												;
-												
-												return output;
-												
-											},
-									},
+													"></a>";
+											}
+											return "";
+										},
+								},
 									// upload userFile
 									{
 										field: "fileUpload",
@@ -181,7 +198,31 @@ application.controller
 									)
 									;
 									
-									$(".UploadAndPrepData1-metrics-userFile-fileForm-linkbutton").each
+									$(".UploadAndPrepData1-deleteDataSource").each
+								(
+										function(index, element)
+										{
+											var metricId = element.getAttribute("metricId");
+											
+											$(this).linkbutton
+											(
+													{
+														iconCls: "icon-delete",
+														onClick:
+															function()
+															{
+																$scope.deleteDataSource(metricId);
+																
+															},
+													}
+											)
+											;
+											
+										}
+								)
+								;
+								
+								$(".UploadAndPrepData1-metrics-userFile-fileForm-linkbutton").each
 									(
 											function(index, element)
 											{
@@ -230,7 +271,7 @@ application.controller
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", (1450 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", (1500 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}
@@ -244,6 +285,60 @@ application.controller
 			$scope.setMetricUserFile = function(metricId, userFileId)
 			{
 				postData("setMetricUserFile", {"metricId": metricId, "userFileId": userFileId, });
+				
+			}
+			
+			$scope.deleteDataSource = function(metricId)
+			{
+				var combobox = $(".UploadAndPrepData1-userFileCombobox[metricId='" + metricId + "']");
+				var userFileId = combobox.combobox("getValue");
+				var userFileName = combobox.combobox("getText");
+				
+				if (!userFileId) return;
+				
+				var dependentPpaNames = getData("getUserFileDependentPpaNames", {"userFileId": userFileId, });
+				
+				var message;
+				
+				if (dependentPpaNames.length == 0)
+				{
+					message = getMessage("MyDataSources.userFiles.delete.noDependentPpas.message", [userFileName, ]);
+					
+				}
+				else
+				{
+					var dependentPpaNamesFormatted = dependentPpaNames.join("<br>");
+					
+					message = getMessage("MyDataSources.userFiles.delete.dependentPpas.message", [userFileName, dependentPpaNamesFormatted, ]);
+					
+				}
+				
+				$.messager.confirm
+				(
+						getMessage("ConfirmationDialog.title"),
+						message,
+						function(confirmed)
+						{
+							if (confirmed)
+							{
+								postData
+								(
+										"deleteUserFiles",
+										{"userFileIds": [userFileId, ], },
+										true,
+										function()
+										{
+											$scope.refreshMetrics();
+											
+										}
+								)
+								;
+								
+							}
+							
+						}
+				)
+				;
 				
 			}
 			
