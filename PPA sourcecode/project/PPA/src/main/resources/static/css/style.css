@@ -291,6 +291,7 @@ input[type=checkbox]:disabled
 {
 	background-color: #004745;
 	color: white;
+	cursor: pointer;
 }
 .datagrid-toolbar
 {

@@ -79,6 +79,13 @@ application.controller
 							fitColumns: true,
 							checkbox: true,
 				            onBeforeSelect: function(){return false;},
+							onClickRow:
+								function(index, row)
+								{
+									var t = window.event ? window.event.target : null;
+									if (t && $(t).closest('input,textarea,select,.textbox,.combo,.radiobutton,.combobox').length) return;
+									$("#SelectPPA-ppas-select-" + row["id"]).radiobutton("check");
+								},
 							singleSelect: true,
 							url: "data/getPpas",
 							idField: "id",

@@ -54,6 +54,13 @@ application.controller
 							fit: true,
 							fitColumns: true,
 				            onBeforeSelect: function(){return false;},
+							onClickRow:
+								function(index, row)
+								{
+									var t = window.event ? window.event.target : null;
+									if (t && $(t).closest('input,textarea,select,.textbox,.combo,.radiobutton,.combobox').length) return;
+									$("#Accounts-accounts-select-" + row["id"]).radiobutton("check");
+								},
 							singleSelect: true,
 							url: "data/getAccountsTable",
 							idField: "id",

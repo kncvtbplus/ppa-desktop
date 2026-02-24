@@ -325,6 +325,17 @@ application.controller
 							fit: true,
 							/*fitColumns: true,*/
 							onBeforeSelect: function(){return false;},
+							onClickRow:
+								function(index, row)
+								{
+									var t = window.event ? window.event.target : null;
+									if (t && $(t).closest('input,textarea,select,.textbox,.combo').length) return;
+									var dg = $(this);
+									var checked = dg.datagrid("getChecked");
+									var isChecked = false;
+									for (var i = 0; i < checked.length; i++) { if (checked[i] === row) { isChecked = true; break; } }
+									dg.datagrid(isChecked ? "uncheckRow" : "checkRow", index);
+								},
 							url: "data/getDataSourceSubsetColumn1Values",
 							columns:
 								[[
@@ -443,6 +454,17 @@ application.controller
 							fit: true,
 							/*fitColumns: true,*/
 							onBeforeSelect: function(){return false;},
+							onClickRow:
+								function(index, row)
+								{
+									var t = window.event ? window.event.target : null;
+									if (t && $(t).closest('input,textarea,select,.textbox,.combo').length) return;
+									var dg = $(this);
+									var checked = dg.datagrid("getChecked");
+									var isChecked = false;
+									for (var i = 0; i < checked.length; i++) { if (checked[i] === row) { isChecked = true; break; } }
+									dg.datagrid(isChecked ? "uncheckRow" : "checkRow", index);
+								},
 							url: "data/getDataSourceSubsetColumn2Values",
 							columns:
 								[[
