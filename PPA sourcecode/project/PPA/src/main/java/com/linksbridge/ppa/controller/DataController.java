@@ -3563,10 +3563,29 @@ public class DataController implements MessageSourceAware
 		
 		for (Ppa ppa : ppas)
 		{
-			// remove from owning account
 			if (ppa.getAccount() != null)
 			{
-				ppa.getAccount().removePpa(ppa);
+				Account account = ppa.getAccount();
+				
+				// clear selectedPpa references in account-user associations
+				// to avoid FK constraint issues during cascade delete
+				for (AccountUserAssociation aua : account.getAccountUserAssociations())
+				{
+					if (aua.getSelectedPpa() != null && aua.getSelectedPpa().getId().equals(ppa.getId()))
+					{
+						aua.setSelectedPpa(null);
+					}
+				}
+				
+				// clear dataSource references in metrics to avoid FK ordering
+				// issues when Hibernate cascade-deletes both metrics and data sources
+				for (Metric metric : ppa.getMetrics())
+				{
+					metric.setDataSource(null);
+				}
+				
+				// remove from owning account (triggers orphanRemoval cascade)
+				account.removePpa(ppa);
 			}
 		}
 
