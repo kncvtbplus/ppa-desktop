@@ -143,15 +143,9 @@ application.controller
 					
 					$scope.refreshMenuButtonStates();
 					
-					// navigate to last user page
+					// always start at the team space selection page
 					
-					var userNavigationPage = $rootScope.user.navigationPage || "Accounts";
-					
-					if (userNavigationPage)
-					{
-						$scope.selectContentTab(userNavigationPage);
-						
-					}
+					$scope.selectContentTab("Accounts");
 					
 				}
 				
