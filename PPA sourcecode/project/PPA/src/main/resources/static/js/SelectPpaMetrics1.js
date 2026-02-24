@@ -176,13 +176,6 @@ application.controller
 										
 									}
 									
-									// apply filter visibility if active
-									
-									if ($scope.showSelectedOnly)
-									{
-										$scope.applyFilter();
-									}
-									
 								},
 							onCheckAll:
 								function()
@@ -192,10 +185,6 @@ application.controller
 									{
 										$(this).textbox("enable");
 									});
-									if ($scope.showSelectedOnly)
-									{
-										$scope.applyFilter();
-									}
 									
 								},
 							onUncheckAll:
@@ -214,10 +203,6 @@ application.controller
 											$("#SelectPpaMetrics1-dpn-" + data.rows[i]["metricId"]).textbox("enable");
 										}
 									}
-									if ($scope.showSelectedOnly)
-									{
-										$scope.applyFilter();
-									}
 									
 								},
 							onCheck:
@@ -232,10 +217,6 @@ application.controller
 								{
 									$scope.setMetricSelected(row["id"], false);
 									$("#SelectPpaMetrics1-dpn-" + row["metricId"]).textbox("disable");
-									if ($scope.showSelectedOnly)
-									{
-										$scope.applyFilter();
-									}
 									
 								},
 						}
@@ -249,7 +230,12 @@ application.controller
 			
 			$scope.refreshMetrics = function()
 			{
-				$("#SelectPpaMetrics1-ppaMetrics").datagrid("reload");
+				var queryParams = {};
+				if ($scope.showSelectedOnly)
+				{
+					queryParams["selected"] = true;
+				}
+				$("#SelectPpaMetrics1-ppaMetrics").datagrid("load", queryParams);
 
 			}
 			
@@ -262,58 +248,14 @@ application.controller
 				{
 					$btn.addClass("filter-active");
 					$btn.find(".l-btn-text").text(getMessage("SelectPpaMetrics1.filter.showAll"));
-					$scope.applyFilter();
 				}
 				else
 				{
 					$btn.removeClass("filter-active");
 					$btn.find(".l-btn-text").text(getMessage("SelectPpaMetrics1.filter.showSelected"));
-					$scope.showAllRows();
 				}
 				
-			}
-			
-			$scope.applyFilter = function()
-			{
-				var dg = $("#SelectPpaMetrics1-ppaMetrics");
-				var options = dg.datagrid("options");
-				var panel = dg.datagrid("getPanel");
-				var rows = dg.datagrid("getRows");
-				
-				for (var i = 0; i < rows.length; i++)
-				{
-					var tr = options.finder.getTr(panel, i);
-					var trAlt = options.finder.getTr(panel, i, "body", 2);
-					
-					if (!rows[i]["selected"])
-					{
-						$(tr).hide();
-						if (trAlt.length) $(trAlt).hide();
-					}
-					else
-					{
-						$(tr).show();
-						if (trAlt.length) $(trAlt).show();
-					}
-				}
-				
-			}
-			
-			$scope.showAllRows = function()
-			{
-				var dg = $("#SelectPpaMetrics1-ppaMetrics");
-				var options = dg.datagrid("options");
-				var panel = dg.datagrid("getPanel");
-				var rows = dg.datagrid("getRows");
-				
-				for (var i = 0; i < rows.length; i++)
-				{
-					var tr = options.finder.getTr(panel, i);
-					var trAlt = options.finder.getTr(panel, i, "body", 2);
-					
-					$(tr).show();
-					if (trAlt.length) $(trAlt).show();
-				}
+				$scope.refreshMetrics();
 				
 			}
 			
