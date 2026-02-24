@@ -32,10 +32,7 @@ application.controller
 					{
 						role: "ROLE_USER",
 					},
-					"Account":
-					{
-						role: "ROLE_USER",
-					},
+				
 					"MyDataSources":
 						{
 							role: "ROLE_USER",
@@ -222,20 +219,6 @@ application.controller
 			
 			$scope.createLoginButton = function()
 			{
-				$("#Home-loginButton").linkbutton
-				(
-						{
-							text: getMessage("home.userMenu.login.text"),
-							onClick:
-								function()
-								{
-									call(null, "selectContentTab", ["Login", ]);
-									
-								},
-						}
-				)
-				;
-				
 			}
 			
 			// userMenu
@@ -263,27 +246,7 @@ application.controller
 				)
 				;
 				
-				// menu for not authenticated user
-				
-				$("#Home-userMenu-notAuthenticated").menu({});
-				
-				$("#Home-userMenu-notAuthenticated").menu
-				(
-						"appendItem",
-						{
-							id: "Home-userMenu-login",
-							text: getMessage("home.userMenu.login.text"),
-							onclick:
-								function()
-								{
-									call(null, "selectContentTab", ["Login", ]);
-									
-								},
-						}
-				)
-				;
-				
-				// menu for authenticated user
+			// menu for authenticated user
 				
 				$("#Home-userMenu-authenticated").menu({});
 				
@@ -351,37 +314,7 @@ application.controller
 				)
 				;
 				
-				$("#Home-userMenu-authenticated").menu
-				(
-						"appendItem",
-						{
-							id: "Home-userMenu-accountSettings",
-							text: getMessage("home.userMenu.accountSettings.text"),
-							onclick:
-								function()
-								{
-									call(null, "selectContentTab", ["Account", ]);
-									
-								},
-						}
-				)
-				;
-				
-				$("#Home-userMenu-authenticated").menu
-				(
-						"appendItem",
-						{
-							id: "Home-userMenu-switchUserAccount",
-							text: getMessage("home.userMenu.switchUserAccount.text"),
-							onclick:
-								function()
-								{
-									logout(true);
-									
-								},
-						}
-				)
-				;
+			
 				
 				// Add 'contact'
 				$("#Home-userMenu-authenticated").menu
@@ -439,21 +372,7 @@ application.controller
 				)
 				;
 				
-				$("#Home-userMenu-authenticated").menu
-				(
-						"appendItem",
-						{
-							id: "Home-userMenu-logout",
-							text: getMessage("home.userMenu.logout.text"),
-							onclick:
-								function()
-								{
-									logout(false);
-									
-								},
-						}
-				)
-				;
+			
 				
 			}
 			
@@ -1028,9 +947,8 @@ application.controller
 				
 				switch (tabTitle)
 				{
-				// non wizard pages
-				case "Account":
-				case "Accounts":
+			// non wizard pages
+			case "Accounts":
 				case "SelectPPA":
 				case "MyDataSources":
 					

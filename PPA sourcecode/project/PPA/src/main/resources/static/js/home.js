@@ -57,35 +57,41 @@ application.controller
 			)
 			;
 			
-			$scope.onOpen = function()
-			{
-				// home
-				
-				$scope.initializeHome();
-				
-				// registerUser
-				
-				$scope.initializeRegisterUserForm();
-				
-				// loginUser
-				
-				$scope.initializeLoginUserForm();
-				
-				// acceptInvitation
-				
-				$scope.initializeAcceptInvitationForm();
-				
-				// recoverPassword
-				
-				$scope.initializeRecoverPasswordForm();
-				
-				// resetPassword
-				
-				$scope.initializeResetPasswordForm();
-				
-				// post initialization
-				
-				if ($location.search().hasOwnProperty("confirmEmail"))
+		$scope.onOpen = function()
+		{
+			// Auto-login as guest and redirect to main app
+			$scope.guestLogin();
+			return;
+
+			// --- Legacy login UI (kept for cloud mode reference) ---
+
+			// home
+			
+			$scope.initializeHome();
+			
+			// registerUser
+			
+			$scope.initializeRegisterUserForm();
+			
+			// loginUser
+			
+			$scope.initializeLoginUserForm();
+			
+			// acceptInvitation
+			
+			$scope.initializeAcceptInvitationForm();
+			
+			// recoverPassword
+			
+			$scope.initializeRecoverPasswordForm();
+			
+			// resetPassword
+			
+			$scope.initializeResetPasswordForm();
+			
+			// post initialization
+			
+			if ($location.search().hasOwnProperty("confirmEmail"))
 				{
 					// check token
 					
