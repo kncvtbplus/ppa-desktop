@@ -56,6 +56,26 @@ application.controller
 								[[
 									{field: "ck", checkbox: true, },
 									{field: "metricName", title: getMessage("SelectPpaMetrics1.column.metricName"), width: 190, fixed: true, },
+									{
+										field: "dataPointName",
+										title: getMessage("SelectPpaMetrics1.column.dataPointName"),
+										width: 500,
+										fixed: true,
+										formatter:
+											function(value,row,index)
+											{
+												var safeValue = (value != null ? value : "");
+												var output =
+													"<input class='easyui-element SelectPpaMetrics1-dataPointNameTextbox'" +
+													" id='SelectPpaMetrics1-dpn-" + row["metricId"] + "'" +
+													" data-options='value: \"" + safeValue + "\", metricId: " + row["metricId"] + ", '" +
+													"/>"
+												;
+												
+												return output;
+												
+											},
+									},
 								]],
 							onLoadSuccess:
 								function(data)
@@ -98,35 +118,96 @@ application.controller
 									
 									options.onCheck = onCheckSaved;
 									
+									// render dataPointName textboxes
+									
+									$(".SelectPpaMetrics1-dataPointNameTextbox").each
+									(
+											function(index, element)
+											{
+												$(element).width($(element).parent().width());
+												
+												$(element).textbox
+												(
+														{
+															disabled: !$scope.editable,
+															
+															onChange:
+																function(newValue)
+																{
+																	var options = $(this).textbox("options");
+																	
+																	call("SelectPpaMetrics1", "setMetricDataPointName", [options["metricId"], newValue, ]);
+																	
+																}
+														}
+												)
+												;
+												
+												$(element).textbox("textbox").prop("maxlength", 50);
+												
+											}
+									)
+									;
+									
+									// disable textboxes for unselected metrics
+									
+									for (i = 0; i < data.rows.length; ++i)
+									{
+										if (!data.rows[i]["selected"])
+										{
+											$("#SelectPpaMetrics1-dpn-" + data.rows[i]["metricId"]).textbox("disable");
+											
+										}
+										
+									}
+									
 								},
 							onCheckAll:
 								function()
 								{
 									$scope.setMetricSelected(null, true);
+									$(".SelectPpaMetrics1-dataPointNameTextbox").each(function()
+									{
+										$(this).textbox("enable");
+									});
 									
 								},
 							onUncheckAll:
 								function()
 								{
 									$scope.setMetricSelected(null, false);
+									$(".SelectPpaMetrics1-dataPointNameTextbox").each(function()
+									{
+										$(this).textbox("disable");
+									});
+									var data = $("#SelectPpaMetrics1-ppaMetrics").datagrid("getData");
+									for (var i = 0; i < data.rows.length; i++)
+									{
+										if (data.rows[i]["required"])
+										{
+											$("#SelectPpaMetrics1-dpn-" + data.rows[i]["metricId"]).textbox("enable");
+										}
+									}
 									
 								},
 							onCheck:
 								function(index,row)
 								{
 									$scope.setMetricSelected(row["id"], true);
+									$("#SelectPpaMetrics1-dpn-" + row["metricId"]).textbox("enable");
 									
 								},
 							onUncheck:
 								function(index,row)
 								{
 									$scope.setMetricSelected(row["id"], false);
+									$("#SelectPpaMetrics1-dpn-" + row["metricId"]).textbox("disable");
 									
 								},
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", ($rootScope.tableCheckColumnWidth + 190 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", ($rootScope.tableCheckColumnWidth + 190 + 500 + $rootScope.tableScrollbarWidth).toString() + "px")
 				.addClass("datagrid-nocheckbox")
 				;
 				
@@ -144,7 +225,12 @@ application.controller
 				
 			}
 			
+			$scope.setMetricDataPointName = function(metricId, dataPointName)
+			{
+				postData("setMetricDataPointName", {"metricId": metricId, "dataPointName": dataPointName, });
+				
+			}
+			
 		}
 )
 ;
-

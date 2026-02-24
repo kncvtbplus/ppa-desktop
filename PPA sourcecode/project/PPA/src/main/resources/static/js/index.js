@@ -47,13 +47,6 @@ application.controller
 							menuItemId: "Home-menu-SelectPpaMetrics",
 							submenuItemId: "Home-menu-SelectPpaMetrics1",
 						},
-					"SelectPpaMetrics2":
-						{
-							role: "ROLE_USER",
-							ppaRequired: true,
-							menuItemId: "Home-menu-SelectPpaMetrics",
-							submenuItemId: "Home-menu-SelectPpaMetrics2",
-						},
 					"UploadAndPrepData1":
 						{
 							role: "ROLE_USER",
@@ -126,8 +119,8 @@ application.controller
 						},
 				}
 			;
-			$scope.wizardTabsNational = ["SelectPPA", "SelectPpaMetrics1", "SelectPpaMetrics2", "UploadAndPrepData1", "UploadAndPrepData2", "UploadAndPrepData3", "IdentifyPpaVariables1", "IdentifyPpaVariables2", "MapHealthSectorsAndLevels1", "MapHealthSectorsAndLevels2", "SelectOutputTypeAndGo1", ];
-			$scope.wizardTabsSubnational = ["SelectPPA", "SelectPpaMetrics1", "SelectPpaMetrics2", "UploadAndPrepData1", "UploadAndPrepData2", "UploadAndPrepData3", "IdentifyPpaVariables1", "IdentifyPpaVariables2", "MapHealthSectorsAndLevels1", "MapHealthSectorsAndLevels2", "MapAggregationLevels1", "MapAggregationLevels2", "SelectOutputTypeAndGo1", ];
+			$scope.wizardTabsNational = ["SelectPPA", "SelectPpaMetrics1", "UploadAndPrepData1", "UploadAndPrepData2", "UploadAndPrepData3", "IdentifyPpaVariables1", "IdentifyPpaVariables2", "MapHealthSectorsAndLevels1", "MapHealthSectorsAndLevels2", "SelectOutputTypeAndGo1", ];
+			$scope.wizardTabsSubnational = ["SelectPPA", "SelectPpaMetrics1", "UploadAndPrepData1", "UploadAndPrepData2", "UploadAndPrepData3", "IdentifyPpaVariables1", "IdentifyPpaVariables2", "MapHealthSectorsAndLevels1", "MapHealthSectorsAndLevels2", "MapAggregationLevels1", "MapAggregationLevels2", "SelectOutputTypeAndGo1", ];
 			
 			$scope.initialized = false;
 			$scope.onOpen = function()
@@ -703,23 +696,6 @@ application.controller
 				)
 				;
 				$("#Home-menu-SelectPpaMetrics1").addClass("Home-submenu-item");
-				
-				$("#Home-menu-SelectPpaMetrics-menu").menu
-				(
-						"appendItem",
-						{
-							id: "Home-menu-SelectPpaMetrics2",
-							text: getMessage("home.menu.SelectPpaMetrics2.text"),
-							onclick:
-								function()
-								{
-									$scope.selectContentTab("SelectPpaMetrics2");
-									
-								},
-						}
-				)
-				;
-				$("#Home-menu-SelectPpaMetrics2").addClass("Home-submenu-item");
 				
 				// UploadAndPrepData
 				
