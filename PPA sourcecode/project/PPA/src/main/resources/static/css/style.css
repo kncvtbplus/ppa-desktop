@@ -436,6 +436,60 @@ input[type=checkbox]:disabled
 	color: #004745;
 }
 
+/* SelectPpaMetrics1 toolbar filter button (wizard-style pill) */
+
+#SelectPpaMetrics1-filterButton.l-btn
+{
+	box-sizing: border-box;
+	height: 36px;
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 24px;
+	vertical-align: middle;
+	text-align: center;
+	background-color: #FFFFFF;
+	border-color: #004745;
+	padding: 0 12px;
+	margin-right: 10px;
+}
+
+#SelectPpaMetrics1-filterButton.l-btn>.l-btn-left
+{
+	max-width: 100%;
+}
+
+#SelectPpaMetrics1-filterButton.l-btn>.l-btn-left>.l-btn-text
+{
+	vertical-align: middle;
+	text-align: center;
+	line-height: 32px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #004745;
+}
+
+#SelectPpaMetrics1-filterButton.l-btn>.l-btn-left>.l-btn-icon
+{
+	vertical-align: middle;
+	margin-top: -1px;
+}
+
+#SelectPpaMetrics1-filterButton.filter-active.l-btn
+{
+	background-color: #004745;
+	border-color: #004745;
+}
+
+#SelectPpaMetrics1-filterButton.filter-active.l-btn>.l-btn-left>.l-btn-text
+{
+	color: #FFFFFF;
+}
+
+#SelectPpaMetrics1-filterButton.filter-active .icon-filter
+{
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 6h18M7 12h10M11 18h2' stroke='%23FFFFFF' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+}
+
 /* Override EasyUI icon sprites for PPA toolbar buttons so icons match text colour */
 
 .icon-add,
@@ -445,6 +499,14 @@ input[type=checkbox]:disabled
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 16px 16px;
+}
+
+.icon-filter
+{
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 16px 16px;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 6h18M7 12h10M11 18h2' stroke='%23004745' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
 }
 
 .icon-add

@@ -11,6 +11,7 @@ application.controller
 			// page open
 			
 			$scope.initialized = false;
+			$scope.showSelectedOnly = false;
 			$scope.onOpen = function()
 			{
 				// Local installer: all users can edit PPA settings.
@@ -52,6 +53,20 @@ application.controller
 							/*fitColumns: false,*/
 				            onBeforeSelect: function(){return false;},
 							url: "data/getMetrics",
+							toolbar:
+								[
+									{
+										id: "SelectPpaMetrics1-filterButton",
+										iconCls: "icon-filter",
+										text: getMessage("SelectPpaMetrics1.filter.showSelected"),
+										handler:
+											function()
+											{
+												$scope.toggleFilter();
+												
+											},
+									},
+								],
 							columns:
 								[[
 									{field: "ck", checkbox: true, },
@@ -161,6 +176,13 @@ application.controller
 										
 									}
 									
+									// apply filter visibility if active
+									
+									if ($scope.showSelectedOnly)
+									{
+										$scope.applyFilter();
+									}
+									
 								},
 							onCheckAll:
 								function()
@@ -170,6 +192,10 @@ application.controller
 									{
 										$(this).textbox("enable");
 									});
+									if ($scope.showSelectedOnly)
+									{
+										$scope.applyFilter();
+									}
 									
 								},
 							onUncheckAll:
@@ -188,6 +214,10 @@ application.controller
 											$("#SelectPpaMetrics1-dpn-" + data.rows[i]["metricId"]).textbox("enable");
 										}
 									}
+									if ($scope.showSelectedOnly)
+									{
+										$scope.applyFilter();
+									}
 									
 								},
 							onCheck:
@@ -202,6 +232,10 @@ application.controller
 								{
 									$scope.setMetricSelected(row["id"], false);
 									$("#SelectPpaMetrics1-dpn-" + row["metricId"]).textbox("disable");
+									if ($scope.showSelectedOnly)
+									{
+										$scope.applyFilter();
+									}
 									
 								},
 						}
@@ -217,6 +251,70 @@ application.controller
 			{
 				$("#SelectPpaMetrics1-ppaMetrics").datagrid("reload");
 
+			}
+			
+			$scope.toggleFilter = function()
+			{
+				$scope.showSelectedOnly = !$scope.showSelectedOnly;
+				var $btn = $("#SelectPpaMetrics1-filterButton");
+				
+				if ($scope.showSelectedOnly)
+				{
+					$btn.addClass("filter-active");
+					$btn.find(".l-btn-text").text(getMessage("SelectPpaMetrics1.filter.showAll"));
+					$scope.applyFilter();
+				}
+				else
+				{
+					$btn.removeClass("filter-active");
+					$btn.find(".l-btn-text").text(getMessage("SelectPpaMetrics1.filter.showSelected"));
+					$scope.showAllRows();
+				}
+				
+			}
+			
+			$scope.applyFilter = function()
+			{
+				var dg = $("#SelectPpaMetrics1-ppaMetrics");
+				var options = dg.datagrid("options");
+				var panel = dg.datagrid("getPanel");
+				var rows = dg.datagrid("getRows");
+				
+				for (var i = 0; i < rows.length; i++)
+				{
+					var tr = options.finder.getTr(panel, i);
+					var trAlt = options.finder.getTr(panel, i, "body", 2);
+					
+					if (!rows[i]["selected"])
+					{
+						$(tr).hide();
+						if (trAlt.length) $(trAlt).hide();
+					}
+					else
+					{
+						$(tr).show();
+						if (trAlt.length) $(trAlt).show();
+					}
+				}
+				
+			}
+			
+			$scope.showAllRows = function()
+			{
+				var dg = $("#SelectPpaMetrics1-ppaMetrics");
+				var options = dg.datagrid("options");
+				var panel = dg.datagrid("getPanel");
+				var rows = dg.datagrid("getRows");
+				
+				for (var i = 0; i < rows.length; i++)
+				{
+					var tr = options.finder.getTr(panel, i);
+					var trAlt = options.finder.getTr(panel, i, "body", 2);
+					
+					$(tr).show();
+					if (trAlt.length) $(trAlt).show();
+				}
+				
 			}
 			
 			$scope.setMetricSelected = function(metricId, selected)
