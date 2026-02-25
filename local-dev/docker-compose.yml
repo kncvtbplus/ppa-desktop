@@ -1,9 +1,6 @@
 services:
   app:
-    image: ${PPA_APP_IMAGE:-ppa-app-local:desktop}
-    build:
-      context: ..
-      dockerfile: Dockerfile
+    image: kncvtbplus/ppa-app:latest
     container_name: ppa-app-local
     restart: unless-stopped
     depends_on:

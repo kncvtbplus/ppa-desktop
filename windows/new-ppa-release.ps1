@@ -436,9 +436,12 @@ function Deploy-LocalDocker {
         return
     }
 
-    Write-Host "Restarting local Docker containers with a rebuilt local app image..." -ForegroundColor Cyan
-    $env:PPA_APP_IMAGE = "ppa-app-local:desktop"
-    & docker compose -f $composeFile up -d --build --force-recreate app
+    Write-Host "Pulling latest Docker app image and restarting local containers..." -ForegroundColor Cyan
+    & docker compose -f $composeFile pull app
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Pull of latest app image failed (non-fatal). Attempting restart with existing local image."
+    }
+    & docker compose -f $composeFile up -d --force-recreate app
     if ($LASTEXITCODE -ne 0) {
         Write-Warning "Local Docker restart failed (non-fatal)."
     } else {
