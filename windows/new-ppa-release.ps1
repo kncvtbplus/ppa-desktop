@@ -368,26 +368,80 @@ function Build-DockerImage {
     )
 
     $dockerfile = Join-Path $RepoRoot "Dockerfile"
+    $sourceJar  = Join-Path $RepoRoot "application.jar"
     if (-not (Test-Path $dockerfile)) {
         throw "Dockerfile not found at '$dockerfile'."
     }
+    if (-not (Test-Path $sourceJar)) {
+        throw "application.jar not found at '$sourceJar'."
+    }
 
-    $imageBase = "kncvtbplus/ppa-app"
+    $imageBase  = "kncvtbplus/ppa-app"
     $tagVersion = "${imageBase}:${Version}"
     $tagLatest  = "${imageBase}:latest"
 
-    Write-Host "Building Docker image $tagVersion (--no-cache)..." -ForegroundColor Cyan
-    Push-Location $RepoRoot
+    # Remove any previous images with these tags to avoid cache confusion
+    Write-Host "Removing old Docker images and pruning build cache..." -ForegroundColor Cyan
+    docker rmi $tagVersion 2>$null
+    docker rmi $tagLatest  2>$null
+    docker builder prune -af 2>$null
+
+    # Build in an isolated temp directory so BuildKit cannot reuse stale layers
+    $tmpDir = Join-Path $RepoRoot ".docker-build-tmp"
+    if (Test-Path $tmpDir) { Remove-Item -Recurse -Force $tmpDir }
+    New-Item -ItemType Directory -Force $tmpDir | Out-Null
+    Copy-Item -LiteralPath $sourceJar  -Destination (Join-Path $tmpDir "application.jar") -Force
+    Copy-Item -LiteralPath $dockerfile -Destination (Join-Path $tmpDir "Dockerfile")      -Force
+
+    $sourceHash = (Get-FileHash $sourceJar -Algorithm MD5).Hash
+    Write-Host "Source JAR MD5: $sourceHash (size: $((Get-Item $sourceJar).Length) bytes)" -ForegroundColor DarkGray
+
+    Write-Host "Building Docker image $tagVersion (--no-cache, isolated context)..." -ForegroundColor Cyan
     try {
-        & docker build --no-cache -t $tagVersion -f Dockerfile .
+        & docker build --no-cache -t $tagVersion -t $tagLatest $tmpDir
         if ($LASTEXITCODE -ne 0) {
             throw "Docker build failed with exit code $LASTEXITCODE."
         }
 
-        docker tag $tagVersion $tagLatest
-        Write-Host "Docker image built and tagged as $tagVersion and $tagLatest." -ForegroundColor Green
+        # Verify the JAR inside the image matches the source.
+        # Use 'docker create' + 'docker cp' to extract the file without starting the app.
+        $verifyContainer = "ppa-verify-jar-$([guid]::NewGuid().ToString('N').Substring(0,8))"
+        try {
+            & docker create --name $verifyContainer $tagVersion | Out-Null
+            $verifyDir = Join-Path $tmpDir "verify"
+            New-Item -ItemType Directory -Force $verifyDir | Out-Null
+            & docker cp "${verifyContainer}:/app/application.jar" (Join-Path $verifyDir "application.jar")
+            $containerHash = (Get-FileHash (Join-Path $verifyDir "application.jar") -Algorithm MD5).Hash
+        } finally {
+            & docker rm $verifyContainer 2>$null | Out-Null
+        }
+        Write-Host "Container JAR MD5: $containerHash" -ForegroundColor DarkGray
+        if ($containerHash.ToUpper() -ne $sourceHash.ToUpper()) {
+            throw "JAR hash mismatch! Source=$sourceHash Container=$containerHash. Build cache corruption detected."
+        }
+        Write-Host "JAR hash verified. Docker image built as $tagVersion and $tagLatest." -ForegroundColor Green
     } finally {
-        Pop-Location
+        Remove-Item -Recurse -Force $tmpDir -ErrorAction SilentlyContinue
+    }
+}
+
+function Deploy-LocalDocker {
+    param(
+        [string]$RepoRoot
+    )
+
+    $composeFile = Join-Path $RepoRoot "local-dev\docker-compose.yml"
+    if (-not (Test-Path $composeFile)) {
+        Write-Host "No local docker-compose.yml found; skipping local deploy." -ForegroundColor Yellow
+        return
+    }
+
+    Write-Host "Restarting local Docker containers..." -ForegroundColor Cyan
+    & docker compose -f $composeFile up -d app
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Local Docker restart failed (non-fatal)."
+    } else {
+        Write-Host "Local Docker containers restarted." -ForegroundColor Green
     }
 }
 
@@ -487,16 +541,20 @@ try {
     # Ensure we have a fresh application.jar at repo root (required by the .iss script)
     Build-ApplicationJar -RepoRoot $repoRoot
 
-    # Build and push the Docker image so PPA Desktop users get the updated app.
-    # Uses --no-cache to guarantee the freshly built JAR is included.
+    # Always build the Docker image locally (hash-verified) to ensure
+    # the running instance gets the correct code.
+    Build-DockerImage -RepoRoot $repoRoot -Version $Version
+
     if (-not $SkipDocker) {
-        Build-DockerImage -RepoRoot $repoRoot -Version $Version
         Push-DockerImage -Version $Version
     }
 
     Update-VersionFiles -RepoRoot $repoRoot -Version $Version
     Update-InnoSetupScript -WindowsDir $windowsDir -Version $Version
     Build-Installer -WindowsDir $windowsDir -Version $Version -CompilerPath $compilerPath
+
+    # Restart the local Docker containers with the freshly built image
+    Deploy-LocalDocker -RepoRoot $repoRoot
 
     if (-not $SkipSourcePush) {
         Push-SourceToDistribution -DistributionRepo $DistributionRepo
