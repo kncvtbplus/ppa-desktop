@@ -781,21 +781,26 @@ function Start-PpaDesktop {
   # 5. Sanity check on application.jar
   Set-UiStatus "Checking application files..." 55
 
-  if (-not (Test-Path (Join-Path $ProjectRoot "application.jar"))) {
+  $appJarPath = Join-Path $ProjectRoot "application.jar"
+  if (-not (Test-Path $appJarPath)) {
     Throw-UiError "We could not find the main application file 'application.jar'. Please reinstall PPA Desktop or contact support."
   }
 
-  # 6. Start docker-compose services
-  Set-UiStatus "Downloading Docker images (if needed)..." 65
+  # Always use the locally built app image from the bundled JAR to avoid
+  # drift from remote :latest tags.
+  $env:PPA_APP_IMAGE = "ppa-app-local:desktop"
+  Write-UiLog "Configured app image: $env:PPA_APP_IMAGE"
 
-  Write-UiLog "Downloading the latest Docker images (this can take a few minutes the first time)..."
-  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "pull" `
-    -WorkingDirectory $ComposeDir -StatusText "Pulling images..." -ShowSubProgress
+  # 6. Start docker-compose services
+  Set-UiStatus "Downloading base Docker images (if needed)..." 65
+  Write-UiLog "Downloading base Docker images (Postgres/Rserve) when needed..."
+  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "pull postgres rserve" `
+    -WorkingDirectory $ComposeDir -StatusText "Pulling base images..." -ShowSubProgress
 
   Set-UiStatus "Starting PPA Desktop services..." 75
-  Write-UiLog "Starting the PPA Desktop services..."
-  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "up -d --force-recreate" `
-    -WorkingDirectory $ComposeDir -StatusText "Starting services..." -ShowSubProgress
+  Write-UiLog "Building local app image from bundled application.jar and starting services..."
+  Invoke-ProcessWithUiOutput -FilePath "docker-compose" -Arguments "up -d --build --force-recreate" `
+    -WorkingDirectory $ComposeDir -StatusText "Building app image and starting services..." -ShowSubProgress
 
   # 7. Wait for the app to respond and open it
   $HealthUrl = "http://localhost:8080/home"
