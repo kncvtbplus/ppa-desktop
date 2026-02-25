@@ -33,7 +33,7 @@ The application supports a step‑by‑step PPA workflow:
 
 - **Team spaces & user management**: create spaces, manage users and roles.
 - **PPA management**: PPAs per team, duplicate/delete, national/subnational aggregation.
-- **Data sources**: upload (.csv/.dta), manage, subset, apply sample weights.
+- **Data sources**: upload (.csv/.dta/.xls/.xlsx), manage, subset, apply sample weights.
 - **Identify variables**:
   - Global variables (facility type, health sector, geography)
   - Service availability variables per metric

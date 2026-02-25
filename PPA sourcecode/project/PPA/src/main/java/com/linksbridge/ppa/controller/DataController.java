@@ -242,6 +242,8 @@ public class DataController implements MessageSourceAware
 	{
 		rFileTypeReadCommands.put("csv", "read.csv('%s', fileEncoding = \"UTF-8\", stringsAsFactors = FALSE, header = TRUE)");
 		rFileTypeReadCommands.put("dta", "read.dta('%s', convert.factors = FALSE)");
+		rFileTypeReadCommands.put("xls",  "read.xls('%s')");
+		rFileTypeReadCommands.put("xlsx", "read.xlsx('%s')");
 		
 	}
 	

@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # rJava/Java toolchain issues inside the container while still writing .xlsx files.
 # Additionally install 'readstata13' so we can read modern Stata .dta files (v13+)
 # without hitting the legacy foreign::read.dta limitations.
-RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI','readstata13'), repos='https://cloud.r-project.org')"
+RUN R -q -e "options(Ncpus = max(1L, parallel::detectCores() - 1L)); install.packages(c('Rserve','plyr','foreign','dplyr','openxlsx','ggplot2','tidyr','cowplot','scales','RPostgreSQL','DBI','readstata13','readxl'), repos='https://cloud.r-project.org')"
 
 # Bootstrap script that defines safer read.dta/read.csv wrappers before Rserve starts
 COPY rserve/init.R /usr/local/bin/ppa-rserve-init.R

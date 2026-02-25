@@ -59,6 +59,11 @@ read.PPA <- function(data)
           {
             read.csv(data, stringsAsFactors = FALSE, header = TRUE)
           },
+          "XLS"=,
+          "XLSX"=
+          {
+            as.data.frame(readxl::read_excel(data))
+          },
           {
             stop("Unsupported data source file extension: ",  toupper(file_ext(data)))
           }

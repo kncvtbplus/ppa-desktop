@@ -33,6 +33,17 @@ safe_read_csv <- function(file, ...) {
 
 assign("read.csv", safe_read_csv, envir = .GlobalEnv)
 
+
+safe_read_excel <- function(file, ...) {
+  # readxl handles both .xls (legacy binary) and .xlsx (Open XML) formats.
+  df <- readxl::read_excel(file, ...)
+  as.data.frame(df)
+}
+
+assign("read.xls",  safe_read_excel, envir = .GlobalEnv)
+assign("read.xlsx", safe_read_excel, envir = .GlobalEnv)
+
+
 # The Java side currently wraps reads in `local({ ... })` and then
 # checks `exists('df')` / `colnames(df)` in subsequent R calls.
 # In base R, variables assigned with `<-` inside `local()` do NOT persist

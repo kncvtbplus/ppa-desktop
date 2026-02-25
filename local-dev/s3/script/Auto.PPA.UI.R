@@ -77,6 +77,10 @@ read.PPA <- function(data)
       # expects for user-uploaded facility and survey files.
       read.csv(data, stringsAsFactors = FALSE, header = TRUE)
     },
+    "XLS" =,
+    "XLSX" = {
+      as.data.frame(readxl::read_excel(data))
+    },
     {
       stop("Unsupported data source file extension: ", ext)
     }
