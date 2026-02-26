@@ -2876,6 +2876,27 @@ public class DataController implements MessageSourceAware
 		
 	}
 	
+	@RequestMapping(value = "/downloadUserFile")
+	@ResponseBody
+	public HttpEntity<byte[]> downloadUserFile
+	(
+			@RequestParam(value = "userFileId") Long userFileId
+	)
+	{
+		UserFile userFile = getUserFile(userFileId);
+
+		byte[] fileBytes = readBytesFromS3OrLocal(userFile.getS3FileName(),
+				"data source file '" + userFile.getFileName() + "'");
+
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		header.set("Content-Disposition",
+				String.format("attachment; filename=\"%s\"", userFile.getFileName()));
+		header.setContentLength(fileBytes.length);
+
+		return new HttpEntity<>(fileBytes, header);
+	}
+
 	@RequestMapping(value = "/getUserFileDependentPpaNames")
 	@ResponseBody
 	public List<String> getUserFileDependentPpaNames

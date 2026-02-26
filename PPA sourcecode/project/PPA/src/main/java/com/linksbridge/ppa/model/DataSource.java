@@ -39,55 +39,55 @@ public class DataSource
 	@Column(name = "subnational_unit_column_name", nullable = false)
 	private String subnationalUnitColumnName = "";
 	
-	@Column(name = "subnational_unit_value_frequencies", nullable = false)
+	@Column(name = "subnational_unit_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subnationalUnitValueFrequencies = "";
 	
-	@Column(name = "subnational_unit_selected_values", nullable = false)
+	@Column(name = "subnational_unit_selected_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subnationalUnitSelectedValues = "";
 	
 	@Column(name = "facility_type_column_name", nullable = false)
 	private String facilityTypeColumnName = "";
 	
-	@Column(name = "facility_type_column_values", nullable = false)
+	@Column(name = "facility_type_column_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String facilityTypeValues = "";
 	
-	@Column(name = "facility_type_value_frequencies", nullable = false)
+	@Column(name = "facility_type_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String facilityTypeValueFrequencies = "";
 	
 	@Column(name = "health_sector_column_name", nullable = false)
 	private String healthSectorColumnName = "";
 	
-	@Column(name = "health_sector_column_values", nullable = false)
+	@Column(name = "health_sector_column_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String healthSectorValues = "";
 	
-	@Column(name = "health_sector_value_frequencies", nullable = false)
+	@Column(name = "health_sector_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String healthSectorValueFrequencies = "";
 	
-	@Column(name = "available_ppa_sector_mapping_value_combination_frequencies", nullable = false)
+	@Column(name = "available_ppa_sector_mapping_value_combination_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String ppaSectorMappingValueCombinationFrequencies = "";
 	
 	@Column(name = "subset_column1_name", nullable = false)
 	private String subsetColumn1Name = "";
 	
-	@Column(name = "subset_column1_values", nullable = false)
+	@Column(name = "subset_column1_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn1Values = "";
 	
-	@Column(name = "subset_column1_value_frequencies", nullable = false)
+	@Column(name = "subset_column1_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn1ValueFrequencies = "";
 	
-	@Column(name = "subset_column1_selected_values", nullable = false)
+	@Column(name = "subset_column1_selected_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn1SelectedValues = "";
 	
 	@Column(name = "subset_column2_name", nullable = false)
 	private String subsetColumn2Name = "";
 	
-	@Column(name = "subset_column2_values", nullable = false)
+	@Column(name = "subset_column2_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn2Values = "";
 	
-	@Column(name = "subset_column2_value_frequencies", nullable = false)
+	@Column(name = "subset_column2_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn2ValueFrequencies = "";
 	
-	@Column(name = "subset_column2_selected_values", nullable = false)
+	@Column(name = "subset_column2_selected_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String subsetColumn2SelectedValues = "";
 	
 	@Column(name = "selected_row_count", nullable = false)
@@ -96,7 +96,7 @@ public class DataSource
 	@Column(name = "weight_column_name", nullable = false)
 	private String weightColumnName = "";
 	
-	@Column(name = "weight_multiplier", nullable = false)
+	@Column(name = "weight_multiplier", nullable = false, precision = 19, scale = 12)
 	private BigDecimal weightMultiplier = new BigDecimal(1);
 	
 	@OneToMany(mappedBy = "dataSource"/*, cascade = CascadeType.ALL, orphanRemoval = true*/)

@@ -36,7 +36,7 @@ public class UserFile
 	@Column(name = "file_name", nullable = false)
 	private String fileName;
 
-	@Column(name = "column_names", nullable = false)
+	@Column(name = "column_names", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String columnNames = "";
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "userFile")

@@ -43,10 +43,10 @@ public class Metric
 	@Column(name = "data_source_column_name", nullable = false)
 	private String dataSourceColumnName = "";
 
-	@Column(name = "column_value_frequencies", nullable = false)
+	@Column(name = "column_value_frequencies", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String ColumnValueFrequencies = "";
 
-	@Column(name = "selected_column_values", nullable = false)
+	@Column(name = "selected_column_values", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String selectedColumnValues = "";
 
 	public Long getId()

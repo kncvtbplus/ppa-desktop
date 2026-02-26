@@ -35,7 +35,7 @@ public class Output
 	@Column(name = "file_name", nullable = false)
 	private String fileName = "";
 
-	@Column(name = "chart_file_names", nullable = false)
+	@Column(name = "chart_file_names", nullable = false, columnDefinition = "TEXT DEFAULT ''")
 	private String chartFileNames = "";
 
 	public Long getId()

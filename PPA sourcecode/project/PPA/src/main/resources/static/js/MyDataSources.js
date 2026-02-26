@@ -81,89 +81,139 @@ application.controller
 							fit: true,
 							/*fitColumns: true,*/
 				            onBeforeSelect: function(){return false;},
-							url: "data/getUserFiles",
-							columns:
-								[[
-									{
-										field: "fileName",
-										title: getMessage("common.label.fileName"),
-										width: 500,
-										fixed: true,
-									},
-									{
-										field: "delete",
-										title: getMessage("MyDataSources.userFiles.column.delete"),
-										width: 80,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												var output;
-												
-												if ($scope.editable)
-												{
-													output =
-														"<a class='MyDataSources-userFiles-delete'" +
-														" userFileId='" + row["id"] + "'" +
-														" userFileName='" + row["fileName"] + "'" +
-														"></a>"
-													;
-													
-												}
-												else
-												{
-													output = "";
-													
-												}
-												
-												return output;
-												
-											},
-									},
-								]],
-							onLoadSuccess:
-								function()
+						url: "data/getUserFiles",
+						columns:
+							[[
 								{
-									// render delete
-									
-									$(".MyDataSources-userFiles-delete").each
-									(
-											function(index, element)
+									field: "fileName",
+									title: getMessage("common.label.fileName"),
+									width: 500,
+								},
+								{
+									field: "download",
+									title: getMessage("common.label.download"),
+									width: 90,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											return "<a class='MyDataSources-userFiles-download'" +
+												" userFileId='" + row["id"] + "'" +
+												"></a>";
+										},
+								},
+								{
+									field: "delete",
+									title: getMessage("MyDataSources.userFiles.column.delete"),
+									width: 80,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											var output;
+											
+											if ($scope.editable)
 											{
-												var userFileId = element.getAttribute("userFileId");
-												var userFileName = element.getAttribute("userFileName");
-												
-												$(this).linkbutton
-												(
-														{
-															iconCls: "icon-delete",
-															onClick:
-																function()
-																{
-																	$scope.deleteUserFile(userFileId, userFileName);
-																	
-																},
-														}
-												)
+												output =
+													"<a class='MyDataSources-userFiles-delete'" +
+													" userFileId='" + row["id"] + "'" +
+													" userFileName='" + row["fileName"] + "'" +
+													"></a>"
 												;
 												
 											}
-									)
-									;
-									
+											else
+											{
+												output = "";
+												
+											}
+											
+											return output;
+											
+										},
 								},
+							]],
+						onLoadSuccess:
+							function()
+							{
+								// render download
+								
+								$(".MyDataSources-userFiles-download").each
+								(
+										function(index, element)
+										{
+											var userFileId = element.getAttribute("userFileId");
+											
+											$(this).linkbutton
+											(
+													{
+														iconCls: "icon-download",
+														onClick:
+															function()
+															{
+																$scope.downloadUserFile(userFileId);
+																
+															},
+													}
+											)
+											.click
+											(
+													function (e)
+													{
+														e.stopPropagation();
+													}
+											)
+											;
+											
+										}
+								)
+								;
+								
+								// render delete
+								
+								$(".MyDataSources-userFiles-delete").each
+								(
+										function(index, element)
+										{
+											var userFileId = element.getAttribute("userFileId");
+											var userFileName = element.getAttribute("userFileName");
+											
+											$(this).linkbutton
+											(
+													{
+														iconCls: "icon-delete",
+														onClick:
+															function()
+															{
+																$scope.deleteUserFile(userFileId, userFileName);
+																
+															},
+													}
+											)
+											;
+											
+										}
+								)
+								;
+								
+							},
 						}
 				)
-				.datagrid("getPanel")
-				.css("max-width", (580 + $rootScope.tableScrollbarWidth).toString() + "px")
-				;
+			;
 				
 			}
 			
 			$scope.refreshUserFiles = function()
 			{
 				$("#MyDataSources-userFiles").datagrid("reload");
+				
+			}
+			
+			$scope.downloadUserFile = function(userFileId)
+			{
+				window.location.href = "data/downloadUserFile?userFileId=" + encodeURIComponent(userFileId);
 				
 			}
 			

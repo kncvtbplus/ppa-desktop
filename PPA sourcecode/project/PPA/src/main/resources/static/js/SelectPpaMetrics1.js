@@ -83,11 +83,10 @@ application.controller
 								[[
 									{field: "ck", checkbox: true, },
 									{field: "metricName", title: getMessage("SelectPpaMetrics1.column.metricName"), width: 190, fixed: true, },
-									{
-										field: "dataPointName",
-										title: getMessage("SelectPpaMetrics1.column.dataPointName"),
-										width: 500,
-										fixed: true,
+								{
+									field: "dataPointName",
+									title: getMessage("SelectPpaMetrics1.column.dataPointName"),
+									width: 500,
 										formatter:
 											function(value,row,index)
 											{
@@ -233,9 +232,8 @@ application.controller
 								},
 						}
 				)
-				.datagrid("getPanel")
-				.css("max-width", ($rootScope.tableCheckColumnWidth + 190 + 500 + $rootScope.tableScrollbarWidth).toString() + "px")
-				.addClass("datagrid-nocheckbox")
+			.datagrid("getPanel")
+			.addClass("datagrid-nocheckbox")
 				;
 				
 			}
