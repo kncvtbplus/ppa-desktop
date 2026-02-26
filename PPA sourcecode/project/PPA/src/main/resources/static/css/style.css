@@ -319,10 +319,10 @@ input[type=checkbox]:disabled
 .navigation-button.l-btn
 {
 	box-sizing: border-box;
-	height: 50px;
+	height: 36px;
 	border-style: solid;
 	border-width: 2px;
-	border-radius: 30px;
+	border-radius: 20px;
 	vertical-align: middle;
 	text-align: center;
 }
@@ -335,8 +335,8 @@ input[type=checkbox]:disabled
 	margin: 0;
 	vertical-align: middle;
 	text-align: center;
-	line-height: 46px;
-	font-size: 16px;
+	line-height: 32px;
+	font-size: 14px;
 	font-weight: bold;
 }
 
@@ -538,6 +538,22 @@ input[type=checkbox]:disabled
 {
 	/* download arrow with baseline */
 	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 5v10M8 11l4 4 4-4M5 19h14' stroke='%23004745' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+
+.icon-delete
+{
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 16px 16px;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 6L6 18M6 6l12 12' stroke='%23004745' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+}
+
+.icon-duplicate
+{
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 16px 16px;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='9' y='9' width='11' height='11' rx='2' stroke='%23004745' stroke-width='2' fill='none'/><path d='M5 15V5a2 2 0 012-2h10' stroke='%23004745' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
 }
 
 /* security form */
@@ -884,7 +900,7 @@ span.label-right
 /* page header top ribbon */
 .page-header-top
 {
-	height: 100px;
+	height: 50px;
 	border-bottom: solid gray 2px;
 	background-color: white !important;
 }
@@ -892,7 +908,7 @@ span.label-right
 /* page header logo */
 .page-header-top-logo
 {
-	width: 400px;
+	width: 200px;
 	background-image: url(/images/logo.png);
 	background-repeat: no-repeat;
 	background-position: left center;
@@ -928,7 +944,7 @@ a.page-header-top-resources-link:visited
 
 .page-header-top-menu
 {
-	width: 100px;
+	width: 50px;
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
@@ -954,7 +970,7 @@ a.page-header-top-resources-link:visited
 /* wizard ribbon */
 .page-header-bottom
 {
-	height: 46px;
+	height: 24px;
 }
 .page-header-bottom-wizard
 {
@@ -994,13 +1010,13 @@ a.page-header-top-resources-link:visited
 .page-header-wizard-menu a .l-btn-left .l-btn-text
 {
 	display: table-cell;
-	padding: 0 15px;
+	padding: 0 8px;
 	vertical-align: middle;
 	text-align: left;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size: 16px;
+	font-size: 12px;
 }
 .page-header-wizard-menu-text
 {
@@ -1026,14 +1042,14 @@ a.page-header-top-resources-link:visited
 .wizard-submenu>.menu-item
 {
 	border: none;
-	height: 46px !important;
+	height: 30px !important;
 }
 .wizard-submenu>.menu-item>.menu-text
 {
-	padding: 0 30px;
-	height: 46px !important;
-	line-height: 46px !important;
-	font-size: 16px;
+	padding: 0 20px;
+	height: 30px !important;
+	line-height: 30px !important;
+	font-size: 13px;
 }
 
 /* team-ppa-selection */
@@ -1154,37 +1170,31 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 }
 .page-title,.page-title-title-only
 {
-	padding-top: 10px;
-	padding-bottom: 0px;
+	padding-top: 6px;
+	padding-bottom: 4px;
 	padding-left: 40px;
 	padding-right: 40px;
 	color: #3e3e3e;
-	overflow: hidden;
-}
-.page-title
-{
-	height: 90px;
 }
 .page-title-title-only
 {
-	height: 40px;
+	height: 30px;
 }
 .page-title-text-title
 {
-	font-size: 30px;
+	font-size: 22px;
 }
 .page-title-text-link
 {
-	margin-top: 4px;
-	font-size: 15px;
+	margin-top: 2px;
+	font-size: 13px;
 	color: #157C79;
 	text-decoration: underline;
 }
 .page-title-text-subtitle
 {
-	margin-top: 4px;
-	font-size: 15px;
-	max-width: 750px;
+	margin-top: 2px;
+	font-size: 13px;
 }
 .page-center
 {
@@ -1214,8 +1224,8 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 
 .page-navigation
 {
-	height: 50px;
-	padding: 10px 40px;
+	height: 40px;
+	padding: 4px 40px;
 	vertical-align: middle;
 	text-align: left;
 }

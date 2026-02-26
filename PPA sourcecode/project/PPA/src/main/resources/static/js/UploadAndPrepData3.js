@@ -106,17 +106,18 @@ application.controller
 													
 												},
 										},
-										{
-											field: "clearSubsetColumn1",
-											width: 30,
-											fixed: true,
-											align: "center",
-											formatter:
-												function(value,row,index)
-												{
-													return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset1' dataSourceId='" + row["id"] + "'>\u00d7</span>";
-												},
-										},
+									{
+										field: "clearSubsetColumn1",
+										title: "",
+										width: 35,
+										fixed: true,
+										align: "center",
+										formatter:
+											function(value,row,index)
+											{
+												return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset1' dataSourceId='" + row["id"] + "' title='" + getMessage("common.label.clear") + "'>\u00d7</span>";
+											},
+									},
 										{
 											field: "subsetColumn1ValueCount",
 											title: getMessage("UploadAndPrepData3.dataSources.column.subsetColumn1ValueCount"),
@@ -142,17 +143,18 @@ application.controller
 													
 												},
 										},
-										{
-											field: "clearSubsetColumn2",
-											width: 30,
-											fixed: true,
-											align: "center",
-											formatter:
-												function(value,row,index)
-												{
-													return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset2' dataSourceId='" + row["id"] + "'>\u00d7</span>";
-												},
-										},
+									{
+										field: "clearSubsetColumn2",
+										title: "",
+										width: 35,
+										fixed: true,
+										align: "center",
+										formatter:
+											function(value,row,index)
+											{
+												return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset2' dataSourceId='" + row["id"] + "' title='" + getMessage("common.label.clear") + "'>\u00d7</span>";
+											},
+									},
 										{
 											field: "subsetColumn2ValueCount",
 											title: getMessage("UploadAndPrepData3.dataSources.column.subsetColumn2ValueCount"),

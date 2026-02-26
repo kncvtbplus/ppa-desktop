@@ -77,17 +77,18 @@ application.controller
 												
 											},
 									},
-									{
-										field: "clearWeightColumnName",
-										width: 40,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												return "<span class='ppa-clear-btn UploadAndPrepData2-clearWeight' dataSourceId='" + row["id"] + "'>\u00d7</span>";
-											},
-									},
+								{
+									field: "clearWeightColumnName",
+									title: "",
+									width: 40,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											return "<span class='ppa-clear-btn UploadAndPrepData2-clearWeight' dataSourceId='" + row["id"] + "' title='" + getMessage("common.label.clear") + "'>\u00d7</span>";
+										},
+								},
 									{
 										field: "weightMultiplier",
 										fixed: true,

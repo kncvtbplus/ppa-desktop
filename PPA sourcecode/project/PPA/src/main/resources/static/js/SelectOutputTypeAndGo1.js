@@ -108,25 +108,9 @@ application.controller
 										formatter:
 											function(value,row,index)
 											{
-												var output;
-												
-												if (value)
-												{
-													output =
-														"<a class='SelectOutputTypeAndGo1-outputs-delete'" +
-														" outputId='" + row["id"] + "'" +
-														"></a>"
-													;
-													
-												}
-												else
-												{
-													output = "";
-													
-												}
-												
-												return output;
-												
+												return "<a class='SelectOutputTypeAndGo1-outputs-delete'" +
+													" outputId='" + row["id"] + "'" +
+													"></a>";
 											},
 									},
 								]],

@@ -2434,16 +2434,23 @@ public class DataController implements MessageSourceAware
 			throw new ApplicationException("Guest login is only available in local/desktop mode.");
 		}
 
+		Account legacyPublic = accountRepository.findByName("Public");
+		if (legacyPublic != null && accountRepository.findByName("Default") == null)
+		{
+			legacyPublic.setName("Default");
+			accountRepository.save(legacyPublic);
+		}
+
 		User guestUser = userRepository.findByUsername(GUEST_USERNAME);
 
 		if (guestUser == null)
 		{
-			Account publicAccount = accountRepository.findByName("Public");
+			Account publicAccount = accountRepository.findByName("Default");
 
 			if (publicAccount == null)
 			{
 				publicAccount = new Account();
-				publicAccount.setName("Public");
+				publicAccount.setName("Default");
 				publicAccount.setDemo(false);
 				accountRepository.save(publicAccount);
 			}
