@@ -71,11 +71,11 @@ application.controller
 										},
 										{
 											title: getMessage("UploadAndPrepData3.dataSources.column.subsetColumn1Group"),
-											colspan: 2,
+											colspan: 3,
 										},
 										{
 											title: getMessage("UploadAndPrepData3.dataSources.column.subsetColumn2Group"),
-											colspan: 2,
+											colspan: 3,
 										},
 										{
 											field: "nRows",
@@ -107,6 +107,17 @@ application.controller
 												},
 										},
 										{
+											field: "clearSubsetColumn1",
+											width: 30,
+											fixed: true,
+											align: "center",
+											formatter:
+												function(value,row,index)
+												{
+													return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset1' dataSourceId='" + row["id"] + "'>\u00d7</span>";
+												},
+										},
+										{
 											field: "subsetColumn1ValueCount",
 											title: getMessage("UploadAndPrepData3.dataSources.column.subsetColumn1ValueCount"),
 											align: "right",
@@ -129,6 +140,17 @@ application.controller
 													
 													return output;
 													
+												},
+										},
+										{
+											field: "clearSubsetColumn2",
+											width: 30,
+											fixed: true,
+											align: "center",
+											formatter:
+												function(value,row,index)
+												{
+													return "<span class='ppa-clear-btn UploadAndPrepData3-clearSubset2' dataSourceId='" + row["id"] + "'>\u00d7</span>";
 												},
 										},
 										{
@@ -180,18 +202,6 @@ application.controller
 															valueField: "value",
 															textField: "value",
 															data: dataSourceColumnNames,
-															icons:
-																[
-																	{
-																		iconCls: "icon-clear",
-																		handler:
-																			function(e)
-																			{
-																				$(e.data.target).combobox("clear");
-																				
-																			},
-																	},
-																],
 															onChange:
 																function(newValue)
 																{
@@ -202,6 +212,21 @@ application.controller
 												)
 												;
 												
+											}
+									)
+									;
+									
+									$(".UploadAndPrepData3-clearSubset1").each
+									(
+											function(index, element)
+											{
+												var dataSourceId = element.getAttribute("dataSourceId");
+												
+												$(element).on("click", function(e)
+												{
+													e.stopPropagation();
+													$(".UploadAndPrepData3-subsetColumn1Name[dataSourceId='" + dataSourceId + "']").combobox("clear");
+												});
 											}
 									)
 									;
@@ -223,18 +248,6 @@ application.controller
 															valueField: "value",
 															textField: "value",
 															data: dataSourceColumnNames,
-															icons:
-																[
-																	{
-																		iconCls: "icon-clear",
-																		handler:
-																			function(e)
-																			{
-																				$(e.data.target).combobox("clear");
-																				
-																			},
-																	},
-																],
 															onChange:
 																function(newValue)
 																{
@@ -245,6 +258,21 @@ application.controller
 												)
 												;
 												
+											}
+									)
+									;
+									
+									$(".UploadAndPrepData3-clearSubset2").each
+									(
+											function(index, element)
+											{
+												var dataSourceId = element.getAttribute("dataSourceId");
+												
+												$(element).on("click", function(e)
+												{
+													e.stopPropagation();
+													$(".UploadAndPrepData3-subsetColumn2Name[dataSourceId='" + dataSourceId + "']").combobox("clear");
+												});
 											}
 									)
 									;

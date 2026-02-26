@@ -1154,15 +1154,16 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 }
 .page-title,.page-title-title-only
 {
-	padding-top: 20px;
+	padding-top: 10px;
 	padding-bottom: 0px;
 	padding-left: 40px;
 	padding-right: 40px;
 	color: #3e3e3e;
+	overflow: hidden;
 }
 .page-title
 {
-	height: 180px;
+	height: 120px;
 }
 .page-title-title-only
 {
@@ -1174,15 +1175,15 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 }
 .page-title-text-link
 {
-	margin-top: 20px;
-	font-size: 18px;
+	margin-top: 4px;
+	font-size: 15px;
 	color: #157C79;
 	text-decoration: underline;
 }
 .page-title-text-subtitle
 {
-	margin-top: 20px;
-	font-size: 18px;
+	margin-top: 4px;
+	font-size: 15px;
 	max-width: 750px;
 }
 .page-center
@@ -1214,7 +1215,7 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 .page-navigation
 {
 	height: 60px;
-	padding: 40px;
+	padding: 20px 40px;
 	vertical-align: middle;
 	text-align: left;
 }
@@ -1424,5 +1425,30 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 	background: #157C79;
 	color: white;
 	border-color: white; 	
+}
+
+/* clear button in datagrid cells */
+
+.ppa-clear-btn
+{
+	cursor: pointer;
+	color: #707070;
+	font-size: 18px;
+	line-height: 50px;
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+}
+.ppa-clear-btn:hover
+{
+	color: #004745;
+}
+.datagrid-row-over td .ppa-clear-btn
+{
+	color: white;
+}
+.datagrid-row-over td .ppa-clear-btn:hover
+{
+	color: #ccc;
 }
 

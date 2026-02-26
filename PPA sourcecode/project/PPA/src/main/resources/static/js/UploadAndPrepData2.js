@@ -57,7 +57,6 @@ application.controller
 										field: "fileName",
 										title: getMessage("UploadAndPrepData2.dataSources.column.fileName"),
 										width: 500,
-										fixed: true,
 									},
 									{
 										field: "weightColumnName",
@@ -76,6 +75,17 @@ application.controller
 												
 												return output;
 												
+											},
+									},
+									{
+										field: "clearWeightColumnName",
+										width: 40,
+										fixed: true,
+										align: "center",
+										formatter:
+											function(value,row,index)
+											{
+												return "<span class='ppa-clear-btn UploadAndPrepData2-clearWeight' dataSourceId='" + row["id"] + "'>\u00d7</span>";
 											},
 									},
 									{
@@ -119,18 +129,6 @@ application.controller
 															valueField: "value",
 															textField: "value",
 															data: data,
-															icons:
-																[
-																	{
-																		iconCls: "icon-clear",
-																		handler:
-																			function(e)
-																			{
-																				$(e.data.target).combobox("clear");
-																				
-																			},
-																	},
-																],
 															onChange:
 																function(newValue)
 																{
@@ -186,11 +184,26 @@ application.controller
 									)
 									;
 									
+									// render clear buttons
+									
+									$(".UploadAndPrepData2-clearWeight").each
+									(
+											function(index, element)
+											{
+												var dataSourceId = element.getAttribute("dataSourceId");
+												
+												$(element).on("click", function(e)
+												{
+													e.stopPropagation();
+													$(".UploadAndPrepData2-dataSources-weightColumnName[dataSourceId='" + dataSourceId + "']").combobox("clear");
+												});
+											}
+									)
+									;
+									
 								},
 						}
 				)
-				.datagrid("getPanel")
-				.css("max-width", (900 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}

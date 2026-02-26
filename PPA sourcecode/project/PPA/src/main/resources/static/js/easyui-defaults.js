@@ -246,6 +246,12 @@ $.fn.datagrid.defaults.rowStyler =
 	}
 ;
 
+// Open combo dropdown when clicking the text input area
+
+$(document).on('click', '.combo .textbox-text', function(e) {
+	$(this).siblings('.textbox-addon').find('.combo-arrow').trigger('click');
+});
+
 // datagrid fitContent
 
 $.fn.datagrid.defaults.fitColumns = true;

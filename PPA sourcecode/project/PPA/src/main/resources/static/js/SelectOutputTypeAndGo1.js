@@ -78,8 +78,7 @@ application.controller
 									{
 										field: "created",
 										title: getMessage("SelectOutputTypeAndGo1.outputs.column.created"),
-										width: 150,
-										fixed: true,
+										width: 220,
 									},
 									{
 										field: "fileName",
@@ -236,7 +235,7 @@ application.controller
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", (350 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", (420 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}
