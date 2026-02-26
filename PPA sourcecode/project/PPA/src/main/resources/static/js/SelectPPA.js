@@ -141,15 +141,13 @@ application.controller
 										formatter:
 											function(value,row,index)
 											{
-												var output =
-													"<div class='SelectPPA-ppas-region-tooltip' style='width: 100%; '>" +
-													"<input class='SelectPPA-ppas-region' style='width: 100%; '" +
-													" value='" + value + "'" +
-													" ppaId='" + row["id"] + "'" +
-													" selected='" + row["selected"] + "'" +
-													"/>" +
-													"</div>"
-												;
+											var output =
+												"<input class='SelectPPA-ppas-region' style='width: 100%; '" +
+												" value='" + value + "'" +
+												" ppaId='" + row["id"] + "'" +
+												" selected='" + row["selected"] + "'" +
+												"/>"
+											;
 												
 												return output;
 												
@@ -329,18 +327,9 @@ application.controller
 									)
 									;
 								
-									// render region
-									
-									$(".SelectPPA-ppas-region-tooltip").tooltip
-									(
-											{
-												position: "top",
-												content: getMessage("SelectPPA.ppas.columns.region.prompt"),
-											}
-									)
-									;
-									
-									$(".SelectPPA-ppas-region").each
+								// render region
+								
+								$(".SelectPPA-ppas-region").each
 									(
 											function(index, element)
 											{

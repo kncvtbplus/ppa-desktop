@@ -970,7 +970,7 @@ a.page-header-top-resources-link:visited
 /* wizard ribbon */
 .page-header-bottom
 {
-	height: 24px;
+	height: 30px;
 }
 .page-header-bottom-wizard
 {
@@ -1060,6 +1060,17 @@ a.page-header-top-resources-link:visited
 .page-header-bottom-selection
 {
 	padding: 0 4px;
+}
+.page-header-bottom-selection .textbox
+{
+	height: 22px !important;
+	border-radius: 12px;
+}
+.page-header-bottom-selection .textbox .textbox-text
+{
+	font-size: 12px;
+	height: 22px !important;
+	line-height: 22px !important;
 }
 
 .logo-button
@@ -1175,6 +1186,10 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 	padding-left: 40px;
 	padding-right: 40px;
 	color: #3e3e3e;
+}
+.page-title
+{
+	height: 80px;
 }
 .page-title-title-only
 {
