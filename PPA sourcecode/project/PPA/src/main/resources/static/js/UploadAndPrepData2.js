@@ -204,6 +204,8 @@ application.controller
 								},
 						}
 				)
+				.datagrid("getPanel")
+				.css("max-width", (1000 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}

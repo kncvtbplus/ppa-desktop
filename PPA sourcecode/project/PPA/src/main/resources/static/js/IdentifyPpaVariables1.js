@@ -70,7 +70,6 @@ application.controller
 										field: "dataSourceFileName",
 										title: getMessage("IdentifyPpaVariables1.globalVariableDataSources.column.dataSourceFileName"),
 										width: 500,
-										fixed: true,
 									},
 									{
 										field: "globalVariableColumnName",
@@ -188,7 +187,7 @@ application.controller
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", (800 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", (1000 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}

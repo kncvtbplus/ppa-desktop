@@ -100,7 +100,6 @@ application
 												field : "fileName",
 												title : getMessage("MapHealthSectorsAndLevels2.dataSources.column.fileName"),
 												width : 350,
-												fixed: true,
 											},
 											{
 												field : "mapped",
@@ -164,7 +163,7 @@ application
 								}
 						)
 						.datagrid("getPanel")
-						.css("max-width", (450 + $rootScope.tableScrollbarWidth).toString() + "px")
+						.css("max-width", (600 + $rootScope.tableScrollbarWidth).toString() + "px")
 						;
 
 					}

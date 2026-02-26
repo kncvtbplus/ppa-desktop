@@ -83,7 +83,7 @@ application.controller
 								{
 									field: "deleteDataSource",
 									title: getMessage("MyDataSources.userFiles.column.delete"),
-									width: 50,
+									width: 80,
 									fixed: true,
 									align: "center",
 									formatter:
