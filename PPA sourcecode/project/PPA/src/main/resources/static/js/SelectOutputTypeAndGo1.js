@@ -97,6 +97,15 @@ application.controller
 									field: "created",
 									title: getMessage("SelectOutputTypeAndGo1.outputs.column.created"),
 									width: 220,
+									formatter:
+										function(value,row,index)
+										{
+											if (!value) return "";
+											var d = new Date(value);
+											var pad = function(n) { return n < 10 ? "0" + n : n; };
+											return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) +
+												" " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+										},
 								},
 								{
 									field: "fileName",

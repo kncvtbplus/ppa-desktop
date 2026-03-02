@@ -7937,16 +7937,13 @@ public class DataController implements MessageSourceAware
 			responseRow.put("id", output.getId());
 			responseRow.put("name", output.getName() != null ? output.getName() : "");
 			
-			// Some local installations rely on Hibernate to create the schema and
-			// do not have a database default for the 'created' column on the
-			// output table. In that case created may be null; avoid NPEs here.
 			if (output.getCreated() != null)
 			{
-				responseRow.put("created", dateFormat.format(output.getCreated()));
+				responseRow.put("created", output.getCreated().getTime());
 			}
 			else
 			{
-				responseRow.put("created", "");
+				responseRow.put("created", null);
 			}
 			
 			responseRow.put("fileName", output.getFileName());
