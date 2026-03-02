@@ -32,6 +32,9 @@ public class Output
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
 
+	@Column(name = "name", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
+	private String name = "";
+
 	@Column(name = "file_name", nullable = false)
 	private String fileName = "";
 
@@ -66,6 +69,16 @@ public class Output
 	public void setCreated(Date created)
 	{
 		this.created = created;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	public String getFileName()

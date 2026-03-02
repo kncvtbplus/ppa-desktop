@@ -6259,6 +6259,7 @@ public class DataController implements MessageSourceAware
 	}
 	
 	@RequestMapping(value = "/getPpaSectors")
+	@Transactional
 	@ResponseBody
 	public List<Map<String, Object>> getPpaSectors
 	(
@@ -6268,11 +6269,85 @@ public class DataController implements MessageSourceAware
 		
 		Ppa selectedPpa = getSelectedPpa(true);
 		
+		// cleanup: keep at most 1 empty editable sector (the one with
+		// the highest position so it stays at the bottom of the list)
+		
+		List<PpaSector> emptyEditables = new ArrayList<>();
+		
+		for (PpaSector s : selectedPpa.getPpaSectors())
+		{
+			if (s.getEditable() && (s.getName() == null || s.getName().trim().isEmpty()))
+			{
+				emptyEditables.add(s);
+			}
+		}
+		
+		if (emptyEditables.size() > 1)
+		{
+			emptyEditables.sort((a, b) -> Long.compare(
+				a.getPosition() != null ? a.getPosition() : 0,
+				b.getPosition() != null ? b.getPosition() : 0
+			));
+			
+			for (int i = 0; i < emptyEditables.size() - 1; i++)
+			{
+				selectedPpa.removePpaSector(emptyEditables.get(i));
+			}
+			
+			ppaRepository.flush();
+		}
+		
+		// auto-create next empty custom sector row if all editable rows
+		// already have a name and the limit of 10 custom rows is not reached
+		
+		long editableCount = 0;
+		boolean hasEmptyEditable = false;
+		
+		for (PpaSector s : selectedPpa.getPpaSectors())
+		{
+			if (s.getEditable())
+			{
+				editableCount++;
+				if (s.getName() == null || s.getName().trim().isEmpty())
+				{
+					hasEmptyEditable = true;
+				}
+			}
+		}
+		
+		if (!hasEmptyEditable && editableCount < 10)
+		{
+			long maxPosition = 0;
+			for (PpaSector s : selectedPpa.getPpaSectors())
+			{
+				if (s.getPosition() != null && s.getPosition() > maxPosition)
+				{
+					maxPosition = s.getPosition();
+				}
+			}
+			
+			PpaSector newSector = new PpaSector();
+			selectedPpa.addPpaSector(newSector);
+			newSector.setPosition(maxPosition + 1);
+			newSector.setName("");
+			newSector.setEditable(true);
+			
+			ppaRepository.flush();
+		}
+		
+		// sort sectors by position so new rows always appear at the bottom
+		
+		List<PpaSector> sortedSectors = new ArrayList<>(selectedPpa.getPpaSectors());
+		sortedSectors.sort((a, b) -> Long.compare(
+			a.getPosition() != null ? a.getPosition() : 0,
+			b.getPosition() != null ? b.getPosition() : 0
+		));
+		
 		// populate output
 		
 		List<Map<String, Object>> output = new ArrayList<>();
 		
-		for (PpaSector ppaSector : selectedPpa.getPpaSectors())
+		for (PpaSector ppaSector : sortedSectors)
 		{
 			Map<String, Object> outputRow = new HashMap<>();
 			output.add(outputRow);
@@ -7832,6 +7907,8 @@ public class DataController implements MessageSourceAware
 		Output output = new Output();
 		selectedPpa.addOutput(output);
 		
+		int nextNumber = selectedPpa.getOutputs().size();
+		output.setName("PPA " + nextNumber);
 		output.setCreated(new Date());
 		output.setFileName(outputFileS3Key);
 		output.setChartFileNames(chartFileS3Keys);
@@ -7858,6 +7935,7 @@ public class DataController implements MessageSourceAware
 			response.add(responseRow);
 			
 			responseRow.put("id", output.getId());
+			responseRow.put("name", output.getName() != null ? output.getName() : "");
 			
 			// Some local installations rely on Hibernate to create the schema and
 			// do not have a database default for the 'created' column on the
@@ -7948,6 +8026,19 @@ public class DataController implements MessageSourceAware
 			}
 		}
 		
+	}
+
+	@RequestMapping(value = "/renameOutput")
+	@ResponseBody
+	@Transactional
+	public void renameOutput
+	(
+			@RequestParam(value = "outputId") Long outputId,
+			@RequestParam(value = "name") String name
+	)
+	{
+		Output output = outputRepository.getOne(outputId);
+		output.setName(name);
 	}
 
 	@RequestMapping(value = "/getOutput")

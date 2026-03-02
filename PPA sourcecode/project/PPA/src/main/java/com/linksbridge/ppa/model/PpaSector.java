@@ -14,10 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "ppa_sector", uniqueConstraints = @UniqueConstraint(columnNames = {"ppa_id", "name"}))
+@Table(name = "ppa_sector")
 public class PpaSector
 {
 	@Id

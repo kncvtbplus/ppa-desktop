@@ -77,47 +77,61 @@ application.controller
 							singleSelect: true,
 							idField: "id",
 							url: "data/getOutputs",
-							columns:
-								[[
-									{
-										field: "created",
-										title: getMessage("SelectOutputTypeAndGo1.outputs.column.created"),
-										width: 220,
-									},
-									{
-										field: "fileName",
-										title: getMessage("SelectOutputTypeAndGo1.outputs.column.file"),
-										width: 100,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												var output =
-													"<a class='SelectOutputTypeAndGo1-outputs-download'" +
-													" outputId='" + row["id"] + "'" +
-													"></a>"
-												;
-												
-												return output;
-												
-											},
-									},
-									{
-										field: "delete",
-										title: getMessage("SelectOutputTypeAndGo1.outputs.column.delete"),
-										width: 100,
-										fixed: true,
-										align: "center",
-										formatter:
-											function(value,row,index)
-											{
-												return "<a class='SelectOutputTypeAndGo1-outputs-delete'" +
-													" outputId='" + row["id"] + "'" +
-													"></a>";
-											},
-									},
-								]],
+						columns:
+							[[
+								{
+									field: "name",
+									title: getMessage("SelectOutputTypeAndGo1.outputs.column.name"),
+									width: 180,
+									formatter:
+										function(value,row,index)
+										{
+											var safeValue = (value != null ? value : "");
+											return "<input class='easyui-element SelectOutputTypeAndGo1-nameTextbox'" +
+												" id='SelectOutputTypeAndGo1-name-" + row["id"] + "'" +
+												" data-options='value: \"" + safeValue.replace(/"/g, "&quot;") + "\", outputId: " + row["id"] + ", '" +
+												"/>";
+										},
+								},
+								{
+									field: "created",
+									title: getMessage("SelectOutputTypeAndGo1.outputs.column.created"),
+									width: 220,
+								},
+								{
+									field: "fileName",
+									title: getMessage("SelectOutputTypeAndGo1.outputs.column.file"),
+									width: 100,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											var output =
+												"<a class='SelectOutputTypeAndGo1-outputs-download'" +
+												" outputId='" + row["id"] + "'" +
+												"></a>"
+											;
+											
+											return output;
+											
+										},
+								},
+								{
+									field: "delete",
+									title: getMessage("SelectOutputTypeAndGo1.outputs.column.delete"),
+									width: 100,
+									fixed: true,
+									align: "center",
+									formatter:
+										function(value,row,index)
+										{
+											return "<a class='SelectOutputTypeAndGo1-outputs-delete'" +
+												" outputId='" + row["id"] + "'" +
+												"></a>";
+										},
+								},
+							]],
 							toolbar:
 								[
 									{
@@ -179,9 +193,42 @@ application.controller
 									)
 									;
 									
-									// render delete
-									
-									$(".SelectOutputTypeAndGo1-outputs-delete").each
+								// render name textboxes
+								
+								$(".SelectOutputTypeAndGo1-nameTextbox").each
+								(
+										function(index, element)
+										{
+											$(element).width($(element).parent().width());
+											
+											$(element).textbox
+											(
+													{
+														disabled: !$scope.editable,
+														
+														onChange:
+															function(newValue)
+															{
+																var options = $(this).textbox("options");
+																
+																postData("renameOutput", {"outputId": options["outputId"], "name": newValue, });
+																
+															}
+													}
+											)
+											;
+											
+											$(element).textbox("textbox").prop("maxlength", 255);
+											
+											$(element).textbox("textbox").click(function(e) { e.stopPropagation(); });
+											
+										}
+								)
+								;
+								
+								// render delete
+								
+								$(".SelectOutputTypeAndGo1-outputs-delete").each
 									(
 											function(index, element)
 											{
@@ -223,7 +270,7 @@ application.controller
 						}
 				)
 				.datagrid("getPanel")
-				.css("max-width", (420 + $rootScope.tableScrollbarWidth).toString() + "px")
+				.css("max-width", (600 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}

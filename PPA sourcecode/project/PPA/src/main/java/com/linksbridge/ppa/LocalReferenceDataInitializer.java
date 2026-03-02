@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,15 +36,43 @@ public class LocalReferenceDataInitializer implements CommandLineRunner {
     @Autowired
     private PpaSectorDefaultValueRepository ppaSectorDefaultValueRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     @Transactional
     public void run(String... args) throws Exception {
         try {
+            dropPpaSectorNameUniqueConstraint();
             seedMetricTypesIfEmpty();
             seedPpaSectorsIfEmpty();
         } catch (DataAccessException ex) {
             // If the schema is not fully created yet we just log and continue.
             logger.warn("Skipping LocalReferenceDataInitializer because reference tables are not available yet: {}", ex.getMessage());
+        }
+    }
+
+    private void dropPpaSectorNameUniqueConstraint() {
+        try {
+            List<String> constraints = jdbcTemplate.queryForList(
+                "SELECT tc.constraint_name " +
+                "FROM information_schema.table_constraints tc " +
+                "JOIN information_schema.key_column_usage kcu " +
+                "  ON tc.constraint_name = kcu.constraint_name " +
+                "  AND tc.table_schema = kcu.table_schema " +
+                "WHERE tc.table_name = 'ppa_sector' " +
+                "  AND tc.constraint_type = 'UNIQUE' " +
+                "  AND kcu.column_name IN ('ppa_id', 'name') " +
+                "GROUP BY tc.constraint_name " +
+                "HAVING COUNT(DISTINCT kcu.column_name) = 2",
+                String.class
+            );
+            for (String constraint : constraints) {
+                jdbcTemplate.execute("ALTER TABLE ppa_sector DROP CONSTRAINT " + constraint);
+                logger.info("Dropped unique constraint '{}' from ppa_sector (ppa_id, name).", constraint);
+            }
+        } catch (Exception e) {
+            logger.debug("Could not drop ppa_sector unique constraint (may not exist): {}", e.getMessage());
         }
     }
 

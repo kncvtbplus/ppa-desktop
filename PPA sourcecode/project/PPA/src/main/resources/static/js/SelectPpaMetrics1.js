@@ -238,6 +238,7 @@ application.controller
 				)
 			.datagrid("getPanel")
 			.addClass("datagrid-nocheckbox")
+			.css("max-width", (750 + $rootScope.tableScrollbarWidth).toString() + "px")
 				;
 				
 			}

@@ -318,6 +318,7 @@ application.controller
 																function(newValue)
 																{
 																	$scope.setPpaSectorName(id, newValue);
+																	$scope.refreshPpaSectors();
 																	
 																},
 														}

@@ -35,6 +35,7 @@ public class SchemaMigrationRunner implements CommandLineRunner {
     public void run(String... args) {
         widenVarcharColumnsToText();
         widenWeightMultiplierScale();
+        addOutputNameColumn();
         checkUserFileIntegrity();
     }
 
@@ -109,6 +110,23 @@ public class SchemaMigrationRunner implements CommandLineRunner {
             }
         } catch (Exception e) {
             logger.warn("User file integrity check failed: {}", e.getMessage());
+        }
+    }
+
+    private void addOutputNameColumn() {
+        try {
+            Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM information_schema.columns " +
+                "WHERE table_name = 'output' AND column_name = 'name'",
+                Integer.class);
+
+            if (count == null || count == 0) {
+                jdbcTemplate.execute(
+                    "ALTER TABLE output ADD COLUMN name VARCHAR(255) NOT NULL DEFAULT ''");
+                logger.info("SchemaMigrationRunner: added 'name' column to output table.");
+            }
+        } catch (Exception e) {
+            logger.warn("Schema migration skipped for output.name: {}", e.getMessage());
         }
     }
 
