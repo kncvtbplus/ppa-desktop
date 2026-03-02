@@ -27,6 +27,11 @@ application
 
 							$scope.initialized = true;
 
+							window.setTimeout(function() {
+								$("#MapHealthSectorsAndLevels2-dataSources").datagrid("resize");
+								$("#MapHealthSectorsAndLevels2-ppaSectorMapping").datagrid("resize");
+							}, 0);
+
 						}
 						else
 						{

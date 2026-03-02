@@ -26,6 +26,10 @@ application.controller
 				$scope.initializeAccounts();
 				$scope.initializeCreateAccountDialog();
 					
+					window.setTimeout(function() {
+						$("#Accounts-accounts").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

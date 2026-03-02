@@ -25,6 +25,10 @@ application.controller
 					$scope.initializeVariables();
 					$scope.initializeMetrics();
 					
+					window.setTimeout(function() {
+						$("#UploadAndPrepData1-metrics").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

@@ -5398,7 +5398,7 @@ public class DataController implements MessageSourceAware
 	public Map<String, Object> setDataSourceSubsetColumn1SelectedValues
 	(
 			@RequestParam(value = "dataSourceId") Long dataSourceId,
-			@RequestParam(value = "value", required = true) String value,
+			@RequestParam(value = "value", required = false) String value,
 			@RequestParam(value = "selected", required = true) boolean selected
 	)
 	{
@@ -5407,8 +5407,9 @@ public class DataController implements MessageSourceAware
 		DataSource dataSource = dataSourceRepository.getOne(dataSourceId);
 		
 		// set subsetColumnSelectedValues
+		// null means apply to all; empty string is a valid individual value
 		
-		if (StringUtils.isEmpty(value))
+		if (value == null)
 		{
 			if (selected)
 			{
@@ -5532,7 +5533,7 @@ public class DataController implements MessageSourceAware
 	public Map<String, Object> setDataSourceSubsetColumn2SelectedValues
 	(
 			@RequestParam(value = "dataSourceId") Long dataSourceId,
-			@RequestParam(value = "value", required = true) String value,
+			@RequestParam(value = "value", required = false) String value,
 			@RequestParam(value = "selected", required = true) boolean selected
 	)
 	{
@@ -5541,8 +5542,9 @@ public class DataController implements MessageSourceAware
 		DataSource dataSource = dataSourceRepository.getOne(dataSourceId);
 		
 		// set subsetColumnSelectedValues
+		// null means apply to all; empty string is a valid individual value
 		
-		if (StringUtils.isEmpty(value))
+		if (value == null)
 		{
 			if (selected)
 			{

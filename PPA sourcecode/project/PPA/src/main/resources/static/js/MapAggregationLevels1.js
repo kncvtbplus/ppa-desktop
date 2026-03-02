@@ -23,6 +23,10 @@ application.controller
 					$scope.initializeVaribles();
 					$scope.initialize();
 					
+					window.setTimeout(function() {
+						$("#MapAggregationLevels1-subnationalUnits").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

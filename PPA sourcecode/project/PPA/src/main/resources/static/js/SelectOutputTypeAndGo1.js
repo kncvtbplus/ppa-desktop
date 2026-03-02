@@ -32,6 +32,10 @@ application.controller
 					$scope.initializeOutputs();
 					$scope.initializeChartRegion();
 					
+					window.setTimeout(function() {
+						$("#SelectOutputTypeAndGo1-outputs").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

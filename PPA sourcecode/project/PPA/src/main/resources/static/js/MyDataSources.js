@@ -24,6 +24,10 @@ application.controller
 					$scope.initializeDropzone();
 					$scope.initializeUserFiles();
 					
+					window.setTimeout(function() {
+						$("#MyDataSources-userFiles").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

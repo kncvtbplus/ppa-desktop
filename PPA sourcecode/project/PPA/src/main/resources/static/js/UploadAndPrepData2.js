@@ -23,6 +23,10 @@ application.controller
 					$scope.initializeVariables();
 					$scope.initializeDataSources();
 					
+					window.setTimeout(function() {
+						$("#UploadAndPrepData2-dataSources").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

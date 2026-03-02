@@ -26,6 +26,10 @@ application.controller
 					$scope.initializeVariables();
 					$scope.initializeMetrics();
 					
+					window.setTimeout(function() {
+						$("#SelectPpaMetrics1-ppaMetrics").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

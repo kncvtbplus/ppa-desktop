@@ -28,6 +28,11 @@ application.controller
 					$scope.initializeGlobalVariableDataSources();
 					$scope.initializeGlobalVariableDataSourceColumnValues();
 					
+					window.setTimeout(function() {
+						$("#IdentifyPpaVariables1-globalVariableDataSources").datagrid("resize");
+						$("#IdentifyPpaVariables1-globalVariableDataSourceColumnValues").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

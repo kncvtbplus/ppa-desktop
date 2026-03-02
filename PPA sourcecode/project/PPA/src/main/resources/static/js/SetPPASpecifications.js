@@ -18,6 +18,10 @@ application.controller
 					$scope.initialize();
 					$scope.initialized = true;
 					
+					window.setTimeout(function() {
+						$("#SetPPASpecifications-ppaSpecifications").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

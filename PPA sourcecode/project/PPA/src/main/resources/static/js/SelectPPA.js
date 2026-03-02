@@ -41,6 +41,10 @@ application.controller
 					
 					$scope.initialized = true;
 					
+					window.setTimeout(function() {
+						$("#SelectPPA-ppas").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{
@@ -76,7 +80,6 @@ application.controller
 				(
 						{
 							fit: true,
-							fitColumns: true,
 							checkbox: true,
 				            onBeforeSelect: function(){return false;},
 							onClickRow:
@@ -481,7 +484,9 @@ application.controller
 								},
 						}
 				)
-				.datagrid("getPanel");
+				.datagrid("getPanel")
+				.css("max-width", (1090 + $rootScope.tableScrollbarWidth).toString() + "px")
+				;
 				
 			}
 			

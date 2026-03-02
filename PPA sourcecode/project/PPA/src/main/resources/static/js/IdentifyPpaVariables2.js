@@ -28,6 +28,11 @@ application.controller
 					$scope.initializeMetrics();
 					$scope.initializeMetricColumnValues();
 					
+					window.setTimeout(function() {
+						$("#IdentifyPpaVariables2-metrics").datagrid("resize");
+						$("#IdentifyPpaVariables2-metricColumnValues").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

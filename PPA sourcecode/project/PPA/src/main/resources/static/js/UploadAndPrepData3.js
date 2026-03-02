@@ -29,6 +29,12 @@ application.controller
 					$scope.initializeSubsetColumn1Values();
 					$scope.initializeSubsetColumn2Values();
 					
+					window.setTimeout(function() {
+						$("#UploadAndPrepData3-dataSources").datagrid("resize");
+						$("#UploadAndPrepData3-subsetColumn1Values").datagrid("resize");
+						$("#UploadAndPrepData3-subsetColumn2Values").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{

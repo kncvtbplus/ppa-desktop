@@ -28,6 +28,10 @@ application.controller
 					$scope.initializeVariables();
 					$scope.initialize();
 					
+					window.setTimeout(function() {
+						$("#MapHealthSectorsAndLevels1-ppaSectors").datagrid("resize");
+					}, 0);
+					
 				}
 				
 				// refresh

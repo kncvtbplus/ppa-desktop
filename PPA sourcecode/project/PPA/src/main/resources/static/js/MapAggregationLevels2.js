@@ -27,6 +27,11 @@ application.controller
 					$scope.initializeVariables();
 					$scope.initialize();
 					
+					window.setTimeout(function() {
+						$("#MapAggregationLevels2-dataSources").datagrid("resize");
+						$("#MapAggregationLevels2-subnationalUnitMapping").datagrid("resize");
+					}, 0);
+					
 				}
 				else
 				{
