@@ -562,12 +562,27 @@ names(Master.Data)[names(Master.Data) == 'Subnational'] <- 'Subnational.Unit'
 # replace NA values with 0
 Master.Data[is.na(Master.Data)] <- 0
 
-# write output
-openxlsx::write.xlsx(Master.Data, outputFilePath, sheetName = "output", colNames = TRUE, rowNames = FALSE, append = FALSE)
+# write output with number formatting so values below 1 don't show as "0"
+wb <- openxlsx::createWorkbook()
+openxlsx::addWorksheet(wb, "output")
+openxlsx::writeData(wb, "output", Master.Data, colNames = TRUE, rowNames = FALSE)
+
+numCols <- which(sapply(Master.Data, is.numeric))
+if (length(numCols) > 0) {
+  numStyle <- openxlsx::createStyle(numFmt = "0.0")
+  for (col in numCols) {
+    openxlsx::addStyle(wb, "output", numStyle,
+                       rows = 2:(nrow(Master.Data) + 1), cols = col,
+                       gridExpand = TRUE)
+  }
+}
 
 # write input data
 InputData <- data.frame(unlist(Metadata))
-openxlsx::write.xlsx(InputData, outputFilePath, sheetName = "input", colNames = FALSE, rowNames = TRUE, append = TRUE)
+openxlsx::addWorksheet(wb, "input")
+openxlsx::writeData(wb, "input", InputData, colNames = FALSE, rowNames = TRUE)
+
+openxlsx::saveWorkbook(wb, outputFilePath, overwrite = TRUE)
 
 ###
 ### PPA Desktop automated ggplot2 visualizations
@@ -706,7 +721,7 @@ for (agg in aggregation) {
   
   p2 <- ggplot(data = data_agg, aes(x = Sector_Level_Numeric, y = Care.Seeking_Care.Seeking, fill = Sector_Level)) +
     geom_bar(stat = "identity", width = 0.8) +
-    geom_text(aes(label = scales::percent(Care.Seeking_Care.Seeking, accuracy = 1)), size = 5, hjust = -0.1, family = "DIN Pro") +
+    geom_text(aes(label = scales::percent(Care.Seeking_Care.Seeking, accuracy = 0.1)), size = 5, hjust = -0.1, family = "DIN Pro") +
     coord_flip() +
     scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
     scale_x_continuous(breaks = unique(data_agg$Sector_Numeric)[-which.min(unique(data_agg$Sector_Numeric))] - 1, 
@@ -762,8 +777,8 @@ for (agg in aggregation) {
     ## Produce Plot
     p3 <- ggplot(data = diagnostic_data, aes(x = Diagnostic_Value, y = Availability, colour = Sector_Level, fill = Sector_Level)) +
       geom_point(aes(shape = Diagnostic), size = fsize) +
-      geom_text(data = filter(diagnostic_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
-      geom_text(data = filter(diagnostic_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
+      geom_text(data = filter(diagnostic_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
+      geom_text(data = filter(diagnostic_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
       scale_shape_manual(values = c(21, 22, 23, 4)) +
       coord_flip() +
       scale_y_continuous(limits = c(0, 1.1)) +
@@ -819,8 +834,8 @@ for (agg in aggregation) {
     p4 <- ggplot(data = access_data, aes(x = 1, y = MaxAccess, fill = Sector_Sector)) +
       geom_bar(stat = "identity") +
       geom_text(inherit.aes = FALSE, data = access_data %>% summarise(MaxAccess = sum(MaxAccess)), 
-                aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
-      scale_y_continuous(labels = function(.) scales::percent(., accuracy = 1), limits = c(0, 1), expand = c(0, 0)) +
+                aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 0.1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
+      scale_y_continuous(labels = function(.) scales::percent(., accuracy = 0.1), limits = c(0, 1), expand = c(0, 0)) +
       scale_fill_manual("Sector", values = col_mapping_avg$Color[match(access_data$Sector_Sector, col_mapping_avg$Sector)]) +
       theme_minimal(10) +
       theme(
@@ -848,7 +863,7 @@ for (agg in aggregation) {
     
     if (length(access_data$MaxAccess[access_data$MaxAccess > 0]) > 1 && all(access_data$MaxAccess[access_data$MaxAccess > 0] >= .1)) p4 <- p4 + 
       geom_text(data = access_data %>% filter(MaxAccess > 0), 
-                aes(label = scales::percent(MaxAccess, accuracy = 1)), position = position_stack(vjust = .5), size = 5, colour = "white", family = "DIN Pro")
+                aes(label = scales::percent(MaxAccess, accuracy = 0.1)), position = position_stack(vjust = .5), size = 5, colour = "white", family = "DIN Pro")
     
   }
   
@@ -871,8 +886,8 @@ for (agg in aggregation) {
     ## Produce Plot
     p5 <- ggplot(data = trt_data, aes(x = Treatment_Value, y = Availability, colour = Sector_Level, fill = Sector_Level)) +
       geom_point(aes(shape = Treatment), size = fsize) +
-      geom_text(data = filter(trt_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
-      geom_text(data = filter(trt_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
+      geom_text(data = filter(trt_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
+      geom_text(data = filter(trt_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
       scale_shape_manual(values = c(21, 22, 23, 4)) +
       coord_flip() +
       scale_y_continuous(limits = c(0, 1.1)) +
@@ -930,8 +945,8 @@ for (agg in aggregation) {
     p6 <- ggplot(data = trt_access_data, aes(x = 1, y = MaxAccess, fill = Sector_Sector)) +
       geom_bar(stat = "identity") +
       geom_text(inherit.aes = FALSE, data = trt_access_data %>% summarise(MaxAccess = sum(MaxAccess)), 
-                aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
-      scale_y_continuous(labels = function(.) scales::percent(., accuracy = 1), limits = c(0, 1), expand = c(0, 0)) +
+                aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 0.1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
+      scale_y_continuous(labels = function(.) scales::percent(., accuracy = 0.1), limits = c(0, 1), expand = c(0, 0)) +
       scale_fill_manual(values = col_mapping_avg$Color[match(access_data$Sector_Sector, col_mapping_avg$Sector)], guide = FALSE) +
       theme_minimal(10) +
       theme(
@@ -953,7 +968,7 @@ for (agg in aggregation) {
     
     if (length(trt_access_data$MaxAccess[trt_access_data$MaxAccess > 0]) > 1 && all(trt_access_data$MaxAccess[trt_access_data$MaxAccess > 0] >= .1)) p6 <- p6 + 
       geom_text(data = trt_access_data %>% filter(MaxAccess > 0), 
-                aes(label = scales::percent(MaxAccess, accuracy = 1)), position = position_stack(vjust = .5), size = 5, colour = "white", family = "DIN Pro")
+                aes(label = scales::percent(MaxAccess, accuracy = 0.1)), position = position_stack(vjust = .5), size = 5, colour = "white", family = "DIN Pro")
     
   }
   
