@@ -4010,6 +4010,11 @@ public class DataController implements MessageSourceAware
 			}
 		}
 
+		// Flush subnational units so that SubnationalUnit entities receive their
+		// IDs before SubnationalUnitMapping objects reference them (the @ManyToOne
+		// from SubnationalUnitMapping to SubnationalUnit has no cascade).
+		ppaRepository.flush();
+
 		// Metrics
 		if (exportDto.metrics != null)
 		{
