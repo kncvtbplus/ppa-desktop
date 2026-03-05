@@ -2,7 +2,7 @@
 
 PPA Desktop is a Windows application that guides the Patient Pathway Analysis (PPA) process end‑to‑end: uploading data, mapping variables, and generating PPA outputs. It runs locally on your machine using Docker containers — no internet connection is required after installation.
 
-PPA Desktop is developed and maintained by **KNCV TB Plus**.
+PPA Desktop is developed by **Job van Rest** and maintained by **KNCV TB Plus**.
 
 ## Installation
 
