@@ -57,6 +57,17 @@ Docker Desktop + internet (for the first image pull) are required.
    - `..\local-dev\docker-compose.yml` → compose file for the stack.
 4. Click **Build → Compile** to generate e.g. `ppa-desktop-setup-1.5.1.exe` (in the same folder as the `.iss` file).
 
+### 2b. Building a stable ZIP for website downloads
+
+If you want a **stable “always latest” direct download link** for your website, publish a ZIP asset with a fixed name:
+
+- `ppa-desktop-setup-latest.zip`
+
+This repo’s publish step now generates this ZIP automatically (see `windows/publish-installer.ps1`).
+Your stable download URL is:
+
+- `https://github.com/kncvtbplus/ppa-desktop/releases/latest/download/ppa-desktop-setup-latest.zip`
+
 ### 3. What the installer does
 
 - Copies:

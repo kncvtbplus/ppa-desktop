@@ -2,7 +2,7 @@
     publish-installer.ps1
 
     Helper script to publish a new PPA Desktop Windows installer (and related
-    documentation) to the public GitHub “distribution” repository, without
+    documentation) to the public GitHub "distribution" repository, without
     syncing the rest of this developer repo.
 
     What it does
@@ -113,7 +113,9 @@ function Get-FilesToUpload {
 
     # Candidate installer files (only those that actually exist are used)
     $exePath = Join-Path $windowsDir ("{0}-{1}.exe" -f $InstallerBaseName, $Version)
-    $zipPath = Join-Path $windowsDir ("{0}-{1}.zip" -f $InstallerBaseName, $Version)
+    $zipVersionedPath = Join-Path $windowsDir ("{0}-{1}.zip" -f $InstallerBaseName, $Version)
+    # Stable ZIP name for "always latest" download links on websites
+    $zipLatestPath = Join-Path $windowsDir ("{0}-latest.zip" -f $InstallerBaseName)
 
     $installerFiles = @()
 
@@ -121,15 +123,53 @@ function Get-FilesToUpload {
         $installerFiles += (Resolve-Path $exePath).Path
     }
 
-    if (Test-Path $zipPath) {
-        $installerFiles += (Resolve-Path $zipPath).Path
-    }
-
     if ($installerFiles.Count -eq 0) {
         throw "No installer file found for version '$Version' in '$windowsDir'. Expected '$InstallerBaseName-$Version.exe' and/or '$InstallerBaseName-$Version.zip'."
     }
 
-    # Documentation files to publish – only include those that currently exist.
+    function Ensure-InstallerZips {
+        param(
+            [Parameter(Mandatory = $true)]
+            [string]$ExePath,
+            [Parameter(Mandatory = $true)]
+            [string]$ZipVersionedPath,
+            [Parameter(Mandatory = $true)]
+            [string]$ZipLatestPath
+        )
+
+        if (-not (Test-Path -LiteralPath $ExePath)) {
+            throw "Installer .exe not found at '$ExePath' (needed to build zip assets)."
+        }
+
+        Write-Host "Ensuring installer ZIP assets exist..." -ForegroundColor Cyan
+
+        foreach ($zipPath in @($ZipVersionedPath, $ZipLatestPath)) {
+            try {
+                if (Test-Path -LiteralPath $zipPath) {
+                    Remove-Item -LiteralPath $zipPath -Force
+                }
+
+                Compress-Archive -LiteralPath $ExePath -DestinationPath $zipPath -Force
+                Write-Host "  - Built: $zipPath" -ForegroundColor Green
+            }
+            catch {
+                throw "Failed to create ZIP '$zipPath': $($_.Exception.Message)"
+            }
+        }
+    }
+
+    # Always generate (and overwrite) ZIP files so website links can use a stable name.
+    Ensure-InstallerZips -ExePath $exePath -ZipVersionedPath $zipVersionedPath -ZipLatestPath $zipLatestPath
+
+    if (Test-Path $zipVersionedPath) {
+        $installerFiles += (Resolve-Path $zipVersionedPath).Path
+    }
+
+    if (Test-Path $zipLatestPath) {
+        $installerFiles += (Resolve-Path $zipLatestPath).Path
+    }
+
+    # Documentation files to publish - only include those that currently exist.
     # Keep the text and PDF guides for end users; skip internal notes/info and
     # the editable .docx to keep the public release page clean.
     $docFileNames = @(
@@ -219,7 +259,7 @@ function Upload-Assets {
     )
 
     if (-not $Files -or $Files.Count -eq 0) {
-        Write-Warning "No files to upload – nothing to do."
+        Write-Warning "No files to upload - nothing to do."
         return
     }
 
@@ -246,11 +286,11 @@ try {
     $repoRoot = Resolve-RepoRoot
     Write-Host "Repository root: $repoRoot"
 
-    Ensure-GitHubCliAvailable
-
     $filesToUpload = Get-FilesToUpload -RepoRoot $repoRoot -InstallerBaseName $InstallerBaseName -Version $Version
 
     Write-Host "Collected $($filesToUpload.Count) file(s) to upload."
+
+    Ensure-GitHubCliAvailable
 
     $tag = "v$Version"
     $releaseName = "PPA Desktop $Version"
