@@ -1485,12 +1485,17 @@ a.userMenuButton .s-btn-downarrow,a.userMenuButton .m-btn-downarrow
 	right: 16px;
 	width: 80px;
 	height: 56px;
+	display: block;
 	background-image: url(/images/kncv-logo.png);
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
 	opacity: 0.55;
-	pointer-events: none;
 	z-index: 9000;
+	transition: opacity 0.2s;
+}
+.kncv-logo:hover
+{
+	opacity: 0.85;
 }
 
