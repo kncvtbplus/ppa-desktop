@@ -284,15 +284,35 @@ function Build-Installer {
         [string]$WindowsDir,
         [string]$Version,
         [Parameter(Mandatory = $true)]
-        [string]$CompilerPath
+        [string]$CompilerPath,
+        [string]$CertThumbprint,
+        [switch]$SkipSign
     )
 
     Write-Host "Using Inno Setup compiler at: $CompilerPath" -ForegroundColor Cyan
 
+    $signBat = $null
+    if (-not $SkipSign -and $CertThumbprint) {
+        try {
+            $signtoolExe = Get-SignToolPath
+            $signBat = Join-Path $WindowsDir "_sign.bat"
+            Set-Content -Path $signBat -Value "@`"$signtoolExe`" sign /sha1 $CertThumbprint /fd SHA256 /tr http://time.certum.pl /td SHA256 %1" -Encoding ASCII
+            Write-Host "Inno Setup will sign installer and uninstaller via SignTool." -ForegroundColor Cyan
+        }
+        catch {
+            Write-Warning "signtool.exe not found; Inno Setup will build without signing. $_"
+            $signBat = $null
+        }
+    }
+
     Push-Location $WindowsDir
     try {
         Write-Host "Building installer for version $Version..." -ForegroundColor Cyan
-        & $CompilerPath "ppa-desktop-installer.iss"
+        if ($signBat) {
+            & $CompilerPath "/Sppa=$signBat `$f" "ppa-desktop-installer.iss"
+        } else {
+            & $CompilerPath "ppa-desktop-installer.iss"
+        }
 
         if ($LASTEXITCODE -ne 0) {
             throw "Inno Setup compiler failed with exit code $LASTEXITCODE."
@@ -300,6 +320,7 @@ function Build-Installer {
     }
     finally {
         Pop-Location
+        if ($signBat -and (Test-Path $signBat)) { Remove-Item $signBat -Force -ErrorAction SilentlyContinue }
     }
 
     $expectedExe = Join-Path $WindowsDir ("ppa-desktop-setup-{0}.exe" -f $Version)
@@ -615,7 +636,7 @@ try {
 
     Update-VersionFiles -RepoRoot $repoRoot -Version $Version
     Update-InnoSetupScript -WindowsDir $windowsDir -Version $Version
-    Build-Installer -WindowsDir $windowsDir -Version $Version -CompilerPath $compilerPath
+    Build-Installer -WindowsDir $windowsDir -Version $Version -CompilerPath $compilerPath -CertThumbprint $CertThumbprint -SkipSign:$SkipSign
 
     if (-not $SkipSign) {
         Sign-Installer -WindowsDir $windowsDir -Version $Version -Thumbprint $CertThumbprint

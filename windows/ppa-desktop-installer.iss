@@ -4,18 +4,25 @@
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.8.21
+AppVersion=1.8.22
 AppPublisher=KNCV TB Plus
 DefaultDirName={commonpf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-desktop-setup-1.8.21
+OutputBaseFilename=ppa-desktop-setup-1.8.22
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
+UninstallDisplayName=PPA Desktop
 UninstallDisplayIcon={app}\windows\ppa-logo.ico
+; Sign both the installer and the embedded uninstaller using signtool.
+; The "ppa" name references the [SignTool] entry registered in Inno Setup IDE:
+;   Tools -> Configure Sign Tools -> Add -> Name: ppa
+;   Command: "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign /sha1 525ABE3E90FDE6A04FCD65AF057C264443D6DA5B /fd SHA256 /tr http://time.certum.pl /td SHA256 $f
+SignTool=ppa
+SignedUninstaller=yes
 ; Custom PPA logo for installer executable and wizard
 ; Use absolute path from the script directory so the icon is always found.
 ; Make sure ppa-logo.ico is present in the windows folder before compiling.
@@ -59,6 +66,7 @@ Source: "PPA Desktop Installation and Local Use Guide.pdf"; DestDir: "{app}\wind
 [Icons]
 Name: "{group}\PPA Desktop (Start)"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-run.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
 Name: "{group}\PPA Desktop (Stop)"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-stop.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\windows\ppa-logo.ico"
+Name: "{group}\Uninstall PPA Desktop"; Filename: "{uninstallexe}"; IconFilename: "{app}\windows\ppa-logo.ico"
 Name: "{commondesktop}\PPA Desktop"; Filename: "wscript.exe"; Parameters: """{app}\windows\ppa-desktop-run.vbs"""; WorkingDir: "{app}"; Tasks: desktopicon; IconFilename: "{app}\windows\ppa-logo.ico"
 
 [Registry]
