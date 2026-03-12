@@ -46,7 +46,13 @@ param(
     [switch]$SkipDocker,
 
     # Skip pushing source code to the distribution repository.
-    [switch]$SkipSourcePush
+    [switch]$SkipSourcePush,
+
+    # Skip code signing the installer executable.
+    [switch]$SkipSign,
+
+    # SHA1 thumbprint of the code signing certificate to use.
+    [string]$CertThumbprint = "525ABE3E90FDE6A04FCD65AF057C264443D6DA5B"
 )
 
 Set-StrictMode -Version Latest
@@ -473,6 +479,60 @@ function Push-DockerImage {
     Write-Host "Docker images pushed successfully." -ForegroundColor Green
 }
 
+function Get-SignToolPath {
+    $candidates = @()
+
+    # Windows SDK locations
+    $kitRoot = "C:\Program Files (x86)\Windows Kits\10\bin"
+    if (Test-Path $kitRoot) {
+        Get-ChildItem -LiteralPath $kitRoot -Directory -ErrorAction SilentlyContinue |
+            Sort-Object Name -Descending |
+            ForEach-Object {
+                $p = Join-Path $_.FullName "x64\signtool.exe"
+                if (Test-Path -LiteralPath $p) { $candidates += $p }
+            } | Out-Null
+    }
+
+    $candidates += "C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe"
+
+    $cmd = Get-Command signtool -ErrorAction SilentlyContinue
+    if ($cmd -and $cmd.Source) { $candidates = @($cmd.Source) + $candidates }
+
+    $exe = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+    if (-not $exe) {
+        throw "signtool.exe not found. Install the Windows SDK or add signtool.exe to PATH."
+    }
+
+    return $exe
+}
+
+function Sign-Installer {
+    param(
+        [string]$WindowsDir,
+        [string]$Version,
+        [string]$Thumbprint
+    )
+
+    $signtool = Get-SignToolPath
+    Write-Host "Using signtool at: $signtool" -ForegroundColor Cyan
+
+    $exePath = Join-Path $WindowsDir ("ppa-desktop-setup-{0}.exe" -f $Version)
+    if (-not (Test-Path $exePath)) {
+        throw "Installer not found at '$exePath'. Build the installer first."
+    }
+
+    Write-Host "Signing $exePath..." -ForegroundColor Cyan
+    & $signtool sign /sha1 $Thumbprint /fd SHA256 /tr http://time.certum.pl /td SHA256 $exePath
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Code signing failed with exit code $LASTEXITCODE. Make sure SimplySign Desktop is running and logged in."
+    }
+
+    Write-Host "Installer signed successfully." -ForegroundColor Green
+
+    & $signtool verify /pa /v $exePath | Select-String "Issued to|Successfully"
+}
+
 function Push-SourceToDistribution {
     param(
         [string]$DistributionRepo
@@ -556,6 +616,10 @@ try {
     Update-VersionFiles -RepoRoot $repoRoot -Version $Version
     Update-InnoSetupScript -WindowsDir $windowsDir -Version $Version
     Build-Installer -WindowsDir $windowsDir -Version $Version -CompilerPath $compilerPath
+
+    if (-not $SkipSign) {
+        Sign-Installer -WindowsDir $windowsDir -Version $Version -Thumbprint $CertThumbprint
+    }
 
     # Restart the local Docker containers with the freshly built image
     Deploy-LocalDocker -RepoRoot $repoRoot
