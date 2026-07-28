@@ -10,7 +10,8 @@
     - Looks in the local `windows\` folder for installer files for the
       specified version (both `.exe` and `.zip` are supported).
     - Collects the installer, the root `version.txt`, and key documentation
-      files.
+      files. The download ZIP includes the installer plus the PDF guide so
+      users can read it before installing.
     - Uses the GitHub CLI (`gh`) to create or reuse a release in the
       distribution repository.
     - Uploads the selected files as release assets, replacing any existing
@@ -127,6 +128,9 @@ function Get-FilesToUpload {
         throw "No installer file found for version '$Version' in '$windowsDir'. Expected '$InstallerBaseName-$Version.exe' and/or '$InstallerBaseName-$Version.zip'."
     }
 
+    $guidePdfName = "PPA Desktop Installation and Local Use Guide.pdf"
+    $guidePdfPath = Join-Path $windowsDir $guidePdfName
+
     function Ensure-InstallerZips {
         param(
             [Parameter(Mandatory = $true)]
@@ -134,12 +138,15 @@ function Get-FilesToUpload {
             [Parameter(Mandatory = $true)]
             [string]$ZipVersionedPath,
             [Parameter(Mandatory = $true)]
-            [string]$ZipLatestPath
+            [string]$ZipLatestPath,
+            [string[]]$ExtraFiles = @()
         )
 
         if (-not (Test-Path -LiteralPath $ExePath)) {
             throw "Installer .exe not found at '$ExePath' (needed to build zip assets)."
         }
+
+        $zipContents = @($ExePath) + @($ExtraFiles | Where-Object { Test-Path -LiteralPath $_ })
 
         Write-Host "Ensuring installer ZIP assets exist..." -ForegroundColor Cyan
 
@@ -149,8 +156,8 @@ function Get-FilesToUpload {
                     Remove-Item -LiteralPath $zipPath -Force
                 }
 
-                Compress-Archive -LiteralPath $ExePath -DestinationPath $zipPath -Force
-                Write-Host "  - Built: $zipPath" -ForegroundColor Green
+                Compress-Archive -LiteralPath $zipContents -DestinationPath $zipPath -Force
+                Write-Host "  - Built: $zipPath ($($zipContents.Count) file(s))" -ForegroundColor Green
             }
             catch {
                 throw "Failed to create ZIP '$zipPath': $($_.Exception.Message)"
@@ -158,8 +165,15 @@ function Get-FilesToUpload {
         }
     }
 
+    $zipExtraFiles = @()
+    if (Test-Path -LiteralPath $guidePdfPath) {
+        $zipExtraFiles += (Resolve-Path -LiteralPath $guidePdfPath).Path
+    } else {
+        Write-Warning "Guide PDF not found at '$guidePdfPath'; ZIP will contain only the installer."
+    }
+
     # Always generate (and overwrite) ZIP files so website links can use a stable name.
-    Ensure-InstallerZips -ExePath $exePath -ZipVersionedPath $zipVersionedPath -ZipLatestPath $zipLatestPath
+    Ensure-InstallerZips -ExePath $exePath -ZipVersionedPath $zipVersionedPath -ZipLatestPath $zipLatestPath -ExtraFiles $zipExtraFiles
 
     if (Test-Path $zipVersionedPath) {
         $installerFiles += (Resolve-Path $zipVersionedPath).Path
@@ -175,7 +189,7 @@ function Get-FilesToUpload {
     $docFileNames = @(
         # Keep only the PDF guide as the public-facing document; the
         # plain-text variant is no longer published to keep releases minimal.
-        "PPA Desktop Installation and Local Use Guide.pdf"
+        $guidePdfName
     )
 
     $docFiles = foreach ($name in $docFileNames) {

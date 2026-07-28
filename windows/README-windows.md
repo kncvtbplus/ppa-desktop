@@ -63,6 +63,8 @@ If you want a **stable “always latest” direct download link** for your websi
 
 - `ppa-desktop-setup-latest.zip`
 
+The ZIP contains the installer `.exe` and the **PPA Desktop Installation and Local Use Guide** (PDF), so end users can read the guide before running the installer.
+
 This repo’s publish step now generates this ZIP automatically (see `windows/publish-installer.ps1`).
 Your stable download URL is:
 
