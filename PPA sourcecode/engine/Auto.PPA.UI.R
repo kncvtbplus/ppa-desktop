@@ -569,22 +569,112 @@ data_clean <- data %>%
 data_clean[is.na(data_clean)] <- 0
 
 ## Map colors to levels and sectors
+ensure_chart_color <- function(colors) {
+  vapply(colors, function(color) {
+    if (is.na(color) || !nzchar(color)) {
+      return("#888888")
+    }
+    rgb <- col2rgb(color, alpha = FALSE)[, 1]
+    luminance <- (0.299 * rgb[1] + 0.587 * rgb[2] + 0.114 * rgb[3]) / 255
+    if (luminance > 0.75) {
+      rgb <- pmax(round(rgb * 0.50), 0)
+      return(rgb(rgb[1], rgb[2], rgb[3], maxColorValue = 255))
+    }
+    color
+  }, character(1), USE.NAMES = FALSE)
+}
+
+prettify_label <- function(labels) {
+  labels <- gsub("\\.", " ", labels)
+  labels <- gsub("_", " ", labels)
+  labels <- gsub("\\s+", " ", labels)
+  trimws(labels)
+}
+
 col_mapping <- data.frame(
   `Level` =  c(0:4, "Other"),
   `Informal Private` = c("#fabdb3", "#e05859", "#c4272f", "#87070d", "#5b0005", "#400004"),
-  `Private` = c("#bbddef", "#a2c5e1", "#6686b0", "#366694", "#13375d", "#0D2640"),
-  `Public` = c("#eed8ad", "#e5b784", "#d4934c", "#b86f3e", "#884424", "#402011"),
-  `Other` = c("#f7f7f7", "#d9d9d9", "#bdbdbd", "#969696", "#636363", "#252525")
+  `Private` = c("#9ec5e8", "#a2c5e1", "#6686b0", "#366694", "#13375d", "#0D2640"),
+  `Public` = c("#e5c985", "#e5b784", "#d4934c", "#b86f3e", "#884424", "#402011"),
+  `Drug Vendor/Pharmacy` = c("#c49fd4", "#a070b8", "#804898", "#603070", "#401850", "#280838"),
+  `Private Not For Profit` = c("#8fd4a8", "#5aad70", "#3d8f55", "#2a7040", "#1a5028", "#103818"),
+  `Other` = c("#bdbdbd", "#d9d9d9", "#bdbdbd", "#969696", "#636363", "#252525")
   , check.names = FALSE) %>%
   gather(key = Sector, value = Color, 2:ncol(.)) %>%
-  mutate_all(funs(as.character))
+  mutate_all(funs(as.character)) %>%
+  mutate(Color = ensure_chart_color(Color))
 
 ## Store an "average" color aggregated across levels
 col_mapping_avg <- col_mapping %>%
   filter(Level == 2)
 
+lookup_sector_color <- function(sectors) {
+  ensure_chart_color(col_mapping_avg$Color[match(sectors, col_mapping_avg$Sector)])
+}
+
 # plot variables initialization
 p1 <- p2 <- p3 <- p4 <- p5 <- p6 <- NULL
+
+## Shared chart layout (cowplot clips legends/captions unless margins are generous)
+chart_margin_top <- 0.8
+chart_margin_right <- 0.8
+chart_margin_bottom <- 5.5
+chart_margin_bottom_main <- 0.3
+chart_margin_left_labels <- 1.2
+chart_margin_left <- 0.8
+chart_legend_theme <- theme(
+  legend.position = "bottom",
+  legend.justification = "center",
+  legend.box = "horizontal",
+  legend.title = element_text(face = "bold", size = 10, hjust = 0, margin = margin(b = 3)),
+  legend.text = element_text(size = 9),
+  legend.key.size = unit(0.35, "cm"),
+  legend.key.height = unit(0.45, "cm"),
+  legend.key.width = unit(0.45, "cm"),
+  legend.spacing.y = unit(0.12, "cm"),
+  legend.box.margin = margin(t = 0, b = 0)
+)
+abbreviate_sector <- function(sectors) {
+  sectors <- prettify_label(sectors)
+  sectors <- gsub("Drug Vendor/Pharmacy", "Drug vendor", sectors, fixed = TRUE)
+  sectors <- gsub("Private Not For Profit", "Private NFP", sectors, fixed = TRUE)
+  sectors <- gsub("Private not for Profit", "Private NFP", sectors, fixed = TRUE)
+  sectors <- gsub("Not For Profit", "NFP", sectors, fixed = TRUE)
+  sectors <- gsub("not for Profit", "NFP", sectors, fixed = TRUE)
+  sectors
+}
+
+manual_legend_grob <- function(title, labels, colors, shapes, ncol = 1) {
+  count <- length(labels)
+  if (count == 0) {
+    return(NULL)
+  }
+
+  legend_data <- data.frame(
+    Label = labels,
+    Color = colors,
+    Shape = shapes,
+    Column = (seq_len(count) - 1) %% ncol,
+    Row = floor((seq_len(count) - 1) / ncol),
+    stringsAsFactors = FALSE
+  ) %>%
+    mutate(
+      X = Column * (0.98 / ncol),
+      Y = 0.76 - Row * 0.15
+    )
+
+  ggplot(legend_data, aes(x = X, y = Y)) +
+    annotate("text", x = 0, y = 0.98, label = title, hjust = 0, vjust = 1,
+             fontface = "bold", size = 3.5, family = "DIN Pro") +
+    geom_point(aes(colour = Color, shape = Shape), size = 4.0) +
+    geom_text(aes(x = X + 0.045, label = Label), hjust = 0, vjust = 0.5,
+              size = 3.15, family = "DIN Pro") +
+    scale_colour_identity() +
+    scale_shape_identity() +
+    coord_cartesian(xlim = c(-0.01, 1), ylim = c(0, 1), clip = "off") +
+    theme_void() +
+    theme(plot.margin = margin(0, 4, 0, 4))
+}
 
 ## Loop over all unique aggregation levels
 ## Loop over all unique aggregation levels
@@ -601,9 +691,10 @@ for (agg in aggregation) {
     ungroup() %>%
     mutate(Sector_Level_Numeric = as.numeric(Sector_Level) - 0.5) %>%
     group_by(Sector_Sector) %>%
-    mutate(Col_Level = as.character(ifelse(Level_Level == "Other", max(as.numeric(as.character(Level_Level)), na.rm = TRUE) + 1, as.numeric(as.character(Level_Level))))) %>%
+    mutate(Col_Level = as.character(ifelse(Level_Level == "Other", "Other", as.numeric(as.character(Level_Level))))) %>%
     ungroup() %>%
     left_join(col_mapping , by = c("Sector_Sector" = "Sector", "Col_Level" = "Level")) %>%
+    mutate(Color = ensure_chart_color(Color)) %>%
     
     # old version
     #    mutate(Nfaclabel = ifelse(Sector_Sector == "Informal Private", "Unknown", N.Facilities_Number.of.Facilities),
@@ -625,14 +716,14 @@ for (agg in aggregation) {
   
   ## Produce Plot
   p1 <- ggplot(data = data_agg, aes(x = Sector_Level_Numeric, y = N.Facilities_Number.of.Facilities)) +
-    geom_text(aes(label = Nfaclabel), y = 1, family = "DIN Pro", size = 5, hjust = "inward") +
+    geom_text(aes(label = Nfaclabel), y = 0.5, family = "DIN Pro", size = 5, hjust = 0.5) +
     geom_bar(aes(y = 0), stat = "identity", width = 0.8) +
     geom_vline(xintercept = unique(data_agg$Sector_Numeric)[-which.min(unique(data_agg$Sector_Numeric))] - 1, colour = "grey70", size = 0.25) +
     #geom_rect(inherit.aes = FALSE, data = filter(data_agg, RectColor), aes(xmin = Sector_Level_Numeric - 0.5, xmax = Sector_Level_Numeric + 0.5,
     #                                                  ymin = -Inf, ymax = Inf), alpha = 0.2) +
     coord_flip() +
     scale_y_continuous(limits = c(0, 1)) +
-    scale_x_continuous(labels = as.character(data_agg$Sector_Level),
+    scale_x_continuous(labels = abbreviate_sector(as.character(data_agg$Sector_Level)),
                        breaks = data_agg$Sector_Level_Numeric,
                        minor_breaks = data_agg$Sector_Level_Numeric - 0.5,
                        expand = c(0, 0.1)) +
@@ -644,10 +735,10 @@ for (agg in aggregation) {
       panel.grid.minor.y = element_line(size = 0.25, colour = "grey70", linetype = "dashed"),
       axis.line = element_blank(),
       axis.text.x = element_blank(),
-      axis.text.y = element_text(size = 12),
+      axis.text.y = element_text(size = 10, hjust = 1),
       axis.title = element_blank(),
       panel.grid = element_blank(),
-      plot.margin = unit(c(0.5, 0, 2.2, 0.5), "cm"),
+      plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left_labels), "cm"),
       text = element_text(family = "DIN Pro")
     ) +
     labs(
@@ -660,7 +751,6 @@ for (agg in aggregation) {
   ##
   
   ## Produce Plot
-  legend_rows <- ceiling(length(unique(data_agg$Sector_Level)) / 3)
   
   p2 <- ggplot(data = data_agg, aes(x = Sector_Level_Numeric, y = Care.Seeking_Care.Seeking, fill = Sector_Level)) +
     geom_bar(stat = "identity", width = 0.8) +
@@ -670,8 +760,13 @@ for (agg in aggregation) {
     scale_x_continuous(breaks = unique(data_agg$Sector_Numeric)[-which.min(unique(data_agg$Sector_Numeric))] - 1, 
                        minor_breaks = seq_along(data_agg$Sector_Level_Numeric[-1]),
                        expand = c(0, 0.1)) +
-    scale_fill_manual("Sector/Level", values = data_agg$Color) +
+    scale_fill_manual(
+      "Sector/Level",
+      values = data_agg$Color,
+      labels = abbreviate_sector(as.character(data_agg$Sector_Level))
+    ) +
     theme_minimal(10) +
+    chart_legend_theme +
     theme(
       plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
       panel.border = element_rect(colour = "grey70", fill = NA, size = 0.5),
@@ -682,16 +777,11 @@ for (agg in aggregation) {
       panel.grid.minor.y = element_line(size = 0.25, colour = "grey70", linetype = "dashed"),
       panel.grid.major.x = element_blank(),
       panel.grid.minor.x = element_blank(),
-      legend.title = element_text(face = "bold"),
-      legend.text = element_text(size = 10),
-      legend.justification = "center",
-      legend.position = c(0, -.08),
-      legend.key.size = unit(0.4, "cm"),
-      plot.margin = unit(c(0.5, 0.5, 2.19, 0.5), "cm"),
+      plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left), "cm"),
       text = element_text(family = "DIN Pro")
     ) +
     guides(
-      fill = guide_legend(nrow = legend_rows, title.position = "left")
+      fill = guide_legend(ncol = 2, byrow = TRUE, title.position = "top")
     ) +
     labs(
       # old code
@@ -709,7 +799,7 @@ for (agg in aggregation) {
     diagnostic_data <- data_agg %>%
       select(Sector_Level:Level_Level, matches("^Diagnostic\\.[0-9]\\.Availability")) %>%
       gather(key = Diagnostic, value = Availability, 4:ncol(.)) %>%
-      mutate(Diagnostic = gsub("^Diagnostic\\.[0-9]\\.Availability_(.*)$", "\\1", Diagnostic)) %>%
+      mutate(Diagnostic = prettify_label(gsub("^Diagnostic\\.[0-9]\\.Availability_(.*)$", "\\1", Diagnostic))) %>%
       arrange(Sector_Level) %>%
       mutate(Diagnostic_Value = seq(0.5 / length(unique(Diagnostic)), nrow(.) / length(unique(Diagnostic)), by = 1 / length(unique(Diagnostic))),
              LabelPos = (Availability >= .7))
@@ -723,7 +813,7 @@ for (agg in aggregation) {
       geom_text(data = filter(diagnostic_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
       geom_text(data = filter(diagnostic_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
       scale_shape_manual(values = c(21, 22, 23, 4)) +
-      coord_flip() +
+      coord_flip(clip = "off") +
       scale_y_continuous(limits = c(0, 1.1)) +
       scale_x_continuous(limits = c(0.1, max(diagnostic_data$Diagnostic_Value) + diff(diagnostic_data$Diagnostic_Value)[1] / 2 - 0.1),
                          breaks = c(0, data_agg$Sector_Numeric - 1, nrow(data_agg)), 
@@ -732,6 +822,7 @@ for (agg in aggregation) {
       scale_colour_manual(values = data_agg$Color, guide = FALSE) +
       scale_fill_manual(values = data_agg$Color, guide = FALSE) +
       theme_minimal(10) +
+      chart_legend_theme +
       theme(
         plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
         plot.subtitle = element_text(hjust = 0),
@@ -743,11 +834,7 @@ for (agg in aggregation) {
         axis.title = element_blank(),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.title = element_text(face = "bold"),
-        legend.text = element_text(size = 10),
-        legend.justification = "center",
-        legend.position = c(0.5, -0.08),
-        plot.margin = unit(c(0.5, 0.5, 2.19, 0.5), "cm"),
+        plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left), "cm"),
         text = element_text(family = "DIN Pro")
       ) +
       labs(
@@ -755,7 +842,12 @@ for (agg in aggregation) {
       ) +
       ylab("") +
       guides(
-        shape = guide_legend(nrow = min(2, length(unique(diagnostic_data$Diagnostic))), title.position = "left")
+        shape = guide_legend(
+          ncol = min(2, length(unique(diagnostic_data$Diagnostic))),
+          byrow = TRUE,
+          title.position = "top",
+          override.aes = list(fill = "#666666", colour = "#666666", size = 4)
+        )
       )
     
   }
@@ -779,29 +871,35 @@ for (agg in aggregation) {
       geom_text(inherit.aes = FALSE, data = access_data %>% summarise(MaxAccess = sum(MaxAccess)), 
                 aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 0.1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
       scale_y_continuous(labels = function(.) scales::percent(., accuracy = 0.1), limits = c(0, 1), expand = c(0, 0)) +
-      scale_fill_manual("Sector", values = col_mapping_avg$Color[match(access_data$Sector_Sector, col_mapping_avg$Sector)]) +
+      scale_fill_manual(
+        "Sector",
+        values = setNames(
+          lookup_sector_color(unique(access_data$Sector_Sector)),
+          unique(access_data$Sector_Sector)
+        ),
+        labels = setNames(
+          abbreviate_sector(unique(access_data$Sector_Sector)),
+          unique(access_data$Sector_Sector)
+        )
+      ) +
       theme_minimal(10) +
+      chart_legend_theme +
       theme(
-        plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 10, face = "bold", lineheight = 0.95),
         plot.subtitle = element_text(hjust = 0),
         panel.border = element_rect(colour = "grey70", fill = NA, size = 0.5),
         axis.line = element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank(),
-        legend.title = element_text(face = "bold"),
-        legend.key.size = unit(0.4, "cm"),
-        legend.text = element_text(size = 10),
-        legend.position = c(0.5, -0.08),
-        legend.justification = "center",
         panel.grid = element_blank(),
-        plot.margin = unit(c(0.5, 0.5, 2.19, 0.5), "cm"),
+        plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left), "cm"),
         text = element_text(family = "DIN Pro")
       ) +
       labs(
-        title = "Access to Diagnostic Services\nat First Visit"
+        title = "Access to Diagnostic\nServices at First\nVisit"
       ) +
       guides(
-        fill = guide_legend(nrow = 3, title.position = "left")
+        fill = guide_legend(ncol = 1, title.position = "top")
       )
     
     if (length(access_data$MaxAccess[access_data$MaxAccess > 0]) > 1 && all(access_data$MaxAccess[access_data$MaxAccess > 0] >= .1)) p4 <- p4 + 
@@ -818,7 +916,7 @@ for (agg in aggregation) {
     trt_data <- data_agg %>%
       select(Sector_Level:Level_Level, matches("^Treatment\\.[0-9]\\.Availability")) %>%
       gather(key = Treatment, value = Availability, 4:ncol(.)) %>%
-      mutate(Treatment = gsub("^Treatment\\.[0-9]\\.Availability_(.*)$", "\\1", Treatment)) %>%
+      mutate(Treatment = prettify_label(gsub("^Treatment\\.[0-9]\\.Availability_(.*)$", "\\1", Treatment))) %>%
       arrange(Sector_Level) %>%
       mutate(Treatment_Value = seq(0.5 / length(unique(Treatment)), nrow(.) / length(unique(Treatment)), by = 1 / length(unique(Treatment))),
              LabelPos = (Availability >= .7))
@@ -832,7 +930,7 @@ for (agg in aggregation) {
       geom_text(data = filter(trt_data, !LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = -0.4, colour = "black", family = "DIN Pro") +
       geom_text(data = filter(trt_data, LabelPos), aes(label = scales::percent(Availability, accuracy = 0.1)), size = fsize, hjust = 1.25, colour = "black", family = "DIN Pro") +    
       scale_shape_manual(values = c(21, 22, 23, 4)) +
-      coord_flip() +
+      coord_flip(clip = "off") +
       scale_y_continuous(limits = c(0, 1.1)) +
       scale_x_continuous(limits = c(0.1, max(trt_data$Treatment_Value) + diff(trt_data$Treatment_Value)[1] / 2 - 0.1),
                          breaks = c(0, data_agg$Sector_Numeric - 1, nrow(data_agg)), 
@@ -841,6 +939,7 @@ for (agg in aggregation) {
       scale_colour_manual(values = data_agg$Color, guide = FALSE) +
       scale_fill_manual(values = data_agg$Color, guide = FALSE) +
       theme_minimal(10) +
+      chart_legend_theme +
       theme(
         plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
         plot.subtitle = element_text(hjust = 0),
@@ -852,11 +951,7 @@ for (agg in aggregation) {
         axis.title = element_blank(),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.title = element_text(face = "bold"),
-        legend.text = element_text(size = 10),
-        legend.justification = "center",
-        legend.position = c(0.5, -0.08),
-        plot.margin = unit(c(0.5, 0.5, 2.19, 0.5), "cm"),
+        plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left), "cm"),
         text = element_text(family = "DIN Pro")
       ) +
       labs(
@@ -864,7 +959,12 @@ for (agg in aggregation) {
       ) +
       ylab("") +
       guides(
-        shape = guide_legend(nrow = min(2, length(unique(trt_data$Treatment))), title.position = "left")
+        shape = guide_legend(
+          ncol = min(2, length(unique(trt_data$Treatment))),
+          byrow = TRUE,
+          title.position = "top",
+          override.aes = list(fill = "#666666", colour = "#666666", size = 4)
+        )
       )
     
   }
@@ -890,23 +990,22 @@ for (agg in aggregation) {
       geom_text(inherit.aes = FALSE, data = trt_access_data %>% summarise(MaxAccess = sum(MaxAccess)), 
                 aes(x = 1, y = MaxAccess, label = scales::percent(MaxAccess, accuracy = 0.1)), size = 5, vjust = -0.4, fontface = "bold", family = "DIN Pro") +
       scale_y_continuous(labels = function(.) scales::percent(., accuracy = 0.1), limits = c(0, 1), expand = c(0, 0)) +
-      scale_fill_manual(values = col_mapping_avg$Color[match(access_data$Sector_Sector, col_mapping_avg$Sector)], guide = FALSE) +
+      scale_fill_manual(values = lookup_sector_color(trt_access_data$Sector_Sector), guide = FALSE) +
       theme_minimal(10) +
       theme(
-        plot.title = element_text(hjust = 0.5, size = 12, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 10, face = "bold", lineheight = 0.95),
         plot.subtitle = element_text(hjust = 0),
-        plot.caption = element_text(size = 10, vjust = -19),
+        plot.caption = element_blank(),
         panel.border = element_rect(colour = "grey70", fill = NA, size = 0.5),
         axis.line = element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank(),
         panel.grid = element_blank(),
-        plot.margin = unit(c(0.5, 1.5, 0.5, 0.5), "cm"),
+        plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom, chart_margin_left), "cm"),
         text = element_text(family = "DIN Pro")
       ) +
       labs(
-        title = "Access to Treatment Services\nat First Visit",
-        caption = paste0(tools::toTitleCase(gsub("_", " ", mydata)), ": ", agg)
+        title = "Access to Treatment\nServices at First\nVisit"
       )
     
     if (length(trt_access_data$MaxAccess[trt_access_data$MaxAccess > 0]) > 1 && all(trt_access_data$MaxAccess[trt_access_data$MaxAccess > 0] >= .1)) p6 <- p6 + 
@@ -918,11 +1017,83 @@ for (agg in aggregation) {
   ##
   ## Final Plot Grid
   ##
-  final_plots <- plot_grid(p1, p2, p3, p4, p5, p6, align = "h", ncol = 6, axis = "l",
-                           rel_widths = c(.175, .2, .2, .1, .2, .125))
+  rel_widths <- c(.21, .20, .18, .13, .17, .11)
+
+  plot_without_legend <- function(p, left_margin = chart_margin_left) {
+    if (is.null(p)) {
+      return(NULL)
+    }
+    p + theme(
+      legend.position = "none",
+      plot.margin = unit(c(chart_margin_top, chart_margin_right, chart_margin_bottom_main, left_margin), "cm")
+    )
+  }
+
+  charts_row <- plot_grid(
+    plot_without_legend(p1, chart_margin_left_labels),
+    plot_without_legend(p2),
+    plot_without_legend(p3),
+    plot_without_legend(p4),
+    plot_without_legend(p5),
+    plot_without_legend(p6),
+    align = "h", axis = "lb", ncol = 6, rel_widths = rel_widths
+  )
+
+  legend_cards_row <- plot_grid(
+    NULL,
+    manual_legend_grob(
+      "Sector/Level",
+      abbreviate_sector(as.character(data_agg$Sector_Level)),
+      data_agg$Color,
+      rep(15, nrow(data_agg)),
+      ncol = 2
+    ),
+    manual_legend_grob(
+      "Diagnostic",
+      unique(diagnostic_data$Diagnostic),
+      rep("#666666", length(unique(diagnostic_data$Diagnostic))),
+      c(16, 15, 17, 18)[seq_along(unique(diagnostic_data$Diagnostic))],
+      ncol = min(2, length(unique(diagnostic_data$Diagnostic)))
+    ),
+    manual_legend_grob(
+      "Sector",
+      abbreviate_sector(unique(access_data$Sector_Sector)),
+      lookup_sector_color(unique(access_data$Sector_Sector)),
+      rep(15, length(unique(access_data$Sector_Sector))),
+      ncol = 1
+    ),
+    manual_legend_grob(
+      "Treatment",
+      unique(trt_data$Treatment),
+      rep("#666666", length(unique(trt_data$Treatment))),
+      c(16, 15, 17, 18)[seq_along(unique(trt_data$Treatment))],
+      ncol = min(2, length(unique(trt_data$Treatment)))
+    ),
+    NULL,
+    align = "h", axis = "t", ncol = 6, rel_widths = rel_widths
+  )
+
+  footer_row <- ggdraw() +
+    draw_label(
+      paste0(tools::toTitleCase(gsub("_", " ", mydata)), ": ", agg),
+      x = 0.985, y = 0.72, hjust = 1, vjust = 0.5, size = 8
+    )
+
+  ## Use fixed rows instead of vertically centering differently-sized legends.
+  ## This guarantees a common title baseline and reserves real bottom padding.
+  final_plots <- plot_grid(
+    charts_row,
+    legend_cards_row,
+    footer_row,
+    NULL,
+    ncol = 1,
+    rel_heights = c(0.76, 0.19, 0.025, 0.025),
+    align = "v",
+    axis = "l"
+  )
   
   ## Write it out
   #    ggsave(final_plots, filename = file.path(final_dir, paste0(mydata, "_", agg, "_charts.png")), dpi = 300, height = 8, width = 18)
-  ggsave(final_plots, filename = chartFilePaths[[agg]], dpi = 300, height = 8, width = 18)
+  ggsave(final_plots, filename = chartFilePaths[[agg]], dpi = 300, height = 10, width = 20, bg = "white")
 }
 
