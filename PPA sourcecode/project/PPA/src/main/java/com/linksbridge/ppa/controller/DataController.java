@@ -232,8 +232,10 @@ public class DataController implements MessageSourceAware
 	
 	private static final char R_LIST_SEPARATOR = ',';
 
-	// Export/import schema version for .ppa files
-	private static final int PPA_EXPORT_SCHEMA_VERSION = 1;
+	// Export/import schema versions for .ppa files. Version 1 stored database
+	// metric-type IDs only; version 2 also stores a portable semantic key.
+	private static final int PPA_EXPORT_SCHEMA_VERSION = 2;
+	private static final int PPA_MIN_SUPPORTED_SCHEMA_VERSION = 1;
 	
 	// R file type read commands
 	
@@ -3381,6 +3383,8 @@ public class DataController implements MessageSourceAware
 			dto.originalId = metric.getId();
 			dto.dataSourceOriginalId = (metric.getDataSource() != null ? metric.getDataSource().getId() : null);
 			dto.metricTypeId = (metric.getMetricType() != null ? metric.getMetricType().getId() : null);
+			dto.metricTypeKey = (metric.getMetricType() != null ? metric.getMetricType().getRName() : null);
+			dto.metricTypeName = (metric.getMetricType() != null ? metric.getMetricType().getName() : null);
 			dto.selected = metric.getSelected();
 			dto.dataPointName = metric.getDataPointName();
 			dto.dataSourceColumnName = metric.getDataSourceColumnName();
@@ -3730,7 +3734,8 @@ public class DataController implements MessageSourceAware
 				schemaVersion = Integer.parseInt(String.valueOf(schemaVersionObject));
 			}
 
-			if (schemaVersion != PPA_EXPORT_SCHEMA_VERSION)
+			if (schemaVersion < PPA_MIN_SUPPORTED_SCHEMA_VERSION
+					|| schemaVersion > PPA_EXPORT_SCHEMA_VERSION)
 			{
 				throw new ApplicationException("Unsupported PPA export schema version: " + schemaVersion);
 			}
@@ -4015,11 +4020,31 @@ public class DataController implements MessageSourceAware
 		// from SubnationalUnitMapping to SubnationalUnit has no cascade).
 		ppaRepository.flush();
 
-		// Metrics
+		// Metrics. Schema v1 archives only contain database IDs. Those IDs are
+		// resolved against the current installation and removed legacy metric
+		// types are skipped. Schema v2+ uses the stable metric-type name.
+		PpaMetricTypeResolver metricTypeResolver =
+				new PpaMetricTypeResolver(metricTypeRepository.findAllByOrderByIdAsc());
+		List<String> skippedMetricTypes = new ArrayList<>();
 		if (exportDto.metrics != null)
 		{
 			for (PpaExportDto.MetricDto metricDto : exportDto.metrics)
 			{
+				MetricType metricType = metricTypeResolver.resolve(metricDto);
+				if (metricType == null)
+				{
+					String metricTypeDescription =
+							(StringUtils.isNotBlank(metricDto.metricTypeKey)
+									? metricDto.metricTypeKey
+									: StringUtils.isNotBlank(metricDto.metricTypeName)
+									? metricDto.metricTypeName
+									: String.valueOf(metricDto.metricTypeId));
+					System.err.println("Import: skipping unsupported legacy metric type '"
+							+ metricTypeDescription + "'.");
+					skippedMetricTypes.add(metricTypeDescription);
+					continue;
+				}
+
 				Metric metric = new Metric();
 				newPpa.addMetric(metric);
 
@@ -4029,11 +4054,7 @@ public class DataController implements MessageSourceAware
 					metric.setDataSource(ds);
 				}
 
-				if (metricDto.metricTypeId != null)
-				{
-					MetricType metricType = metricTypeRepository.getOne(metricDto.metricTypeId);
-					metric.setMetricType(metricType);
-				}
+				metric.setMetricType(metricType);
 
 				metric.setSelected(metricDto.selected);
 				metric.setDataPointName(metricDto.dataPointName != null ? metricDto.dataPointName : "");
@@ -4048,6 +4069,12 @@ public class DataController implements MessageSourceAware
 					metric.setSelectedColumnValues(metricDto.selectedColumnValues);
 				}
 			}
+		}
+
+		if (!skippedMetricTypes.isEmpty())
+		{
+			System.out.println("Import completed without " + skippedMetricTypes.size()
+					+ " unsupported legacy metric type(s): " + skippedMetricTypes);
 		}
 
 		// Sector mappings

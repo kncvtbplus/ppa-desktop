@@ -65,6 +65,14 @@ public class PpaExportDto
 	{
 		public Long originalId;
 		public Long dataSourceOriginalId;
+		/**
+		 * Stable application key and human-readable fallback used by schema
+		 * version 2 and newer. metricTypeId remains present for importing legacy
+		 * schema version 1 archives, but database IDs are not portable between
+		 * installations.
+		 */
+		public String metricTypeKey;
+		public String metricTypeName;
 		public Long metricTypeId;
 		public boolean selected;
 		public String dataPointName;
