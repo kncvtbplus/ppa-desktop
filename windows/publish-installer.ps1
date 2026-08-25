@@ -245,8 +245,14 @@ function Ensure-ReleaseExists {
 
     Write-Host "Checking for existing release '$Tag' in '$DistributionRepo'..."
 
-    & $script:GhExe release view $Tag -R $DistributionRepo *> $null
-    $exists = ($LASTEXITCODE -eq 0)
+    $previousErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        & $script:GhExe release view $Tag -R $DistributionRepo *> $null
+        $exists = ($LASTEXITCODE -eq 0)
+    } finally {
+        $ErrorActionPreference = $previousErrorAction
+    }
 
     if ($exists) {
         Write-Host "Release '$Tag' already exists; will upload/replace assets."

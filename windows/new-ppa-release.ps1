@@ -291,6 +291,11 @@ function Build-Installer {
 
     Write-Host "Using Inno Setup compiler at: $CompilerPath" -ForegroundColor Cyan
 
+    $issPath = Join-Path $WindowsDir "ppa-desktop-installer.iss"
+    $issBackupPath = Join-Path $WindowsDir "ppa-desktop-installer.iss.bak"
+    $issContent = Get-Content -Path $issPath -Raw
+    Copy-Item -LiteralPath $issPath -Destination $issBackupPath -Force
+
     $signBat = $null
     if (-not $SkipSign -and $CertThumbprint) {
         try {
@@ -303,6 +308,11 @@ function Build-Installer {
             Write-Warning "signtool.exe not found; Inno Setup will build without signing. $_"
             $signBat = $null
         }
+    }
+    else {
+        $issContent = $issContent -replace '(?m)^SignTool=.*\r?\n', ''
+        $issContent = $issContent -replace '(?m)^SignedUninstaller=.*\r?\n', ''
+        Set-Content -Path $issPath -Value $issContent -Encoding UTF8 -NoNewline
     }
 
     Push-Location $WindowsDir
@@ -321,6 +331,9 @@ function Build-Installer {
     finally {
         Pop-Location
         if ($signBat -and (Test-Path $signBat)) { Remove-Item $signBat -Force -ErrorAction SilentlyContinue }
+        if (Test-Path $issBackupPath) {
+            Move-Item -LiteralPath $issBackupPath -Destination $issPath -Force
+        }
     }
 
     $expectedExe = Join-Path $WindowsDir ("ppa-desktop-setup-{0}.exe" -f $Version)
@@ -409,9 +422,16 @@ function Build-DockerImage {
 
     # Remove any previous images with these tags to avoid cache confusion
     Write-Host "Removing old Docker images and pruning build cache..." -ForegroundColor Cyan
-    docker rmi $tagVersion 2>$null
-    docker rmi $tagLatest  2>$null
-    docker builder prune -af 2>$null
+    $previousErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        foreach ($tag in @($tagVersion, $tagLatest)) {
+            & docker rmi $tag 2>$null | Out-Null
+        }
+        & docker builder prune -af 2>$null | Out-Null
+    } finally {
+        $ErrorActionPreference = $previousErrorAction
+    }
 
     # Build in an isolated temp directory so BuildKit cannot reuse stale layers
     $tmpDir = Join-Path $RepoRoot ".docker-build-tmp"

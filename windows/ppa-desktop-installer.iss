@@ -1,17 +1,17 @@
-; Inno Setup script to package PPA Desktop as a Windows installer
+﻿; Inno Setup script to package PPA Desktop as a Windows installer
 ; Requires Inno Setup (https://jrsoftware.org/isinfo.php)
 
 [Setup]
 AppId={{F8A5F5C3-4E7E-4B0A-8F0C-9E6A1B9E1F01}
 AppName=PPA Desktop
-AppVersion=1.8.22
+AppVersion=1.8.23
 AppPublisher=KNCV TB Plus
 DefaultDirName={commonpf}\PPA Desktop
 DefaultGroupName=PPA Desktop
 DisableDirPage=no
 DisableProgramGroupPage=no
 OutputDir=.
-OutputBaseFilename=ppa-desktop-setup-1.8.22
+OutputBaseFilename=ppa-desktop-setup-1.8.23
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
