@@ -699,8 +699,7 @@ for (agg in aggregation) {
     # old version
     #    mutate(Nfaclabel = ifelse(Sector_Sector == "Informal Private", "Unknown", N.Facilities_Number.of.Facilities),
     #           Sector_Numeric = 1:nrow(.)) %>%
-    # [PA-327] changes
-    mutate(Nfaclabel = ifelse(Sector_Sector == "Informal Private" | Level_Level == "0", "Unknown", N.Facilities_Number.of.Facilities),
+    mutate(Nfaclabel = ifelse(Sector_Sector == "Informal Private" | N.Facilities_Number.of.Facilities == 0, "Unknown", N.Facilities_Number.of.Facilities),
            Sector_Numeric = 1:nrow(.)) %>%
     
     group_by(Sector_Sector) %>%

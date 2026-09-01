@@ -43,3 +43,7 @@ This document summarizes the functional changes made to the packaged PPA Desktop
   - Added a "Continue without login" button on the home screen so that users can access PPAs on a shared desktop PC without creating an account or logging in.
   - Behind the scenes a dedicated guest user (with ROLE_USER only, no admin rights) is automatically created on first use and linked to a "Public" account. PPAs attached to this Public account are available to everyone; PPAs in other accounts still require a real login.
   - This feature is only active when the application runs in local/desktop mode (`LOCAL_MODE=true`). In cloud/hosted mode the guest login endpoint is rejected.
+
+- **Level 0 health facility counts in output charts (Sep 2026)**  
+  - Fixed generated output charts (step 6.1) showing "Unknown" for all level 0 sectors, including sectors such as Drug vendor/pharmacy that have entered facility counts.
+  - Level 0 now displays the actual number of health facilities. "Unknown" is shown only for the Informal Private sector, or when a selected sector/level combination has zero facilities.
